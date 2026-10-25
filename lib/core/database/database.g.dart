@@ -256,6 +256,21 @@ class $ClientsTable extends Clients
       'REFERENCES office_lawyers (id)',
     ),
   );
+  static const VerificationMeta _isArchivedMeta = const VerificationMeta(
+    'isArchived',
+  );
+  @override
+  late final GeneratedColumn<bool> isArchived = GeneratedColumn<bool>(
+    'is_archived',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_archived" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -274,6 +289,7 @@ class $ClientsTable extends Clients
     name,
     phone,
     assignedLawyerId,
+    isArchived,
     createdAt,
   ];
   @override
@@ -316,6 +332,12 @@ class $ClientsTable extends Clients
         ),
       );
     }
+    if (data.containsKey('is_archived')) {
+      context.handle(
+        _isArchivedMeta,
+        isArchived.isAcceptableOrUnknown(data['is_archived']!, _isArchivedMeta),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -347,6 +369,10 @@ class $ClientsTable extends Clients
         DriftSqlType.string,
         data['${effectivePrefix}assigned_lawyer_id'],
       ),
+      isArchived: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_archived'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -365,12 +391,14 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
   final String name;
   final String? phone;
   final String? assignedLawyerId;
+  final bool isArchived;
   final DateTime createdAt;
   const ClientEntity({
     required this.id,
     required this.name,
     this.phone,
     this.assignedLawyerId,
+    required this.isArchived,
     required this.createdAt,
   });
   @override
@@ -384,6 +412,7 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
     if (!nullToAbsent || assignedLawyerId != null) {
       map['assigned_lawyer_id'] = Variable<String>(assignedLawyerId);
     }
+    map['is_archived'] = Variable<bool>(isArchived);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -398,6 +427,7 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
       assignedLawyerId: assignedLawyerId == null && nullToAbsent
           ? const Value.absent()
           : Value(assignedLawyerId),
+      isArchived: Value(isArchived),
       createdAt: Value(createdAt),
     );
   }
@@ -412,6 +442,7 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
       name: serializer.fromJson<String>(json['name']),
       phone: serializer.fromJson<String?>(json['phone']),
       assignedLawyerId: serializer.fromJson<String?>(json['assignedLawyerId']),
+      isArchived: serializer.fromJson<bool>(json['isArchived']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -423,6 +454,7 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
       'name': serializer.toJson<String>(name),
       'phone': serializer.toJson<String?>(phone),
       'assignedLawyerId': serializer.toJson<String?>(assignedLawyerId),
+      'isArchived': serializer.toJson<bool>(isArchived),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -432,6 +464,7 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
     String? name,
     Value<String?> phone = const Value.absent(),
     Value<String?> assignedLawyerId = const Value.absent(),
+    bool? isArchived,
     DateTime? createdAt,
   }) => ClientEntity(
     id: id ?? this.id,
@@ -440,6 +473,7 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
     assignedLawyerId: assignedLawyerId.present
         ? assignedLawyerId.value
         : this.assignedLawyerId,
+    isArchived: isArchived ?? this.isArchived,
     createdAt: createdAt ?? this.createdAt,
   );
   ClientEntity copyWithCompanion(ClientsCompanion data) {
@@ -450,6 +484,9 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
       assignedLawyerId: data.assignedLawyerId.present
           ? data.assignedLawyerId.value
           : this.assignedLawyerId,
+      isArchived: data.isArchived.present
+          ? data.isArchived.value
+          : this.isArchived,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -461,13 +498,15 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
           ..write('name: $name, ')
           ..write('phone: $phone, ')
           ..write('assignedLawyerId: $assignedLawyerId, ')
+          ..write('isArchived: $isArchived, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, phone, assignedLawyerId, createdAt);
+  int get hashCode =>
+      Object.hash(id, name, phone, assignedLawyerId, isArchived, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -476,6 +515,7 @@ class ClientEntity extends DataClass implements Insertable<ClientEntity> {
           other.name == this.name &&
           other.phone == this.phone &&
           other.assignedLawyerId == this.assignedLawyerId &&
+          other.isArchived == this.isArchived &&
           other.createdAt == this.createdAt);
 }
 
@@ -484,6 +524,7 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
   final Value<String> name;
   final Value<String?> phone;
   final Value<String?> assignedLawyerId;
+  final Value<bool> isArchived;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const ClientsCompanion({
@@ -491,6 +532,7 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
     this.name = const Value.absent(),
     this.phone = const Value.absent(),
     this.assignedLawyerId = const Value.absent(),
+    this.isArchived = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -499,6 +541,7 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
     required String name,
     this.phone = const Value.absent(),
     this.assignedLawyerId = const Value.absent(),
+    this.isArchived = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -508,6 +551,7 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
     Expression<String>? name,
     Expression<String>? phone,
     Expression<String>? assignedLawyerId,
+    Expression<bool>? isArchived,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
@@ -516,6 +560,7 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
       if (name != null) 'name': name,
       if (phone != null) 'phone': phone,
       if (assignedLawyerId != null) 'assigned_lawyer_id': assignedLawyerId,
+      if (isArchived != null) 'is_archived': isArchived,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -526,6 +571,7 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
     Value<String>? name,
     Value<String?>? phone,
     Value<String?>? assignedLawyerId,
+    Value<bool>? isArchived,
     Value<DateTime>? createdAt,
     Value<int>? rowid,
   }) {
@@ -534,6 +580,7 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
       name: name ?? this.name,
       phone: phone ?? this.phone,
       assignedLawyerId: assignedLawyerId ?? this.assignedLawyerId,
+      isArchived: isArchived ?? this.isArchived,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -554,6 +601,9 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
     if (assignedLawyerId.present) {
       map['assigned_lawyer_id'] = Variable<String>(assignedLawyerId.value);
     }
+    if (isArchived.present) {
+      map['is_archived'] = Variable<bool>(isArchived.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -570,6 +620,7 @@ class ClientsCompanion extends UpdateCompanion<ClientEntity> {
           ..write('name: $name, ')
           ..write('phone: $phone, ')
           ..write('assignedLawyerId: $assignedLawyerId, ')
+          ..write('isArchived: $isArchived, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1959,10 +2010,11 @@ class $$OfficeLawyersTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (clientsRefs)
-                    await $_getPrefetchedData<
+                    await $_getPrefetchedDataByColumns<
                       OfficeLawyerEntity,
                       $OfficeLawyersTable,
-                      ClientEntity
+                      ClientEntity,
+                      $ClientsTable
                     >(
                       currentTable: table,
                       referencedTable: $$OfficeLawyersTableReferences
@@ -1973,10 +2025,8 @@ class $$OfficeLawyersTableTableManager
                             table,
                             p0,
                           ).clientsRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where(
-                            (e) => e.assignedLawyerId == item.id,
-                          ),
+                      currentColumn: 'id',
+                      referencedColumn: 'assigned_lawyer_id',
                       typedResults: items,
                     ),
                 ];
@@ -2007,6 +2057,7 @@ typedef $$ClientsTableCreateCompanionBuilder =
       required String name,
       Value<String?> phone,
       Value<String?> assignedLawyerId,
+      Value<bool> isArchived,
       Value<DateTime> createdAt,
       Value<int> rowid,
     });
@@ -2016,6 +2067,7 @@ typedef $$ClientsTableUpdateCompanionBuilder =
       Value<String> name,
       Value<String?> phone,
       Value<String?> assignedLawyerId,
+      Value<bool> isArchived,
       Value<DateTime> createdAt,
       Value<int> rowid,
     });
@@ -2083,6 +2135,11 @@ class $$ClientsTableFilterComposer
 
   ColumnFilters<String> get phone => $composableBuilder(
     column: $table.phone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2164,6 +2221,11 @@ class $$ClientsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -2210,6 +2272,11 @@ class $$ClientsTableAnnotationComposer
 
   GeneratedColumn<String> get phone =>
       $composableBuilder(column: $table.phone, builder: (column) => column);
+
+  GeneratedColumn<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -2295,6 +2362,7 @@ class $$ClientsTableTableManager
                 Value<String> name = const Value.absent(),
                 Value<String?> phone = const Value.absent(),
                 Value<String?> assignedLawyerId = const Value.absent(),
+                Value<bool> isArchived = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ClientsCompanion(
@@ -2302,6 +2370,7 @@ class $$ClientsTableTableManager
                 name: name,
                 phone: phone,
                 assignedLawyerId: assignedLawyerId,
+                isArchived: isArchived,
                 createdAt: createdAt,
                 rowid: rowid,
               ),
@@ -2311,6 +2380,7 @@ class $$ClientsTableTableManager
                 required String name,
                 Value<String?> phone = const Value.absent(),
                 Value<String?> assignedLawyerId = const Value.absent(),
+                Value<bool> isArchived = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ClientsCompanion.insert(
@@ -2318,6 +2388,7 @@ class $$ClientsTableTableManager
                 name: name,
                 phone: phone,
                 assignedLawyerId: assignedLawyerId,
+                isArchived: isArchived,
                 createdAt: createdAt,
                 rowid: rowid,
               ),
@@ -2369,20 +2440,19 @@ class $$ClientsTableTableManager
                   getPrefetchedDataCallback: (items) async {
                     return [
                       if (casesRefs)
-                        await $_getPrefetchedData<
+                        await $_getPrefetchedDataByColumns<
                           ClientEntity,
                           $ClientsTable,
-                          CaseEntity
+                          CaseEntity,
+                          $CasesTable
                         >(
                           currentTable: table,
                           referencedTable: $$ClientsTableReferences
                               ._casesRefsTable(db),
                           managerFromTypedResult: (p0) =>
                               $$ClientsTableReferences(db, table, p0).casesRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.clientId == item.id,
-                              ),
+                          currentColumn: 'id',
+                          referencedColumn: 'client_id',
                           typedResults: items,
                         ),
                     ];
@@ -2874,10 +2944,11 @@ class $$CasesTableTableManager
                   getPrefetchedDataCallback: (items) async {
                     return [
                       if (sessionsRefs)
-                        await $_getPrefetchedData<
+                        await $_getPrefetchedDataByColumns<
                           CaseEntity,
                           $CasesTable,
-                          SessionEntity
+                          SessionEntity,
+                          $SessionsTable
                         >(
                           currentTable: table,
                           referencedTable: $$CasesTableReferences
@@ -2888,17 +2959,16 @@ class $$CasesTableTableManager
                                 table,
                                 p0,
                               ).sessionsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.caseId == item.id,
-                              ),
+                          currentColumn: 'id',
+                          referencedColumn: 'case_id',
                           typedResults: items,
                         ),
                       if (caseNotesRefs)
-                        await $_getPrefetchedData<
+                        await $_getPrefetchedDataByColumns<
                           CaseEntity,
                           $CasesTable,
-                          CaseNoteEntity
+                          CaseNoteEntity,
+                          $CaseNotesTable
                         >(
                           currentTable: table,
                           referencedTable: $$CasesTableReferences
@@ -2909,10 +2979,8 @@ class $$CasesTableTableManager
                                 table,
                                 p0,
                               ).caseNotesRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.caseId == item.id,
-                              ),
+                          currentColumn: 'id',
+                          referencedColumn: 'case_id',
                           typedResults: items,
                         ),
                     ];
