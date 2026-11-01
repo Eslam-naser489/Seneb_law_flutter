@@ -29,6 +29,13 @@ class DashboardScreen extends StatelessWidget {
               icon: const Icon(Icons.people),
               label: const Text('إدارة الموكلين'),
             ),
+            // جوه الـ Column تحت زرار המوكلين ضيف الزرار ده
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/cases'),
+              icon: const Icon(Icons.gavel),
+              label: const Text('إدارة القضايا'),
+            ),
           ],
         ),
       ),

@@ -28,6 +28,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
       appBar: AppBar(
         title: const Text('إدارة الموكلين'),
       ),
+
       body: BlocBuilder<ClientsCubit, ClientsState>(
         builder: (context, state) {
           if (state is ClientsLoading) {
@@ -79,7 +80,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
         },
       ),
 
-      // الانتقال إلى شاشة إضافة موكل جديد
+      // زر إضافة موكل جديد
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           context.push('/add-client');
