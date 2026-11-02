@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:seneb_law/core/database/app_repository.dart';
 
 import 'package:seneb_law/features/dashboard/presentation/dashboard_screen.dart';
 import 'package:seneb_law/features/splash/presentation/splash_screen.dart';
@@ -8,6 +9,7 @@ import 'package:seneb_law/features/clients/presentation/screens/add_client_scree
 
 import 'package:seneb_law/features/cases/presentation/screens/cases_screen.dart';
 import 'package:seneb_law/features/cases/presentation/screens/add_case_screen.dart';
+import 'package:seneb_law/features/cases/presentation/screens/case_details_screen.dart';
 
 // ==================== الجلسات ====================
 import 'package:seneb_law/features/sessions/presentation/screens/add_session_screen.dart';
@@ -46,6 +48,14 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/add-case',
       builder: (context, state) => const AddCaseScreen(),
+    ),
+
+    GoRoute(
+      path: '/case-details',
+      builder: (context, state) {
+        final caseWithClient = state.extra as CaseWithClient;
+        return CaseDetailsScreen(caseWithClient: caseWithClient);
+      },
     ),
 
     // ==================== الجلسات ====================

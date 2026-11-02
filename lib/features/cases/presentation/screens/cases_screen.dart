@@ -41,6 +41,10 @@ class _CasesScreenState extends State<CasesScreen> {
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
+                    onTap: () {
+                      // الانتقال لملف القضية وتمرير الكائن
+                      context.push('/case-details', extra: caseItem);
+                    },
                     leading: const CircleAvatar(child: Icon(Icons.gavel)),
                     title: Text('قضية رقم: ${caseItem.caseEntity.caseNumber}'),
                     subtitle: Text('الموكل: ${caseItem.client.name}\nالخصم: ${caseItem.caseEntity.opponentName ?? "غير مسجل"}'),
