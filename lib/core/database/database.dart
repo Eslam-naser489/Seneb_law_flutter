@@ -61,7 +61,24 @@ class CaseNotes extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [OfficeLawyers, Clients, Cases, Sessions, CaseNotes])
+// 6. جدول المعاملات المالية (الخزينة)
+@DataClassName('TransactionEntity')
+class Transactions extends Table {
+  TextColumn get id => text()(); // UUID
+  TextColumn get title => text()(); // اسم المعاملة (مثال: دفعة أتعاب، أو مصاريف مواصلات)
+  RealColumn get amount => real()(); // المبلغ
+  TextColumn get type => text()(); // نوعها: 'INCOME' (إيراد) أو 'EXPENSE' (مصروف)
+  DateTimeColumn get transactionDate => dateTime().withDefault(currentDateAndTime)();
+  
+  // لو المعاملة تخص قضية وموكل معين، هنربطهم هنا (ممكن يبقوا null لو دي مصروفات عامة للمكتب)
+  TextColumn get caseId => text().nullable().references(Cases, #id)();
+  TextColumn get clientId => text().nullable().references(Clients, #id)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [OfficeLawyers, Clients, Cases, Sessions, CaseNotes , Transactions])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
   

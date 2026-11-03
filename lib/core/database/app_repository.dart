@@ -241,11 +241,63 @@ class AppRepository {
           ..orderBy([(t) => OrderingTerm.asc(t.sessionDate)]))
         .get();
   }
+
+  // ==========================================
+  // الماليات والخزينة (Financials & Treasury)
+  // ==========================================
+
+  // 1. إضافة معاملة مالية جديدة (إيراد أو مصروف)
+  Future<void> addTransaction({
+    required String title,
+    required double amount,
+    required String type, // 'INCOME' أو 'EXPENSE'
+    String? caseId,
+    String? clientId,
+  }) async {
+    final id = _uuid.v4();
+    await db.into(db.transactions).insert(
+      TransactionsCompanion.insert(
+        id: id,
+        title: title,
+        amount: amount,
+        type: type,
+        caseId: Value(caseId),
+        clientId: Value(clientId),
+      ),
+    );
+  }
+
+  // 2. جلب كل المعاملات مرتبة من الأحدث للأقدم (كشف الحساب)
+  Future<List<TransactionEntity>> getAllTransactions() async {
+    return await (db.select(db.transactions)
+          ..orderBy([(t) => OrderingTerm.desc(t.transactionDate)]))
+        .get();
+  }
+
+  // 3. دالة سريعة تحسب ملخص الخزينة (إجمالي الوارد، المنصرف، والصافي)
+  Future<Map<String, double>> getTreasurySummary() async {
+    final transactions = await getAllTransactions();
+    double totalIncome = 0;
+    double totalExpense = 0;
+
+    for (var t in transactions) {
+      if (t.type == 'INCOME') {
+        totalIncome += t.amount;
+      } else if (t.type == 'EXPENSE') {
+        totalExpense += t.amount;
+      }
+    }
+
+    return {
+      'income': totalIncome,
+      'expense': totalExpense,
+      'net': totalIncome - totalExpense, // الصافي
+    };
+  }
 }
 
-// ==========================================
+
 // الكلاسات المساعدة (Helper Classes)
-// ==========================================
 
 // القضايا مع بيانات الموكل
 class CaseWithClient {

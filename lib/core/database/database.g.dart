@@ -1785,6 +1785,468 @@ class CaseNotesCompanion extends UpdateCompanion<CaseNoteEntity> {
   }
 }
 
+class $TransactionsTable extends Transactions
+    with TableInfo<$TransactionsTable, TransactionEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TransactionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+    'amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _transactionDateMeta = const VerificationMeta(
+    'transactionDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> transactionDate =
+      GeneratedColumn<DateTime>(
+        'transaction_date',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime,
+      );
+  static const VerificationMeta _caseIdMeta = const VerificationMeta('caseId');
+  @override
+  late final GeneratedColumn<String> caseId = GeneratedColumn<String>(
+    'case_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES cases (id)',
+    ),
+  );
+  static const VerificationMeta _clientIdMeta = const VerificationMeta(
+    'clientId',
+  );
+  @override
+  late final GeneratedColumn<String> clientId = GeneratedColumn<String>(
+    'client_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES clients (id)',
+    ),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    title,
+    amount,
+    type,
+    transactionDate,
+    caseId,
+    clientId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'transactions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TransactionEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(
+        _amountMeta,
+        amount.isAcceptableOrUnknown(data['amount']!, _amountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('transaction_date')) {
+      context.handle(
+        _transactionDateMeta,
+        transactionDate.isAcceptableOrUnknown(
+          data['transaction_date']!,
+          _transactionDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('case_id')) {
+      context.handle(
+        _caseIdMeta,
+        caseId.isAcceptableOrUnknown(data['case_id']!, _caseIdMeta),
+      );
+    }
+    if (data.containsKey('client_id')) {
+      context.handle(
+        _clientIdMeta,
+        clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TransactionEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TransactionEntity(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      amount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}amount'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      transactionDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}transaction_date'],
+      )!,
+      caseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}case_id'],
+      ),
+      clientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}client_id'],
+      ),
+    );
+  }
+
+  @override
+  $TransactionsTable createAlias(String alias) {
+    return $TransactionsTable(attachedDatabase, alias);
+  }
+}
+
+class TransactionEntity extends DataClass
+    implements Insertable<TransactionEntity> {
+  final String id;
+  final String title;
+  final double amount;
+  final String type;
+  final DateTime transactionDate;
+  final String? caseId;
+  final String? clientId;
+  const TransactionEntity({
+    required this.id,
+    required this.title,
+    required this.amount,
+    required this.type,
+    required this.transactionDate,
+    this.caseId,
+    this.clientId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['title'] = Variable<String>(title);
+    map['amount'] = Variable<double>(amount);
+    map['type'] = Variable<String>(type);
+    map['transaction_date'] = Variable<DateTime>(transactionDate);
+    if (!nullToAbsent || caseId != null) {
+      map['case_id'] = Variable<String>(caseId);
+    }
+    if (!nullToAbsent || clientId != null) {
+      map['client_id'] = Variable<String>(clientId);
+    }
+    return map;
+  }
+
+  TransactionsCompanion toCompanion(bool nullToAbsent) {
+    return TransactionsCompanion(
+      id: Value(id),
+      title: Value(title),
+      amount: Value(amount),
+      type: Value(type),
+      transactionDate: Value(transactionDate),
+      caseId: caseId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(caseId),
+      clientId: clientId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(clientId),
+    );
+  }
+
+  factory TransactionEntity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TransactionEntity(
+      id: serializer.fromJson<String>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      amount: serializer.fromJson<double>(json['amount']),
+      type: serializer.fromJson<String>(json['type']),
+      transactionDate: serializer.fromJson<DateTime>(json['transactionDate']),
+      caseId: serializer.fromJson<String?>(json['caseId']),
+      clientId: serializer.fromJson<String?>(json['clientId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'title': serializer.toJson<String>(title),
+      'amount': serializer.toJson<double>(amount),
+      'type': serializer.toJson<String>(type),
+      'transactionDate': serializer.toJson<DateTime>(transactionDate),
+      'caseId': serializer.toJson<String?>(caseId),
+      'clientId': serializer.toJson<String?>(clientId),
+    };
+  }
+
+  TransactionEntity copyWith({
+    String? id,
+    String? title,
+    double? amount,
+    String? type,
+    DateTime? transactionDate,
+    Value<String?> caseId = const Value.absent(),
+    Value<String?> clientId = const Value.absent(),
+  }) => TransactionEntity(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    amount: amount ?? this.amount,
+    type: type ?? this.type,
+    transactionDate: transactionDate ?? this.transactionDate,
+    caseId: caseId.present ? caseId.value : this.caseId,
+    clientId: clientId.present ? clientId.value : this.clientId,
+  );
+  TransactionEntity copyWithCompanion(TransactionsCompanion data) {
+    return TransactionEntity(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      type: data.type.present ? data.type.value : this.type,
+      transactionDate: data.transactionDate.present
+          ? data.transactionDate.value
+          : this.transactionDate,
+      caseId: data.caseId.present ? data.caseId.value : this.caseId,
+      clientId: data.clientId.present ? data.clientId.value : this.clientId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TransactionEntity(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('amount: $amount, ')
+          ..write('type: $type, ')
+          ..write('transactionDate: $transactionDate, ')
+          ..write('caseId: $caseId, ')
+          ..write('clientId: $clientId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, title, amount, type, transactionDate, caseId, clientId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TransactionEntity &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.amount == this.amount &&
+          other.type == this.type &&
+          other.transactionDate == this.transactionDate &&
+          other.caseId == this.caseId &&
+          other.clientId == this.clientId);
+}
+
+class TransactionsCompanion extends UpdateCompanion<TransactionEntity> {
+  final Value<String> id;
+  final Value<String> title;
+  final Value<double> amount;
+  final Value<String> type;
+  final Value<DateTime> transactionDate;
+  final Value<String?> caseId;
+  final Value<String?> clientId;
+  final Value<int> rowid;
+  const TransactionsCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.type = const Value.absent(),
+    this.transactionDate = const Value.absent(),
+    this.caseId = const Value.absent(),
+    this.clientId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TransactionsCompanion.insert({
+    required String id,
+    required String title,
+    required double amount,
+    required String type,
+    this.transactionDate = const Value.absent(),
+    this.caseId = const Value.absent(),
+    this.clientId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       title = Value(title),
+       amount = Value(amount),
+       type = Value(type);
+  static Insertable<TransactionEntity> custom({
+    Expression<String>? id,
+    Expression<String>? title,
+    Expression<double>? amount,
+    Expression<String>? type,
+    Expression<DateTime>? transactionDate,
+    Expression<String>? caseId,
+    Expression<String>? clientId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (amount != null) 'amount': amount,
+      if (type != null) 'type': type,
+      if (transactionDate != null) 'transaction_date': transactionDate,
+      if (caseId != null) 'case_id': caseId,
+      if (clientId != null) 'client_id': clientId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TransactionsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? title,
+    Value<double>? amount,
+    Value<String>? type,
+    Value<DateTime>? transactionDate,
+    Value<String?>? caseId,
+    Value<String?>? clientId,
+    Value<int>? rowid,
+  }) {
+    return TransactionsCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      amount: amount ?? this.amount,
+      type: type ?? this.type,
+      transactionDate: transactionDate ?? this.transactionDate,
+      caseId: caseId ?? this.caseId,
+      clientId: clientId ?? this.clientId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (transactionDate.present) {
+      map['transaction_date'] = Variable<DateTime>(transactionDate.value);
+    }
+    if (caseId.present) {
+      map['case_id'] = Variable<String>(caseId.value);
+    }
+    if (clientId.present) {
+      map['client_id'] = Variable<String>(clientId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TransactionsCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('amount: $amount, ')
+          ..write('type: $type, ')
+          ..write('transactionDate: $transactionDate, ')
+          ..write('caseId: $caseId, ')
+          ..write('clientId: $clientId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1793,6 +2255,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CasesTable cases = $CasesTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
   late final $CaseNotesTable caseNotes = $CaseNotesTable(this);
+  late final $TransactionsTable transactions = $TransactionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1803,6 +2266,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     cases,
     sessions,
     caseNotes,
+    transactions,
   ];
 }
 
@@ -2112,6 +2576,24 @@ final class $$ClientsTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$TransactionsTable, List<TransactionEntity>>
+  _transactionsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.transactions,
+    aliasName: 'clients__id__transactions__client_id',
+  );
+
+  $$TransactionsTableProcessedTableManager get transactionsRefs {
+    final manager = $$TransactionsTableTableManager(
+      $_db,
+      $_db.transactions,
+    ).filter((f) => f.clientId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_transactionsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$ClientsTableFilterComposer
@@ -2187,6 +2669,31 @@ class $$ClientsTableFilterComposer
           }) => $$CasesTableFilterComposer(
             $db: $db,
             $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> transactionsRefs(
+    Expression<bool> Function($$TransactionsTableFilterComposer f) f,
+  ) {
+    final $$TransactionsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.clientId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TransactionsTableFilterComposer(
+            $db: $db,
+            $table: $db.transactions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2328,6 +2835,31 @@ class $$ClientsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> transactionsRefs<T extends Object>(
+    Expression<T> Function($$TransactionsTableAnnotationComposer a) f,
+  ) {
+    final $$TransactionsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.clientId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TransactionsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$ClientsTableTableManager
@@ -2343,7 +2875,11 @@ class $$ClientsTableTableManager
           $$ClientsTableUpdateCompanionBuilder,
           (ClientEntity, $$ClientsTableReferences),
           ClientEntity,
-          PrefetchHooks Function({bool assignedLawyerId, bool casesRefs})
+          PrefetchHooks Function({
+            bool assignedLawyerId,
+            bool casesRefs,
+            bool transactionsRefs,
+          })
         > {
   $$ClientsTableTableManager(_$AppDatabase db, $ClientsTable table)
     : super(
@@ -2401,10 +2937,17 @@ class $$ClientsTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({assignedLawyerId = false, casesRefs = false}) {
+              ({
+                assignedLawyerId = false,
+                casesRefs = false,
+                transactionsRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
-                  explicitlyWatchedTables: [if (casesRefs) db.cases],
+                  explicitlyWatchedTables: [
+                    if (casesRefs) db.cases,
+                    if (transactionsRefs) db.transactions,
+                  ],
                   addJoins:
                       <
                         T extends TableManagerState<
@@ -2455,6 +2998,26 @@ class $$ClientsTableTableManager
                           referencedColumn: 'client_id',
                           typedResults: items,
                         ),
+                      if (transactionsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ClientEntity,
+                          $ClientsTable,
+                          TransactionEntity,
+                          $TransactionsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ClientsTableReferences
+                              ._transactionsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ClientsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).transactionsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'client_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -2475,7 +3038,11 @@ typedef $$ClientsTableProcessedTableManager =
       $$ClientsTableUpdateCompanionBuilder,
       (ClientEntity, $$ClientsTableReferences),
       ClientEntity,
-      PrefetchHooks Function({bool assignedLawyerId, bool casesRefs})
+      PrefetchHooks Function({
+        bool assignedLawyerId,
+        bool casesRefs,
+        bool transactionsRefs,
+      })
     >;
 typedef $$CasesTableCreateCompanionBuilder =
     CasesCompanion Function({
@@ -2550,6 +3117,24 @@ final class $$CasesTableReferences
     ).filter((f) => f.caseId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_caseNotesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$TransactionsTable, List<TransactionEntity>>
+  _transactionsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.transactions,
+    aliasName: 'cases__id__transactions__case_id',
+  );
+
+  $$TransactionsTableProcessedTableManager get transactionsRefs {
+    final manager = $$TransactionsTableTableManager(
+      $_db,
+      $_db.transactions,
+    ).filter((f) => f.caseId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_transactionsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -2653,6 +3238,31 @@ class $$CasesTableFilterComposer extends Composer<_$AppDatabase, $CasesTable> {
           }) => $$CaseNotesTableFilterComposer(
             $db: $db,
             $table: $db.caseNotes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> transactionsRefs(
+    Expression<bool> Function($$TransactionsTableFilterComposer f) f,
+  ) {
+    final $$TransactionsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.caseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TransactionsTableFilterComposer(
+            $db: $db,
+            $table: $db.transactions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2821,6 +3431,31 @@ class $$CasesTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> transactionsRefs<T extends Object>(
+    Expression<T> Function($$TransactionsTableAnnotationComposer a) f,
+  ) {
+    final $$TransactionsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.caseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TransactionsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$CasesTableTableManager
@@ -2840,6 +3475,7 @@ class $$CasesTableTableManager
             bool clientId,
             bool sessionsRefs,
             bool caseNotesRefs,
+            bool transactionsRefs,
           })
         > {
   $$CasesTableTableManager(_$AppDatabase db, $CasesTable table)
@@ -2902,12 +3538,14 @@ class $$CasesTableTableManager
                 clientId = false,
                 sessionsRefs = false,
                 caseNotesRefs = false,
+                transactionsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (sessionsRefs) db.sessions,
                     if (caseNotesRefs) db.caseNotes,
+                    if (transactionsRefs) db.transactions,
                   ],
                   addJoins:
                       <
@@ -2983,6 +3621,26 @@ class $$CasesTableTableManager
                           referencedColumn: 'case_id',
                           typedResults: items,
                         ),
+                      if (transactionsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          CaseEntity,
+                          $CasesTable,
+                          TransactionEntity,
+                          $TransactionsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CasesTableReferences
+                              ._transactionsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CasesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).transactionsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'case_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -3007,6 +3665,7 @@ typedef $$CasesTableProcessedTableManager =
         bool clientId,
         bool sessionsRefs,
         bool caseNotesRefs,
+        bool transactionsRefs,
       })
     >;
 typedef $$SessionsTableCreateCompanionBuilder =
@@ -3649,6 +4308,450 @@ typedef $$CaseNotesTableProcessedTableManager =
       CaseNoteEntity,
       PrefetchHooks Function({bool caseId})
     >;
+typedef $$TransactionsTableCreateCompanionBuilder =
+    TransactionsCompanion Function({
+      required String id,
+      required String title,
+      required double amount,
+      required String type,
+      Value<DateTime> transactionDate,
+      Value<String?> caseId,
+      Value<String?> clientId,
+      Value<int> rowid,
+    });
+typedef $$TransactionsTableUpdateCompanionBuilder =
+    TransactionsCompanion Function({
+      Value<String> id,
+      Value<String> title,
+      Value<double> amount,
+      Value<String> type,
+      Value<DateTime> transactionDate,
+      Value<String?> caseId,
+      Value<String?> clientId,
+      Value<int> rowid,
+    });
+
+final class $$TransactionsTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $TransactionsTable, TransactionEntity> {
+  $$TransactionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $CasesTable _caseIdTable(_$AppDatabase db) =>
+      db.cases.createAlias('transactions__case_id__cases__id');
+
+  $$CasesTableProcessedTableManager? get caseId {
+    final $_column = $_itemColumn<String>('case_id');
+    if ($_column == null) return null;
+    final manager = $$CasesTableTableManager(
+      $_db,
+      $_db.cases,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_caseIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $ClientsTable _clientIdTable(_$AppDatabase db) =>
+      db.clients.createAlias('transactions__client_id__clients__id');
+
+  $$ClientsTableProcessedTableManager? get clientId {
+    final $_column = $_itemColumn<String>('client_id');
+    if ($_column == null) return null;
+    final manager = $$ClientsTableTableManager(
+      $_db,
+      $_db.clients,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_clientIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$TransactionsTableFilterComposer
+    extends Composer<_$AppDatabase, $TransactionsTable> {
+  $$TransactionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get transactionDate => $composableBuilder(
+    column: $table.transactionDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$CasesTableFilterComposer get caseId {
+    final $$CasesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableFilterComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ClientsTableFilterComposer get clientId {
+    final $$ClientsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.clientId,
+      referencedTable: $db.clients,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ClientsTableFilterComposer(
+            $db: $db,
+            $table: $db.clients,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TransactionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $TransactionsTable> {
+  $$TransactionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get transactionDate => $composableBuilder(
+    column: $table.transactionDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$CasesTableOrderingComposer get caseId {
+    final $$CasesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableOrderingComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ClientsTableOrderingComposer get clientId {
+    final $$ClientsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.clientId,
+      referencedTable: $db.clients,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ClientsTableOrderingComposer(
+            $db: $db,
+            $table: $db.clients,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TransactionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TransactionsTable> {
+  $$TransactionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<double> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get transactionDate => $composableBuilder(
+    column: $table.transactionDate,
+    builder: (column) => column,
+  );
+
+  $$CasesTableAnnotationComposer get caseId {
+    final $$CasesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ClientsTableAnnotationComposer get clientId {
+    final $$ClientsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.clientId,
+      referencedTable: $db.clients,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ClientsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.clients,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TransactionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TransactionsTable,
+          TransactionEntity,
+          $$TransactionsTableFilterComposer,
+          $$TransactionsTableOrderingComposer,
+          $$TransactionsTableAnnotationComposer,
+          $$TransactionsTableCreateCompanionBuilder,
+          $$TransactionsTableUpdateCompanionBuilder,
+          (TransactionEntity, $$TransactionsTableReferences),
+          TransactionEntity,
+          PrefetchHooks Function({bool caseId, bool clientId})
+        > {
+  $$TransactionsTableTableManager(_$AppDatabase db, $TransactionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TransactionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TransactionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TransactionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<double> amount = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<DateTime> transactionDate = const Value.absent(),
+                Value<String?> caseId = const Value.absent(),
+                Value<String?> clientId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TransactionsCompanion(
+                id: id,
+                title: title,
+                amount: amount,
+                type: type,
+                transactionDate: transactionDate,
+                caseId: caseId,
+                clientId: clientId,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String title,
+                required double amount,
+                required String type,
+                Value<DateTime> transactionDate = const Value.absent(),
+                Value<String?> caseId = const Value.absent(),
+                Value<String?> clientId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TransactionsCompanion.insert(
+                id: id,
+                title: title,
+                amount: amount,
+                type: type,
+                transactionDate: transactionDate,
+                caseId: caseId,
+                clientId: clientId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$TransactionsTable, TransactionEntity>(table),
+                  $$TransactionsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({caseId = false, clientId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (caseId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.caseId,
+                                referencedTable: $$TransactionsTableReferences
+                                    ._caseIdTable(db),
+                                referencedColumn: $$TransactionsTableReferences
+                                    ._caseIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+                    if (clientId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.clientId,
+                                referencedTable: $$TransactionsTableReferences
+                                    ._clientIdTable(db),
+                                referencedColumn: $$TransactionsTableReferences
+                                    ._clientIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$TransactionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TransactionsTable,
+      TransactionEntity,
+      $$TransactionsTableFilterComposer,
+      $$TransactionsTableOrderingComposer,
+      $$TransactionsTableAnnotationComposer,
+      $$TransactionsTableCreateCompanionBuilder,
+      $$TransactionsTableUpdateCompanionBuilder,
+      (TransactionEntity, $$TransactionsTableReferences),
+      TransactionEntity,
+      PrefetchHooks Function({bool caseId, bool clientId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3663,4 +4766,6 @@ class $AppDatabaseManager {
       $$SessionsTableTableManager(_db, _db.sessions);
   $$CaseNotesTableTableManager get caseNotes =>
       $$CaseNotesTableTableManager(_db, _db.caseNotes);
+  $$TransactionsTableTableManager get transactions =>
+      $$TransactionsTableTableManager(_db, _db.transactions);
 }
