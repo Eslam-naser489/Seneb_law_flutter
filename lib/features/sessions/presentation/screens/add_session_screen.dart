@@ -40,9 +40,15 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
-    if (picked != null) {
+    if (mounted && picked != null) {
       setState(() => _selectedDate = picked);
     }
+  }
+
+  @override
+  void dispose() {
+    _courtController.dispose();
+    super.dispose();
   }
 
   void _saveSession() {
@@ -76,7 +82,7 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
           child: ListView(
             children: [
               DropdownButtonFormField<String>(
-                value: _selectedCaseId,
+                initialValue: _selectedCaseId,
                 decoration: const InputDecoration(labelText: 'اختر القضية', border: OutlineInputBorder()),
                 items: _cases.map((c) {
                   return DropdownMenuItem(

@@ -89,7 +89,7 @@ class _TreasuryScreenState extends State<TreasuryScreen> {
   Widget _buildSummaryCard(String title, double amount, Color color, IconData icon) {
     return Expanded(
       child: Card(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         elevation: 0,
         shape: RoundedRectangleBorder(side: BorderSide(color: color, width: 1), borderRadius: BorderRadius.circular(8)),
         child: Padding(

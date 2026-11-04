@@ -2247,6 +2247,416 @@ class TransactionsCompanion extends UpdateCompanion<TransactionEntity> {
   }
 }
 
+class $CaseDocumentsTable extends CaseDocuments
+    with TableInfo<$CaseDocumentsTable, CaseDocumentEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CaseDocumentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _caseIdMeta = const VerificationMeta('caseId');
+  @override
+  late final GeneratedColumn<String> caseId = GeneratedColumn<String>(
+    'case_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES cases (id)',
+    ),
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _filePathMeta = const VerificationMeta(
+    'filePath',
+  );
+  @override
+  late final GeneratedColumn<String> filePath = GeneratedColumn<String>(
+    'file_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fileTypeMeta = const VerificationMeta(
+    'fileType',
+  );
+  @override
+  late final GeneratedColumn<String> fileType = GeneratedColumn<String>(
+    'file_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _uploadedAtMeta = const VerificationMeta(
+    'uploadedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> uploadedAt = GeneratedColumn<DateTime>(
+    'uploaded_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    caseId,
+    title,
+    filePath,
+    fileType,
+    uploadedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'case_documents';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CaseDocumentEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('case_id')) {
+      context.handle(
+        _caseIdMeta,
+        caseId.isAcceptableOrUnknown(data['case_id']!, _caseIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_caseIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('file_path')) {
+      context.handle(
+        _filePathMeta,
+        filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_filePathMeta);
+    }
+    if (data.containsKey('file_type')) {
+      context.handle(
+        _fileTypeMeta,
+        fileType.isAcceptableOrUnknown(data['file_type']!, _fileTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_fileTypeMeta);
+    }
+    if (data.containsKey('uploaded_at')) {
+      context.handle(
+        _uploadedAtMeta,
+        uploadedAt.isAcceptableOrUnknown(data['uploaded_at']!, _uploadedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CaseDocumentEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CaseDocumentEntity(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      caseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}case_id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      filePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_path'],
+      )!,
+      fileType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_type'],
+      )!,
+      uploadedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}uploaded_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CaseDocumentsTable createAlias(String alias) {
+    return $CaseDocumentsTable(attachedDatabase, alias);
+  }
+}
+
+class CaseDocumentEntity extends DataClass
+    implements Insertable<CaseDocumentEntity> {
+  final String id;
+  final String caseId;
+  final String title;
+  final String filePath;
+  final String fileType;
+  final DateTime uploadedAt;
+  const CaseDocumentEntity({
+    required this.id,
+    required this.caseId,
+    required this.title,
+    required this.filePath,
+    required this.fileType,
+    required this.uploadedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['case_id'] = Variable<String>(caseId);
+    map['title'] = Variable<String>(title);
+    map['file_path'] = Variable<String>(filePath);
+    map['file_type'] = Variable<String>(fileType);
+    map['uploaded_at'] = Variable<DateTime>(uploadedAt);
+    return map;
+  }
+
+  CaseDocumentsCompanion toCompanion(bool nullToAbsent) {
+    return CaseDocumentsCompanion(
+      id: Value(id),
+      caseId: Value(caseId),
+      title: Value(title),
+      filePath: Value(filePath),
+      fileType: Value(fileType),
+      uploadedAt: Value(uploadedAt),
+    );
+  }
+
+  factory CaseDocumentEntity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CaseDocumentEntity(
+      id: serializer.fromJson<String>(json['id']),
+      caseId: serializer.fromJson<String>(json['caseId']),
+      title: serializer.fromJson<String>(json['title']),
+      filePath: serializer.fromJson<String>(json['filePath']),
+      fileType: serializer.fromJson<String>(json['fileType']),
+      uploadedAt: serializer.fromJson<DateTime>(json['uploadedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'caseId': serializer.toJson<String>(caseId),
+      'title': serializer.toJson<String>(title),
+      'filePath': serializer.toJson<String>(filePath),
+      'fileType': serializer.toJson<String>(fileType),
+      'uploadedAt': serializer.toJson<DateTime>(uploadedAt),
+    };
+  }
+
+  CaseDocumentEntity copyWith({
+    String? id,
+    String? caseId,
+    String? title,
+    String? filePath,
+    String? fileType,
+    DateTime? uploadedAt,
+  }) => CaseDocumentEntity(
+    id: id ?? this.id,
+    caseId: caseId ?? this.caseId,
+    title: title ?? this.title,
+    filePath: filePath ?? this.filePath,
+    fileType: fileType ?? this.fileType,
+    uploadedAt: uploadedAt ?? this.uploadedAt,
+  );
+  CaseDocumentEntity copyWithCompanion(CaseDocumentsCompanion data) {
+    return CaseDocumentEntity(
+      id: data.id.present ? data.id.value : this.id,
+      caseId: data.caseId.present ? data.caseId.value : this.caseId,
+      title: data.title.present ? data.title.value : this.title,
+      filePath: data.filePath.present ? data.filePath.value : this.filePath,
+      fileType: data.fileType.present ? data.fileType.value : this.fileType,
+      uploadedAt: data.uploadedAt.present
+          ? data.uploadedAt.value
+          : this.uploadedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CaseDocumentEntity(')
+          ..write('id: $id, ')
+          ..write('caseId: $caseId, ')
+          ..write('title: $title, ')
+          ..write('filePath: $filePath, ')
+          ..write('fileType: $fileType, ')
+          ..write('uploadedAt: $uploadedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, caseId, title, filePath, fileType, uploadedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CaseDocumentEntity &&
+          other.id == this.id &&
+          other.caseId == this.caseId &&
+          other.title == this.title &&
+          other.filePath == this.filePath &&
+          other.fileType == this.fileType &&
+          other.uploadedAt == this.uploadedAt);
+}
+
+class CaseDocumentsCompanion extends UpdateCompanion<CaseDocumentEntity> {
+  final Value<String> id;
+  final Value<String> caseId;
+  final Value<String> title;
+  final Value<String> filePath;
+  final Value<String> fileType;
+  final Value<DateTime> uploadedAt;
+  final Value<int> rowid;
+  const CaseDocumentsCompanion({
+    this.id = const Value.absent(),
+    this.caseId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.filePath = const Value.absent(),
+    this.fileType = const Value.absent(),
+    this.uploadedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CaseDocumentsCompanion.insert({
+    required String id,
+    required String caseId,
+    required String title,
+    required String filePath,
+    required String fileType,
+    this.uploadedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       caseId = Value(caseId),
+       title = Value(title),
+       filePath = Value(filePath),
+       fileType = Value(fileType);
+  static Insertable<CaseDocumentEntity> custom({
+    Expression<String>? id,
+    Expression<String>? caseId,
+    Expression<String>? title,
+    Expression<String>? filePath,
+    Expression<String>? fileType,
+    Expression<DateTime>? uploadedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (caseId != null) 'case_id': caseId,
+      if (title != null) 'title': title,
+      if (filePath != null) 'file_path': filePath,
+      if (fileType != null) 'file_type': fileType,
+      if (uploadedAt != null) 'uploaded_at': uploadedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CaseDocumentsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? caseId,
+    Value<String>? title,
+    Value<String>? filePath,
+    Value<String>? fileType,
+    Value<DateTime>? uploadedAt,
+    Value<int>? rowid,
+  }) {
+    return CaseDocumentsCompanion(
+      id: id ?? this.id,
+      caseId: caseId ?? this.caseId,
+      title: title ?? this.title,
+      filePath: filePath ?? this.filePath,
+      fileType: fileType ?? this.fileType,
+      uploadedAt: uploadedAt ?? this.uploadedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (caseId.present) {
+      map['case_id'] = Variable<String>(caseId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (filePath.present) {
+      map['file_path'] = Variable<String>(filePath.value);
+    }
+    if (fileType.present) {
+      map['file_type'] = Variable<String>(fileType.value);
+    }
+    if (uploadedAt.present) {
+      map['uploaded_at'] = Variable<DateTime>(uploadedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CaseDocumentsCompanion(')
+          ..write('id: $id, ')
+          ..write('caseId: $caseId, ')
+          ..write('title: $title, ')
+          ..write('filePath: $filePath, ')
+          ..write('fileType: $fileType, ')
+          ..write('uploadedAt: $uploadedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2256,6 +2666,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SessionsTable sessions = $SessionsTable(this);
   late final $CaseNotesTable caseNotes = $CaseNotesTable(this);
   late final $TransactionsTable transactions = $TransactionsTable(this);
+  late final $CaseDocumentsTable caseDocuments = $CaseDocumentsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2267,6 +2678,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     sessions,
     caseNotes,
     transactions,
+    caseDocuments,
   ];
 }
 
@@ -3139,6 +3551,24 @@ final class $$CasesTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$CaseDocumentsTable, List<CaseDocumentEntity>>
+  _caseDocumentsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.caseDocuments,
+    aliasName: 'cases__id__case_documents__case_id',
+  );
+
+  $$CaseDocumentsTableProcessedTableManager get caseDocumentsRefs {
+    final manager = $$CaseDocumentsTableTableManager(
+      $_db,
+      $_db.caseDocuments,
+    ).filter((f) => f.caseId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_caseDocumentsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$CasesTableFilterComposer extends Composer<_$AppDatabase, $CasesTable> {
@@ -3263,6 +3693,31 @@ class $$CasesTableFilterComposer extends Composer<_$AppDatabase, $CasesTable> {
           }) => $$TransactionsTableFilterComposer(
             $db: $db,
             $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> caseDocumentsRefs(
+    Expression<bool> Function($$CaseDocumentsTableFilterComposer f) f,
+  ) {
+    final $$CaseDocumentsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.caseDocuments,
+      getReferencedColumn: (t) => t.caseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CaseDocumentsTableFilterComposer(
+            $db: $db,
+            $table: $db.caseDocuments,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3456,6 +3911,31 @@ class $$CasesTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> caseDocumentsRefs<T extends Object>(
+    Expression<T> Function($$CaseDocumentsTableAnnotationComposer a) f,
+  ) {
+    final $$CaseDocumentsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.caseDocuments,
+      getReferencedColumn: (t) => t.caseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CaseDocumentsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.caseDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$CasesTableTableManager
@@ -3476,6 +3956,7 @@ class $$CasesTableTableManager
             bool sessionsRefs,
             bool caseNotesRefs,
             bool transactionsRefs,
+            bool caseDocumentsRefs,
           })
         > {
   $$CasesTableTableManager(_$AppDatabase db, $CasesTable table)
@@ -3539,6 +4020,7 @@ class $$CasesTableTableManager
                 sessionsRefs = false,
                 caseNotesRefs = false,
                 transactionsRefs = false,
+                caseDocumentsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -3546,6 +4028,7 @@ class $$CasesTableTableManager
                     if (sessionsRefs) db.sessions,
                     if (caseNotesRefs) db.caseNotes,
                     if (transactionsRefs) db.transactions,
+                    if (caseDocumentsRefs) db.caseDocuments,
                   ],
                   addJoins:
                       <
@@ -3641,6 +4124,26 @@ class $$CasesTableTableManager
                           referencedColumn: 'case_id',
                           typedResults: items,
                         ),
+                      if (caseDocumentsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          CaseEntity,
+                          $CasesTable,
+                          CaseDocumentEntity,
+                          $CaseDocumentsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CasesTableReferences
+                              ._caseDocumentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CasesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).caseDocumentsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'case_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -3666,6 +4169,7 @@ typedef $$CasesTableProcessedTableManager =
         bool sessionsRefs,
         bool caseNotesRefs,
         bool transactionsRefs,
+        bool caseDocumentsRefs,
       })
     >;
 typedef $$SessionsTableCreateCompanionBuilder =
@@ -4752,6 +5256,349 @@ typedef $$TransactionsTableProcessedTableManager =
       TransactionEntity,
       PrefetchHooks Function({bool caseId, bool clientId})
     >;
+typedef $$CaseDocumentsTableCreateCompanionBuilder =
+    CaseDocumentsCompanion Function({
+      required String id,
+      required String caseId,
+      required String title,
+      required String filePath,
+      required String fileType,
+      Value<DateTime> uploadedAt,
+      Value<int> rowid,
+    });
+typedef $$CaseDocumentsTableUpdateCompanionBuilder =
+    CaseDocumentsCompanion Function({
+      Value<String> id,
+      Value<String> caseId,
+      Value<String> title,
+      Value<String> filePath,
+      Value<String> fileType,
+      Value<DateTime> uploadedAt,
+      Value<int> rowid,
+    });
+
+final class $$CaseDocumentsTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $CaseDocumentsTable, CaseDocumentEntity> {
+  $$CaseDocumentsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $CasesTable _caseIdTable(_$AppDatabase db) =>
+      db.cases.createAlias('case_documents__case_id__cases__id');
+
+  $$CasesTableProcessedTableManager get caseId {
+    final $_column = $_itemColumn<String>('case_id')!;
+
+    final manager = $$CasesTableTableManager(
+      $_db,
+      $_db.cases,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_caseIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$CaseDocumentsTableFilterComposer
+    extends Composer<_$AppDatabase, $CaseDocumentsTable> {
+  $$CaseDocumentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get filePath => $composableBuilder(
+    column: $table.filePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fileType => $composableBuilder(
+    column: $table.fileType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get uploadedAt => $composableBuilder(
+    column: $table.uploadedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$CasesTableFilterComposer get caseId {
+    final $$CasesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableFilterComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CaseDocumentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CaseDocumentsTable> {
+  $$CaseDocumentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get filePath => $composableBuilder(
+    column: $table.filePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fileType => $composableBuilder(
+    column: $table.fileType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get uploadedAt => $composableBuilder(
+    column: $table.uploadedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$CasesTableOrderingComposer get caseId {
+    final $$CasesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableOrderingComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CaseDocumentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CaseDocumentsTable> {
+  $$CaseDocumentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get filePath =>
+      $composableBuilder(column: $table.filePath, builder: (column) => column);
+
+  GeneratedColumn<String> get fileType =>
+      $composableBuilder(column: $table.fileType, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get uploadedAt => $composableBuilder(
+    column: $table.uploadedAt,
+    builder: (column) => column,
+  );
+
+  $$CasesTableAnnotationComposer get caseId {
+    final $$CasesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CaseDocumentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CaseDocumentsTable,
+          CaseDocumentEntity,
+          $$CaseDocumentsTableFilterComposer,
+          $$CaseDocumentsTableOrderingComposer,
+          $$CaseDocumentsTableAnnotationComposer,
+          $$CaseDocumentsTableCreateCompanionBuilder,
+          $$CaseDocumentsTableUpdateCompanionBuilder,
+          (CaseDocumentEntity, $$CaseDocumentsTableReferences),
+          CaseDocumentEntity,
+          PrefetchHooks Function({bool caseId})
+        > {
+  $$CaseDocumentsTableTableManager(_$AppDatabase db, $CaseDocumentsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CaseDocumentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CaseDocumentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CaseDocumentsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> caseId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> filePath = const Value.absent(),
+                Value<String> fileType = const Value.absent(),
+                Value<DateTime> uploadedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CaseDocumentsCompanion(
+                id: id,
+                caseId: caseId,
+                title: title,
+                filePath: filePath,
+                fileType: fileType,
+                uploadedAt: uploadedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String caseId,
+                required String title,
+                required String filePath,
+                required String fileType,
+                Value<DateTime> uploadedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CaseDocumentsCompanion.insert(
+                id: id,
+                caseId: caseId,
+                title: title,
+                filePath: filePath,
+                fileType: fileType,
+                uploadedAt: uploadedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$CaseDocumentsTable, CaseDocumentEntity>(table),
+                  $$CaseDocumentsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({caseId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (caseId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.caseId,
+                                referencedTable: $$CaseDocumentsTableReferences
+                                    ._caseIdTable(db),
+                                referencedColumn: $$CaseDocumentsTableReferences
+                                    ._caseIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$CaseDocumentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CaseDocumentsTable,
+      CaseDocumentEntity,
+      $$CaseDocumentsTableFilterComposer,
+      $$CaseDocumentsTableOrderingComposer,
+      $$CaseDocumentsTableAnnotationComposer,
+      $$CaseDocumentsTableCreateCompanionBuilder,
+      $$CaseDocumentsTableUpdateCompanionBuilder,
+      (CaseDocumentEntity, $$CaseDocumentsTableReferences),
+      CaseDocumentEntity,
+      PrefetchHooks Function({bool caseId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4768,4 +5615,6 @@ class $AppDatabaseManager {
       $$CaseNotesTableTableManager(_db, _db.caseNotes);
   $$TransactionsTableTableManager get transactions =>
       $$TransactionsTableTableManager(_db, _db.transactions);
+  $$CaseDocumentsTableTableManager get caseDocuments =>
+      $$CaseDocumentsTableTableManager(_db, _db.caseDocuments);
 }

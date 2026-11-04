@@ -87,7 +87,7 @@ class _AddCaseScreenState extends State<AddCaseScreen> {
           child: ListView(
             children: [
               DropdownButtonFormField<String>(
-                value: _selectedClientId,
+                initialValue: _selectedClientId,
                 decoration: const InputDecoration(
                   labelText: 'اختر الموكل',
                   border: OutlineInputBorder(),

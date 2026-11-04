@@ -104,7 +104,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedLawyerId,
+                initialValue: _selectedLawyerId,
                 decoration: const InputDecoration(
                   labelText: 'المحامي المسؤول',
                   border: OutlineInputBorder(),

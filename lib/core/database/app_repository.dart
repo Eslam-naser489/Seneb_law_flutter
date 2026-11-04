@@ -206,6 +206,31 @@ class AppRepository {
     }).toList();
   }
 
+  // 3. جلب جلسات الغد (للتنبيهات المسبقة)
+  Future<List<SessionWithDetails>> getTomorrowSessions() async {
+    final now = DateTime.now();
+    // نضيف يوم على تاريخ النهارده
+    final startOfTomorrow = DateTime(now.year, now.month, now.day + 1);
+    final endOfTomorrow = DateTime(now.year, now.month, now.day + 1, 23, 59, 59, 999);
+
+    final query = db.select(db.sessions).join([
+      innerJoin(db.cases, db.cases.id.equalsExp(db.sessions.caseId)),
+      innerJoin(db.clients, db.clients.id.equalsExp(db.cases.clientId)),
+    ])
+      ..where(db.sessions.sessionDate.isBetweenValues(startOfTomorrow, endOfTomorrow))
+      ..orderBy([OrderingTerm.asc(db.sessions.sessionDate)]);
+
+    final rows = await query.get();
+
+    return rows.map((row) {
+      return SessionWithDetails(
+        session: row.readTable(db.sessions),
+        caseEntity: row.readTable(db.cases),
+        client: row.readTable(db.clients),
+      );
+    }).toList();
+  }
+
   // ==========================================
   // الملاحظات (Case Notes) وتفاصيل القضية
   // ==========================================
@@ -301,6 +326,43 @@ class AppRepository {
           ..where((t) => t.caseId.equals(caseId))
           ..orderBy([(t) => OrderingTerm.desc(t.transactionDate)]))
         .get();
+  }
+
+  // ==========================================
+  // المستندات (Case Documents)
+  // ==========================================
+
+  // 1. إضافة مستند لقضية
+  Future<void> addCaseDocument({
+    required String caseId,
+    required String title,
+    required String filePath,
+    required String fileType,
+  }) async {
+    final id = _uuid.v4();
+
+    await db.into(db.caseDocuments).insert(
+      CaseDocumentsCompanion.insert(
+        id: id,
+        caseId: caseId,
+        title: title,
+        filePath: filePath,
+        fileType: fileType,
+      ),
+    );
+  }
+
+  // 2. جلب مستندات قضية معينة (من الأحدث للأقدم)
+  Future<List<CaseDocumentEntity>> getCaseDocuments(String caseId) async {
+    return await (db.select(db.caseDocuments)
+          ..where((t) => t.caseId.equals(caseId))
+          ..orderBy([(t) => OrderingTerm.desc(t.uploadedAt)]))
+        .get();
+  }
+
+  // 3. حذف مستند
+  Future<void> deleteCaseDocument(String id) async {
+    await (db.delete(db.caseDocuments)..where((t) => t.id.equals(id))).go();
   }
 }
 

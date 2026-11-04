@@ -7,18 +7,22 @@ class SessionsCubit extends Cubit<SessionsState> {
 
   SessionsCubit(this.repository) : super(SessionsInitial());
 
-  // جلب جلسات اليوم من الـ Repository
-  Future<void> loadTodaySessions() async {
-    emit(SessionsLoading()); // إظهار علامة التحميل
+  // جلب جلسات اليوم والغد معاً
+  Future<void> loadDashboardSessions() async {
+    emit(SessionsLoading());
     try {
-      final sessions = await repository.getTodaySessions();
-      emit(SessionsLoaded(sessions)); // تمرير البيانات بنجاح للشاشة
+      final today = await repository.getTodaySessions();
+      final tomorrow = await repository.getTomorrowSessions(); // جلب بكرة
+      
+      emit(SessionsLoaded(
+        todaySessions: today,
+        tomorrowSessions: tomorrow,
+      ));
     } catch (e) {
-      emit(SessionsError(e.toString())); // في حالة حدوث خطأ
+      emit(SessionsError(e.toString()));
     }
   }
 
-  // إضافة جلسة جديدة
   Future<void> addSession({
     required String caseId,
     required DateTime sessionDate,
@@ -30,9 +34,8 @@ class SessionsCubit extends Cubit<SessionsState> {
         sessionDate: sessionDate,
         courtLocation: courtLocation,
       );
-      
-      // بمجرد الحفظ بنجاح، نقوم بجلب جلسات اليوم مرة أخرى لتحديث الشاشة فوراً
-      await loadTodaySessions();
+      // تحديث الشاشة بعد الإضافة
+      await loadDashboardSessions();
     } catch (e) {
       emit(SessionsError(e.toString()));
     }

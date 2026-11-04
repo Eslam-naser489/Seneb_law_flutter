@@ -14,10 +14,15 @@ class SessionsLoading extends SessionsState {}
 
 class SessionsLoaded extends SessionsState {
   final List<SessionWithDetails> todaySessions;
-  const SessionsLoaded(this.todaySessions);
+  final List<SessionWithDetails> tomorrowSessions; // القائمة الجديدة
+
+  const SessionsLoaded({
+    required this.todaySessions,
+    required this.tomorrowSessions,
+  });
 
   @override
-  List<Object> get props => [todaySessions];
+  List<Object> get props => [todaySessions, tomorrowSessions];
 }
 
 class SessionsError extends SessionsState {

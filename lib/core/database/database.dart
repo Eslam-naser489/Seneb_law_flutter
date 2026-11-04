@@ -78,19 +78,41 @@ class Transactions extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [OfficeLawyers, Clients, Cases, Sessions, CaseNotes , Transactions])
+// 7. جدول مستندات القضايا
+@DataClassName('CaseDocumentEntity')
+class CaseDocuments extends Table {
+  TextColumn get id => text()(); 
+  TextColumn get caseId => text().references(Cases, #id)(); 
+  TextColumn get title => text()(); 
+  TextColumn get filePath => text()(); 
+  TextColumn get fileType => text()(); 
+  DateTimeColumn get uploadedAt => dateTime().withDefault(currentDateAndTime)();
+  
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [OfficeLawyers, Clients, Cases, Sessions, CaseNotes, Transactions, CaseDocuments])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
+
+  
   
   // Constructor مخصص للـ Testing
   AppDatabase.forTesting(super.connection); 
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
+      onCreate: (m) => m.createAll(),
+      onUpgrade: (m, from, to) async {
+        if (from < 2) {
+          await m.createTable(caseDocuments);
+        }
+      },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
       },

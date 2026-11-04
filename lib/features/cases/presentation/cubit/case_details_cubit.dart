@@ -8,19 +8,25 @@ class CaseDetailsCubit extends Cubit<CaseDetailsState> {
   CaseDetailsCubit(this.repository) : super(CaseDetailsInitial());
 
   Future<void> loadCaseDetails(String caseId) async {
+    if (isClosed) return;
     emit(CaseDetailsLoading());
     try {
       final sessions = await repository.getCaseSessions(caseId);
       final notes = await repository.getCaseNotes(caseId);
-      final transactions = await repository.getCaseTransactions(caseId); // الجديد
-      
-      emit(CaseDetailsLoaded(
-        sessions: sessions,
-        notes: notes,
-        transactions: transactions, // الجديد
-      ));
+      final transactions = await repository.getCaseTransactions(caseId);
+      final documents = await repository.getCaseDocuments(caseId); // الجديد
+
+      if (isClosed) return;
+      emit(
+        CaseDetailsLoaded(
+          sessions: sessions,
+          notes: notes,
+          transactions: transactions,
+          documents: documents, // الجديد
+        ),
+      );
     } catch (e) {
-      emit(CaseDetailsError(e.toString()));
+      if (!isClosed) emit(CaseDetailsError(e.toString()));
     }
   }
 
@@ -29,11 +35,10 @@ class CaseDetailsCubit extends Cubit<CaseDetailsState> {
       await repository.addCaseNote(caseId: caseId, content: content);
       await loadCaseDetails(caseId);
     } catch (e) {
-      emit(CaseDetailsError(e.toString()));
+      if (!isClosed) emit(CaseDetailsError(e.toString()));
     }
   }
 
-  // الجديد: إضافة دفعة أتعاب للقضية
   Future<void> addCasePayment({
     required String caseId,
     required String clientId,
@@ -44,13 +49,33 @@ class CaseDetailsCubit extends Cubit<CaseDetailsState> {
       await repository.addTransaction(
         title: title,
         amount: amount,
-        type: 'INCOME', // الأتعاب دائماً إيراد
+        type: 'INCOME',
         caseId: caseId,
         clientId: clientId,
       );
+      await loadCaseDetails(caseId);
+    } catch (e) {
+      if (!isClosed) emit(CaseDetailsError(e.toString()));
+    }
+  }
+
+  // الجديد: إضافة مستند للأرشيف
+  Future<void> addDocument({
+    required String caseId,
+    required String title,
+    required String filePath,
+    required String fileType,
+  }) async {
+    try {
+      await repository.addCaseDocument(
+        caseId: caseId,
+        title: title,
+        filePath: filePath,
+        fileType: fileType,
+      );
       await loadCaseDetails(caseId); // تحديث الشاشة
     } catch (e) {
-      emit(CaseDetailsError(e.toString()));
+      if (!isClosed) emit(CaseDetailsError(e.toString()));
     }
   }
 }

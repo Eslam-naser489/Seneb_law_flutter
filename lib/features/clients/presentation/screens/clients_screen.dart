@@ -39,7 +39,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceVariant,
+                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
               ),
               onChanged: (value) {
                 // استدعاء دالة البحث في الـ Cubit مع كل حرف يتكتب
