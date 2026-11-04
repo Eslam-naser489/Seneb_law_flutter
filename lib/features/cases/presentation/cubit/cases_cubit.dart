@@ -4,16 +4,32 @@ import 'cases_state.dart';
 
 class CasesCubit extends Cubit<CasesState> {
   final AppRepository repository;
+  
+  List<CaseWithClient> _allCases = []; // كاش القضايا
 
   CasesCubit(this.repository) : super(CasesInitial());
 
   Future<void> loadCases() async {
     emit(CasesLoading());
     try {
-      final casesList = await repository.getCasesWithClients();
-      emit(CasesLoaded(casesList));
+      _allCases = await repository.getCasesWithClients();
+      emit(CasesLoaded(_allCases));
     } catch (e) {
       emit(CasesError(e.toString()));
+    }
+  }
+
+  // دالة البحث: بتبحث في رقم القضية أو في اسم الموكل
+  void searchCases(String query) {
+    if (query.trim().isEmpty) {
+      emit(CasesLoaded(_allCases));
+    } else {
+      final q = query.toLowerCase();
+      final filtered = _allCases.where((c) => 
+        c.caseEntity.caseNumber.toLowerCase().contains(q) ||
+        c.client.name.toLowerCase().contains(q)
+      ).toList();
+      emit(CasesLoaded(filtered));
     }
   }
 
@@ -24,7 +40,7 @@ class CasesCubit extends Cubit<CasesState> {
         caseNumber: caseNumber,
         opponentName: opponentName,
       );
-      await loadCases(); // تحديث القائمة بعد الإضافة
+      await loadCases();
     } catch (e) {
       emit(CasesError(e.toString()));
     }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:seneb_law/app/router.dart';
+import 'package:seneb_law/features/treasury/presentation/cubit/treasury_cubit.dart';  
 import 'package:seneb_law/app/theme/app_theme.dart';
 
 import 'package:seneb_law/core/database/database.dart';
@@ -51,6 +51,11 @@ class SenebLawApp extends StatelessWidget {
           // إدارة الجلسات
           BlocProvider(
             create: (context) => SessionsCubit(repository),
+          ),
+
+          // إدارة الخزينة
+          BlocProvider(
+            create: (context) => TreasuryCubit(repository),
           ),
         ],
 

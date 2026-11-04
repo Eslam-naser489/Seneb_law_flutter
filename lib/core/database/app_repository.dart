@@ -294,6 +294,14 @@ class AppRepository {
       'net': totalIncome - totalExpense, // الصافي
     };
   }
+
+  // 4. جلب المعاملات المالية الخاصة بقضية معينة فقط
+  Future<List<TransactionEntity>> getCaseTransactions(String caseId) async {
+    return await (db.select(db.transactions)
+          ..where((t) => t.caseId.equals(caseId))
+          ..orderBy([(t) => OrderingTerm.desc(t.transactionDate)]))
+        .get();
+  }
 }
 
 

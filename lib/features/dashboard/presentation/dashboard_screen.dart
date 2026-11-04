@@ -31,25 +31,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // أزرار التنقل السريعة
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () => context.push('/clients'),
-                  icon: const Icon(Icons.people),
-                  label: const Text('الموكلين'),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () => context.push('/cases'),
-                  icon: const Icon(Icons.gavel),
-                  label: const Text('القضايا'),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () => context.push('/add-session'),
-                  icon: const Icon(Icons.calendar_today),
-                  label: const Text('جلسة جديدة'),
-                ),
-              ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () => context.push('/clients'),
+                    icon: const Icon(Icons.people),
+                    label: const Text('الموكلين'),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton.icon(
+                    onPressed: () => context.push('/cases'),
+                    icon: const Icon(Icons.gavel),
+                    label: const Text('القضايا'),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton.icon(
+                    onPressed: () => context.push('/add-session'),
+                    icon: const Icon(Icons.calendar_today),
+                    label: const Text('جلسة جديدة'),
+                  ),
+                  const SizedBox(width: 8),
+                  // زرار الخزينة الجديد
+                  ElevatedButton.icon(
+                    onPressed: () => context.push('/treasury'),
+                    icon: const Icon(Icons.account_balance_wallet),
+                    label: const Text('الخزينة'),
+                  ),
+                ],
+              ),
             ),
           ),
           const Divider(),

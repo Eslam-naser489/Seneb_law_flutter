@@ -15,14 +15,16 @@ class CaseDetailsLoading extends CaseDetailsState {}
 class CaseDetailsLoaded extends CaseDetailsState {
   final List<SessionEntity> sessions;
   final List<CaseNoteEntity> notes;
+  final List<TransactionEntity> transactions; // الجديد
 
   const CaseDetailsLoaded({
     required this.sessions,
     required this.notes,
+    required this.transactions, // الجديد
   });
 
   @override
-  List<Object> get props => [sessions, notes];
+  List<Object> get props => [sessions, notes, transactions];
 }
 
 class CaseDetailsError extends CaseDetailsState {

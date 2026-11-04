@@ -10,7 +10,7 @@ import 'package:seneb_law/features/clients/presentation/screens/add_client_scree
 import 'package:seneb_law/features/cases/presentation/screens/cases_screen.dart';
 import 'package:seneb_law/features/cases/presentation/screens/add_case_screen.dart';
 import 'package:seneb_law/features/cases/presentation/screens/case_details_screen.dart';
-
+import 'package:seneb_law/features/treasury/presentation/screens/treasury_screen.dart'; // إضافة السطر ده
 // ==================== الجلسات ====================
 import 'package:seneb_law/features/sessions/presentation/screens/add_session_screen.dart';
 
@@ -63,5 +63,9 @@ final appRouter = GoRouter(
       path: '/add-session',
       builder: (context, state) => const AddSessionScreen(),
     ),
+    GoRoute(
+  path: '/treasury',
+  builder: (context, state) => const TreasuryScreen(),
+),
   ],
 );

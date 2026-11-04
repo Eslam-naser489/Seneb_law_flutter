@@ -7,23 +7,48 @@ class CaseDetailsCubit extends Cubit<CaseDetailsState> {
 
   CaseDetailsCubit(this.repository) : super(CaseDetailsInitial());
 
-  // جلب جلسات وملاحظات القضية معاً
   Future<void> loadCaseDetails(String caseId) async {
     emit(CaseDetailsLoading());
     try {
       final sessions = await repository.getCaseSessions(caseId);
       final notes = await repository.getCaseNotes(caseId);
-      emit(CaseDetailsLoaded(sessions: sessions, notes: notes));
+      final transactions = await repository.getCaseTransactions(caseId); // الجديد
+      
+      emit(CaseDetailsLoaded(
+        sessions: sessions,
+        notes: notes,
+        transactions: transactions, // الجديد
+      ));
     } catch (e) {
       emit(CaseDetailsError(e.toString()));
     }
   }
 
-  // إضافة ملاحظة جديدة للقضية
   Future<void> addCaseNote(String caseId, String content) async {
     try {
       await repository.addCaseNote(caseId: caseId, content: content);
-      await loadCaseDetails(caseId); // إعادة التحميل لتحديث الشاشة
+      await loadCaseDetails(caseId);
+    } catch (e) {
+      emit(CaseDetailsError(e.toString()));
+    }
+  }
+
+  // الجديد: إضافة دفعة أتعاب للقضية
+  Future<void> addCasePayment({
+    required String caseId,
+    required String clientId,
+    required String title,
+    required double amount,
+  }) async {
+    try {
+      await repository.addTransaction(
+        title: title,
+        amount: amount,
+        type: 'INCOME', // الأتعاب دائماً إيراد
+        caseId: caseId,
+        clientId: clientId,
+      );
+      await loadCaseDetails(caseId); // تحديث الشاشة
     } catch (e) {
       emit(CaseDetailsError(e.toString()));
     }
