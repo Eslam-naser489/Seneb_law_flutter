@@ -43,3 +43,44 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local office databases and SQLite sidecar files
+*.db
+*.db-*
+*.db3
+*.db3-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# Confidential Word documents and office-generated files
+*.doc
+*.docx
+*.docm
+*.dot
+*.dotx
+*.dotm
+~$*
+/backups/
+/exports/
+/office_data/
+/runtime_data/
+
+# Local credentials, signing keys, and environment secrets
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+**/key.properties
+**/local.properties
+
+# Nested build and native-tool caches
+**/build/
+**/.gradle/
+**/.cxx/
+**/ephemeral/

@@ -9,7 +9,7 @@ class PdfHelper {
       List<SessionWithDetails> sessions, String title, DateTime date) async {
     final pdf = pw.Document();
 
-    // تحميل خط عربي مدعوم من Google Fonts عشان الحروف متطلعش متقطعة
+    // تحميل خط عربي مدعوم من Google Fonts
     final arabicFont = await PdfGoogleFonts.cairoRegular();
     final arabicFontBold = await PdfGoogleFonts.cairoBold();
 
@@ -78,7 +78,7 @@ class PdfHelper {
       ),
     );
 
-    // أمر الطباعة (بيفتح نافذة الطباعة أو حفظ كـ PDF في الويندوز/الأندرويد)
+    // أمر الطباعة
     await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => pdf.save(),
       name: 'Agenda_${date.year}_${date.month}_${date.day}.pdf',

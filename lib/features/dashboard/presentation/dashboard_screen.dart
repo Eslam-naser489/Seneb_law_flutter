@@ -6,6 +6,7 @@ import 'package:seneb_law/features/sessions/presentation/cubit/sessions_cubit.da
 import 'package:seneb_law/features/sessions/presentation/cubit/sessions_state.dart';
 import 'package:seneb_law/l10n/app_localizations.dart';
 
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
