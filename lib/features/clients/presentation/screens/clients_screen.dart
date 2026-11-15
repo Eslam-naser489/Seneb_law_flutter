@@ -1,3 +1,4 @@
+import 'package:seneb_law/core/database/app_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -22,10 +23,10 @@ class _ClientsScreenState extends State<ClientsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final repo = context.read<AppRepository>();
+    final workspace = repo is ScopedAppRepository ? repo : null;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('إدارة الموكلين'),
-      ),
+      appBar: AppBar(title: const Text('إدارة الموكلين')),
       body: Column(
         children: [
           // شريط البحث الذكي (الجديد)
@@ -39,7 +40,9 @@ class _ClientsScreenState extends State<ClientsScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                fillColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest,
               ),
               onChanged: (value) {
                 // استدعاء دالة البحث في الـ Cubit مع كل حرف يتكتب
@@ -47,19 +50,15 @@ class _ClientsScreenState extends State<ClientsScreen> {
               },
             ),
           ),
-          
+
           // قائمة الموكلين
           Expanded(
             child: BlocBuilder<ClientsCubit, ClientsState>(
               builder: (context, state) {
                 if (state is ClientsLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 } else if (state is ClientsError) {
-                  return Center(
-                    child: Text('حدث خطأ: ${state.message}'),
-                  );
+                  return Center(child: Text('حدث خطأ: ${state.message}'));
                 } else if (state is ClientsLoaded) {
                   if (state.clients.isEmpty) {
                     return const Center(
@@ -74,29 +73,39 @@ class _ClientsScreenState extends State<ClientsScreen> {
 
                       return Card(
                         margin: const EdgeInsets.symmetric(
-                          horizontal: 12, 
+                          horizontal: 12,
                           vertical: 4,
                         ),
                         child: ListTile(
+                          onTap: workspace == null
+                              ? null
+                              : () async {
+                                  await context.push(
+                                    '/client/${Uri.encodeComponent(client.id)}',
+                                  );
+                                  if (context.mounted) {
+                                    context.read<ClientsCubit>().loadClients();
+                                  }
+                                },
                           leading: const CircleAvatar(
                             child: Icon(Icons.person),
                           ),
                           title: Text(client.name),
-                          subtitle: Text(
-                            client.phone ?? 'لا يوجد رقم',
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(
-                              Icons.archive,
-                              color: Colors.red,
-                            ),
-                            tooltip: 'أرشفة الموكل',
-                            onPressed: () {
-                              context
-                                  .read<ClientsCubit>()
-                                  .archiveClient(client.id);
-                            },
-                          ),
+                          subtitle: Text(client.phone ?? 'لا يوجد رقم'),
+                          trailing: workspace != null
+                              ? null
+                              : IconButton(
+                                  icon: const Icon(
+                                    Icons.archive,
+                                    color: Colors.red,
+                                  ),
+                                  tooltip: 'أرشفة الموكل',
+                                  onPressed: () {
+                                    context.read<ClientsCubit>().archiveClient(
+                                      client.id,
+                                    );
+                                  },
+                                ),
                         ),
                       );
                     },
@@ -109,15 +118,17 @@ class _ClientsScreenState extends State<ClientsScreen> {
           ),
         ],
       ),
-      
+
       // زر إضافة موكل جديد
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          context.push('/add-client');
-        },
-        icon: const Icon(Icons.add),
-        label: const Text('موكل جديد'),
-      ),
+      floatingActionButton: workspace?.canEdit == false
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () {
+                context.push('/add-client');
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('موكل جديد'),
+            ),
     );
   }
 }

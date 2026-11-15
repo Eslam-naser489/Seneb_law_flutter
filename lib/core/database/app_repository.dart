@@ -1,394 +1,224 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:drift/drift.dart';
-import 'package:seneb_law/core/database/database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
+import '../security/pin_hasher.dart';
+import '../../features/lawyers/domain/office_models.dart';
+import '../../features/clients/domain/client_profile.dart';
+import '../../features/search/domain/search_models.dart';
+import '../../features/search/data/arabic_search.dart';
+import 'audit_writer.dart';
 
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:seneb_law/features/lawyers/domain/lawyers_repository.dart';
+import 'package:seneb_law/features/lawyers/data/drift_lawyers_repository.dart';
+import 'package:seneb_law/features/clients/domain/clients_repository.dart';
+import 'package:seneb_law/features/clients/data/drift_clients_repository.dart';
+import 'package:seneb_law/features/cases/domain/cases_repository.dart';
+import 'package:seneb_law/features/cases/data/drift_cases_repository.dart';
+import 'package:seneb_law/features/sessions/domain/sessions_repository.dart';
+import 'package:seneb_law/features/sessions/data/drift_sessions_repository.dart';
+import 'package:seneb_law/features/notes/domain/notes_repository.dart';
+import 'package:seneb_law/features/notes/data/drift_notes_repository.dart';
+import 'package:seneb_law/features/treasury/domain/treasury_repository.dart';
+import 'package:seneb_law/features/treasury/data/drift_treasury_repository.dart';
+import 'package:seneb_law/features/documents/domain/documents_repository.dart';
+import 'package:seneb_law/features/documents/data/drift_documents_repository.dart';
+
+import '../storage/backup_service.dart';
+import '../storage/write_coordinator.dart';
+import 'database.dart';
+import 'models.dart';
+import '../money/money.dart';
+import '../../features/finance/domain/finance_models.dart';
+import '../../features/reports/domain/report_models.dart';
+
+export 'models.dart';
+part 'office_access.dart';
+part 'scoped_repository.dart';
+part 'workspace_queries.dart';
+part 'search_queries.dart';
+part 'finance_queries.dart';
+part 'report_queries.dart';
+
+/// واجهة انتقالية تحافظ على الشاشات الحالية أثناء فصل المستودعات.
 class AppRepository {
-  final AppDatabase db;
-  final _uuid = const Uuid();
+  final AppDatabase _db;
+  final Directory? storageRoot;
+  final _writes = WriteCoordinator();
+  late final LawyersRepository lawyersRepository = DriftLawyersRepository(_db);
+  late final ClientsRepository clientsRepository = DriftClientsRepository(_db);
+  late final CasesRepository casesRepository = DriftCasesRepository(_db);
+  late final SessionsRepository sessionsRepository = DriftSessionsRepository(
+    _db,
+  );
+  late final NotesRepository notesRepository = DriftNotesRepository(_db);
+  late final TreasuryRepository treasuryRepository = DriftTreasuryRepository(
+    _db,
+  );
+  late final DocumentsRepository documentsRepository = DriftDocumentsRepository(
+    _db,
+    _resolveStorageRoot,
+  );
 
-  AppRepository(this.db);
+  AppRepository(this._db, {this.storageRoot});
+  bool get canPostLegacyTransactions => false;
 
-  // ==========================================
-  // المحامين
-  // ==========================================
+  Future<Directory> _resolveStorageRoot() async =>
+      storageRoot ??
+      Directory(
+        p.join((await getApplicationDocumentsDirectory()).path, 'seneb_law'),
+      );
 
-  Future<String> addLawyer(String name) async {
-    final id = _uuid.v4();
+  Future<void> initialize() => _writes.run(() async {
+    await _db.customSelect('SELECT 1').get();
+    await documentsRepository.resumeImports();
+  });
 
-    await db.into(db.officeLawyers).insert(
-      OfficeLawyersCompanion.insert(
-        id: id,
-        name: name,
-      ),
-    );
+  Future<BackupResult> createBackup(Directory destinationRoot) =>
+      _writes.run(() async {
+        await _db.customSelect('SELECT 1').get();
+        await documentsRepository.resumeImports();
+        final root = await _resolveStorageRoot();
+        return BackupService().create(
+          databaseFile: File(p.join(root.path, 'seneb_law_db.sqlite')),
+          storageRoot: root,
+          destinationRoot: destinationRoot,
+        );
+      });
 
-    return id;
-  }
-
-  Future<List<OfficeLawyerEntity>> getLawyers() async {
-    return await db.select(db.officeLawyers).get();
-  }
-
-  // ==========================================
-  // الموكلين
-  // ==========================================
-
-  // 1. إضافة موكل
+  Future<String> addLawyer(String name) =>
+      _writes.run(() => lawyersRepository.addLawyer(name));
+  Future<List<OfficeLawyerEntity>> getLawyers() =>
+      lawyersRepository.getLawyers();
   Future<String> addClient({
     required String name,
     String? phone,
     String? lawyerId,
-  }) async {
-    final id = _uuid.v4();
-
-    await db.into(db.clients).insert(
-      ClientsCompanion.insert(
-        id: id,
-        name: name,
-        phone: Value(phone),
-        assignedLawyerId: Value(lawyerId),
-      ),
-    );
-
-    return id;
-  }
-
-  // 2. تعديل موكل
+  }) => _writes.run(
+    () => clientsRepository.addClient(
+      name: name,
+      phone: phone,
+      lawyerId: lawyerId,
+    ),
+  );
   Future<void> updateClient(
     String id, {
     String? name,
     String? phone,
     String? lawyerId,
-  }) async {
-    await (db.update(db.clients)..where((t) => t.id.equals(id))).write(
-      ClientsCompanion(
-        name: name != null ? Value(name) : const Value.absent(),
-        phone: phone != null ? Value(phone) : const Value.absent(),
-        assignedLawyerId:
-            lawyerId != null ? Value(lawyerId) : const Value.absent(),
-      ),
-    );
-  }
-
-  // 3. أرشفة موكل
-  Future<void> archiveClient(String id) async {
-    await (db.update(db.clients)..where((t) => t.id.equals(id))).write(
-      const ClientsCompanion(
-        isArchived: Value(true),
-      ),
-    );
-  }
-
-  // 4. جلب الموكلين النشطين فقط
-  Future<List<ClientEntity>> getActiveClients() async {
-    return await (db.select(db.clients)
-          ..where((t) => t.isArchived.equals(false)))
-        .get();
-  }
-
-  // ==========================================
-  // القضايا
-  // ==========================================
-
-  // 1. إضافة قضية جديدة
+  }) => _writes.run(
+    () => clientsRepository.updateClient(
+      id,
+      name: name,
+      phone: phone,
+      lawyerId: lawyerId,
+    ),
+  );
+  Future<void> archiveClient(String id) =>
+      _writes.run(() => clientsRepository.archiveClient(id));
+  Future<List<ClientEntity>> getActiveClients() =>
+      clientsRepository.getActiveClients();
   Future<String> addCase({
     required String clientId,
     required String caseNumber,
     String? opponentName,
-  }) async {
-    final id = _uuid.v4();
-
-    await db.into(db.cases).insert(
-      CasesCompanion.insert(
-        id: id,
-        clientId: clientId,
-        caseNumber: caseNumber,
-        opponentName: Value(opponentName),
-      ),
-    );
-
-    return id;
-  }
-
-  // 2. جلب كل القضايا مع بيانات الموكلين (Join)
-  Future<List<CaseWithClient>> getCasesWithClients() async {
-    final query = db.select(db.cases).join([
-      innerJoin(
-        db.clients,
-        db.clients.id.equalsExp(db.cases.clientId),
-      ),
-    ])..orderBy([
-        OrderingTerm.desc(db.cases.createdAt),
-      ]);
-
-    final rows = await query.get();
-
-    return rows.map((row) {
-      return CaseWithClient(
-        caseEntity: row.readTable(db.cases),
-        client: row.readTable(db.clients),
-      );
-    }).toList();
-  }
-
-  // ==========================================
-  // الجلسات (Sessions)
-  // ==========================================
-
-  // 1. إضافة جلسة جديدة
+  }) => _writes.run(
+    () => casesRepository.addCase(
+      clientId: clientId,
+      caseNumber: caseNumber,
+      opponentName: opponentName,
+    ),
+  );
+  Future<List<CaseWithClient>> getCasesWithClients() =>
+      casesRepository.getCasesWithClients();
+  Future<void> updateCaseStatus(
+    String caseId,
+    String statusCode, {
+    required String reason,
+  }) => _writes.run(
+    () => casesRepository.updateCaseStatus(caseId, statusCode, reason: reason),
+  );
   Future<void> addSession({
     required String caseId,
     required DateTime sessionDate,
     required String courtLocation,
-  }) async {
-    final id = _uuid.v4();
-
-    await db.into(db.sessions).insert(
-      SessionsCompanion.insert(
-        id: id,
-        caseId: caseId,
-        sessionDate: sessionDate,
-        courtLocation: courtLocation,
-      ),
-    );
-  }
-
-  // 2. جلب جلسات اليوم مع بيانات القضية والموكل (Join)
-  Future<List<SessionWithDetails>> getTodaySessions() async {
-    final now = DateTime.now();
-
-    final startOfDay = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    );
-
-    final endOfDay = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      23,
-      59,
-      59,
-      999,
-    );
-
-    // دمج الجداول الثلاثة معاً
-    final query = db.select(db.sessions).join([
-      innerJoin(
-        db.cases,
-        db.cases.id.equalsExp(db.sessions.caseId),
-      ),
-      innerJoin(
-        db.clients,
-        db.clients.id.equalsExp(db.cases.clientId),
-      ),
-    ])
-      ..where(
-        db.sessions.sessionDate.isBetweenValues(
-          startOfDay,
-          endOfDay,
-        ),
-      )
-      ..orderBy([
-        OrderingTerm.asc(db.sessions.sessionDate),
-      ]);
-
-    final rows = await query.get();
-
-    // تحويل النتيجة إلى SessionWithDetails
-    return rows.map((row) {
-      return SessionWithDetails(
-        session: row.readTable(db.sessions),
-        caseEntity: row.readTable(db.cases),
-        client: row.readTable(db.clients),
+    String? circleNumber,
+    String? decision,
+  }) => _writes.run(
+    () => sessionsRepository.addSession(
+      caseId: caseId,
+      sessionDate: sessionDate,
+      courtLocation: courtLocation,
+      circleNumber: circleNumber,
+      decision: decision,
+    ),
+  );
+  Future<void> updateSessionDecision(
+    String sessionId,
+    String? decision, {
+    required String reason,
+  }) => _writes.run(
+    () => sessionsRepository.updateSessionDecision(
+      sessionId,
+      decision,
+      reason: reason,
+    ),
+  );
+  Future<List<SessionWithDetails>> getTodaySessions() =>
+      sessionsRepository.getTodaySessions();
+  Future<List<SessionWithDetails>> getTomorrowSessions() =>
+      sessionsRepository.getTomorrowSessions();
+  Future<List<SessionEntity>> getCaseSessions(String caseId) =>
+      sessionsRepository.getCaseSessions(caseId);
+  Future<void> addCaseNote({required String caseId, required String content}) =>
+      _writes.run(
+        () => notesRepository.addCaseNote(caseId: caseId, content: content),
       );
-    }).toList();
-  }
-
-  // 3. جلب جلسات الغد (للتنبيهات المسبقة)
-  Future<List<SessionWithDetails>> getTomorrowSessions() async {
-    final now = DateTime.now();
-    // نضيف يوم على تاريخ النهارده
-    final startOfTomorrow = DateTime(now.year, now.month, now.day + 1);
-    final endOfTomorrow = DateTime(now.year, now.month, now.day + 1, 23, 59, 59, 999);
-
-    final query = db.select(db.sessions).join([
-      innerJoin(db.cases, db.cases.id.equalsExp(db.sessions.caseId)),
-      innerJoin(db.clients, db.clients.id.equalsExp(db.cases.clientId)),
-    ])
-      ..where(db.sessions.sessionDate.isBetweenValues(startOfTomorrow, endOfTomorrow))
-      ..orderBy([OrderingTerm.asc(db.sessions.sessionDate)]);
-
-    final rows = await query.get();
-
-    return rows.map((row) {
-      return SessionWithDetails(
-        session: row.readTable(db.sessions),
-        caseEntity: row.readTable(db.cases),
-        client: row.readTable(db.clients),
-      );
-    }).toList();
-  }
-
-  // ==========================================
-  // الملاحظات (Case Notes) وتفاصيل القضية
-  // ==========================================
-
-  // 1. إضافة ملاحظة جديدة لملف القضية
-  Future<void> addCaseNote({
-    required String caseId,
-    required String content,
-  }) async {
-    final id = _uuid.v4();
-
-    await db.into(db.caseNotes).insert(
-      CaseNotesCompanion.insert(
-        id: id,
-        caseId: caseId,
-        content: content,
-      ),
-    );
-  }
-
-  // 2. جلب جميع الملاحظات الخاصة بقضية معينة (مرتبة من الأحدث للأقدم)
-  Future<List<CaseNoteEntity>> getCaseNotes(String caseId) async {
-    return await (db.select(db.caseNotes)
-          ..where((t) => t.caseId.equals(caseId))
-          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
-        .get();
-  }
-
-  // 3. جلب جميع الجلسات الخاصة بقضية معينة (لمتابعة سجل جلسات القضية)
-  Future<List<SessionEntity>> getCaseSessions(String caseId) async {
-    return await (db.select(db.sessions)
-          ..where((t) => t.caseId.equals(caseId))
-          ..orderBy([(t) => OrderingTerm.asc(t.sessionDate)]))
-        .get();
-  }
-
-  // ==========================================
-  // الماليات والخزينة (Financials & Treasury)
-  // ==========================================
-
-  // 1. إضافة معاملة مالية جديدة (إيراد أو مصروف)
+  Future<List<CaseNoteEntity>> getCaseNotes(String caseId) =>
+      notesRepository.getCaseNotes(caseId);
   Future<void> addTransaction({
     required String title,
     required double amount,
-    required String type, // 'INCOME' أو 'EXPENSE'
+    required String type,
     String? caseId,
     String? clientId,
-  }) async {
-    final id = _uuid.v4();
-    await db.into(db.transactions).insert(
-      TransactionsCompanion.insert(
-        id: id,
-        title: title,
-        amount: amount,
-        type: type,
-        caseId: Value(caseId),
-        clientId: Value(clientId),
-      ),
-    );
-  }
-
-  // 2. جلب كل المعاملات مرتبة من الأحدث للأقدم (كشف الحساب)
-  Future<List<TransactionEntity>> getAllTransactions() async {
-    return await (db.select(db.transactions)
-          ..orderBy([(t) => OrderingTerm.desc(t.transactionDate)]))
-        .get();
-  }
-
-  // 3. دالة سريعة تحسب ملخص الخزينة (إجمالي الوارد، المنصرف، والصافي)
-  Future<Map<String, double>> getTreasurySummary() async {
-    final transactions = await getAllTransactions();
-    double totalIncome = 0;
-    double totalExpense = 0;
-
-    for (var t in transactions) {
-      if (t.type == 'INCOME') {
-        totalIncome += t.amount;
-      } else if (t.type == 'EXPENSE') {
-        totalExpense += t.amount;
-      }
-    }
-
-    return {
-      'income': totalIncome,
-      'expense': totalExpense,
-      'net': totalIncome - totalExpense, // الصافي
-    };
-  }
-
-  // 4. جلب المعاملات المالية الخاصة بقضية معينة فقط
-  Future<List<TransactionEntity>> getCaseTransactions(String caseId) async {
-    return await (db.select(db.transactions)
-          ..where((t) => t.caseId.equals(caseId))
-          ..orderBy([(t) => OrderingTerm.desc(t.transactionDate)]))
-        .get();
-  }
-
-  // ==========================================
-  // المستندات (Case Documents)
-  // ==========================================
-
-  // 1. إضافة مستند لقضية
+  }) => _writes.run(
+    () => treasuryRepository.addTransaction(
+      title: title,
+      amount: amount,
+      type: type,
+      caseId: caseId,
+      clientId: clientId,
+    ),
+  );
+  Future<List<TransactionEntity>> getAllTransactions() =>
+      treasuryRepository.getAllTransactions();
+  Future<Map<String, double>> getTreasurySummary() =>
+      treasuryRepository.getTreasurySummary();
+  Future<List<TransactionEntity>> getCaseTransactions(String caseId) =>
+      treasuryRepository.getCaseTransactions(caseId);
   Future<void> addCaseDocument({
     required String caseId,
     required String title,
     required String filePath,
     required String fileType,
-  }) async {
-    final id = _uuid.v4();
-
-    await db.into(db.caseDocuments).insert(
-      CaseDocumentsCompanion.insert(
-        id: id,
-        caseId: caseId,
-        title: title,
-        filePath: filePath,
-        fileType: fileType,
-      ),
-    );
-  }
-
-  // 2. جلب مستندات قضية معينة (من الأحدث للأقدم)
-  Future<List<CaseDocumentEntity>> getCaseDocuments(String caseId) async {
-    return await (db.select(db.caseDocuments)
-          ..where((t) => t.caseId.equals(caseId))
-          ..orderBy([(t) => OrderingTerm.desc(t.uploadedAt)]))
-        .get();
-  }
-
-  // 3. حذف مستند
-  Future<void> deleteCaseDocument(String id) async {
-    await (db.delete(db.caseDocuments)..where((t) => t.id.equals(id))).go();
-  }
-}
-
-
-// الكلاسات المساعدة (Helper Classes)
-
-// القضايا مع بيانات الموكل
-class CaseWithClient {
-  final CaseEntity caseEntity;
-  final ClientEntity client;
-
-  CaseWithClient({
-    required this.caseEntity,
-    required this.client,
-  });
-}
-
-// الجلسات مع بيانات القضية والموكل
-class SessionWithDetails {
-  final SessionEntity session;
-  final CaseEntity caseEntity;
-  final ClientEntity client;
-
-  SessionWithDetails({
-    required this.session,
-    required this.caseEntity,
-    required this.client,
-  });
+  }) => _writes.run(
+    () => documentsRepository.addCaseDocument(
+      caseId: caseId,
+      title: title,
+      filePath: filePath,
+      fileType: fileType,
+    ),
+  );
+  Future<List<CaseDocumentEntity>> getCaseDocuments(String caseId) =>
+      documentsRepository.getCaseDocuments(caseId);
+  Future<void> deleteCaseDocument(String id) =>
+      _writes.run(() => documentsRepository.deleteCaseDocument(id));
+  Future<String> resolveDocumentPath(String storedPath) =>
+      documentsRepository.resolveDocumentPath(storedPath);
 }

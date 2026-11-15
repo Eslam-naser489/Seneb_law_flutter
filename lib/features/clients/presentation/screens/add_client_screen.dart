@@ -16,9 +16,12 @@ class _AddClientScreenState extends State<AddClientScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  
+
   String? _selectedLawyerId;
   List<OfficeLawyerEntity> _lawyers = [];
+  bool _saving = false;
+  bool _loading = true;
+  String? _loadError;
 
   @override
   void initState() {
@@ -28,19 +31,28 @@ class _AddClientScreenState extends State<AddClientScreen> {
 
   // جلب المحامين من الداتابيز عشان نعرضهم في الـ Dropdown
   Future<void> _loadLawyers() async {
-    final repo = context.read<AppRepository>();
-    var lawyers = await repo.getLawyers();
-    
-    // لو مفيش محامين متسجلين في المكتب، هنضيف محامي افتراضي عشان التجربة
-    if (lawyers.isEmpty) {
-      await repo.addLawyer('المحامي الرئيسي (أدمن)');
-      lawyers = await repo.getLawyers();
-    }
-    
-    if (mounted) {
+    setState(() {
+      _loading = true;
+      _loadError = null;
+    });
+    try {
+      final repo = context.read<AppRepository>();
+      var lawyers = await repo.getLawyers();
+      if (lawyers.isEmpty) {
+        await repo.addLawyer('المحامي الرئيسي (أدمن)');
+        lawyers = await repo.getLawyers();
+      }
+      if (!mounted) return;
       setState(() {
         _lawyers = lawyers;
         _selectedLawyerId = lawyers.isNotEmpty ? lawyers.first.id : null;
+        _loading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _loadError = 'تعذر تحميل المحامين.';
       });
     }
   }
@@ -52,87 +64,113 @@ class _AddClientScreenState extends State<AddClientScreen> {
     super.dispose();
   }
 
-  void _saveClient() {
-    // التأكد إن البيانات المطلوبة (الاسم) مكتوبة
-    if (_formKey.currentState!.validate()) {
-      context.read<ClientsCubit>().addClient(
-        name: _nameController.text.trim(),
-        phone: _phoneController.text.trim(),
-        lawyerId: _selectedLawyerId,
-      );
-      // الرجوع للشاشة السابقة بعد الحفظ
+  Future<void> _saveClient() async {
+    if (_saving || !_formKey.currentState!.validate()) return;
+    setState(() => _saving = true);
+    final saved = await context.read<ClientsCubit>().addClient(
+      name: _nameController.text.trim(),
+      phone: _phoneController.text.trim(),
+      lawyerId: _selectedLawyerId,
+    );
+    if (!mounted) return;
+    setState(() => _saving = false);
+    if (saved) {
       context.pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تعذر الحفظ. احتُفظ بالبيانات المدخلة، حاول مرة أخرى.'),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('إضافة موكل جديد'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'اسم الموكل',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
+    return PopScope(
+      canPop: !_saving,
+      child: Scaffold(
+        appBar: AppBar(title: const Text('إضافة موكل جديد')),
+        body: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : _loadError != null
+            ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(_loadError!),
+                    TextButton(
+                      onPressed: _loadLawyers,
+                      child: const Text('إعادة المحاولة'),
+                    ),
+                  ],
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'برجاء إدخال اسم الموكل';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'رقم الهاتف (اختياري)',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.phone),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          labelText: 'اسم الموكل',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'برجاء إدخال اسم الموكل';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _phoneController,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          labelText: 'رقم الهاتف (اختياري)',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.phone),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      DropdownButtonFormField<String>(
+                        initialValue: _selectedLawyerId,
+                        decoration: const InputDecoration(
+                          labelText: 'المحامي المسؤول',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.gavel),
+                        ),
+                        items: _lawyers.map((lawyer) {
+                          return DropdownMenuItem(
+                            value: lawyer.id,
+                            child: Text(lawyer.name),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedLawyerId = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 32),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        onPressed: _saving ? null : _saveClient,
+                        child: Text(
+                          _saving ? 'جارٍ الحفظ…' : 'حفظ بيانات الموكل',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                initialValue: _selectedLawyerId,
-                decoration: const InputDecoration(
-                  labelText: 'المحامي المسؤول',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.gavel),
-                ),
-                items: _lawyers.map((lawyer) {
-                  return DropdownMenuItem(
-                    value: lawyer.id,
-                    child: Text(lawyer.name),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedLawyerId = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                onPressed: _saveClient,
-                child: const Text('حفظ بيانات الموكل', style: TextStyle(fontSize: 16)),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

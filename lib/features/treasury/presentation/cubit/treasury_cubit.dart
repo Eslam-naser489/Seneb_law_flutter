@@ -4,27 +4,32 @@ import 'treasury_state.dart';
 
 class TreasuryCubit extends Cubit<TreasuryState> {
   final AppRepository repository;
+  bool _saving = false;
 
   TreasuryCubit(this.repository) : super(TreasuryInitial());
 
   Future<void> loadTreasuryData() async {
-    emit(TreasuryLoading());
+    if (!isClosed) emit(TreasuryLoading());
     try {
       final transactions = await repository.getAllTransactions();
       final summary = await repository.getTreasurySummary();
-      emit(TreasuryLoaded(transactions: transactions, summary: summary));
+      if (!isClosed) {
+        emit(TreasuryLoaded(transactions: transactions, summary: summary));
+      }
     } catch (e) {
-      emit(TreasuryError(e.toString()));
+      if (!isClosed) emit(TreasuryError('تعذر تحميل الخزينة. حاول مرة أخرى.'));
     }
   }
 
-  Future<void> addTransaction({
+  Future<bool> addTransaction({
     required String title,
     required double amount,
     required String type, // 'INCOME' or 'EXPENSE'
     String? caseId,
     String? clientId,
   }) async {
+    if (_saving || isClosed) return false;
+    _saving = true;
     try {
       await repository.addTransaction(
         title: title,
@@ -35,8 +40,11 @@ class TreasuryCubit extends Cubit<TreasuryState> {
       );
       // تحديث الخزينة فورا بعد أي حركة
       await loadTreasuryData();
+      return true;
     } catch (e) {
-      emit(TreasuryError(e.toString()));
+      return false;
+    } finally {
+      _saving = false;
     }
   }
 }

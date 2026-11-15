@@ -5,49 +5,59 @@ import 'clients_state.dart';
 
 class ClientsCubit extends Cubit<ClientsState> {
   final AppRepository repository;
-  
+  bool _saving = false;
+
   // كاش للاحتفاظ بالقائمة الأصلية عشان الفلترة تتم بسرعة بدون الرجوع للداتابيز كل حرف
   List<ClientEntity> _allClients = [];
 
   ClientsCubit(this.repository) : super(ClientsInitial());
 
   Future<void> loadClients() async {
-    emit(ClientsLoading());
+    if (!isClosed) emit(ClientsLoading());
     try {
       _allClients = await repository.getActiveClients();
-      emit(ClientsLoaded(_allClients));
+      if (!isClosed) emit(ClientsLoaded(_allClients));
     } catch (e) {
-      emit(ClientsError(e.toString()));
+      if (!isClosed) emit(ClientsError('تعذر تحميل الموكلين. حاول مرة أخرى.'));
     }
   }
 
   // دالة البحث اللحظي
   void searchClients(String query) {
     if (query.trim().isEmpty) {
-      emit(ClientsLoaded(_allClients));
+      if (!isClosed) emit(ClientsLoaded(_allClients));
     } else {
-      final filtered = _allClients.where((c) => 
-        c.name.toLowerCase().contains(query.toLowerCase())
-      ).toList();
-      emit(ClientsLoaded(filtered));
+      final filtered = _allClients
+          .where((c) => c.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      if (!isClosed) emit(ClientsLoaded(filtered));
     }
   }
 
-  Future<void> addClient({required String name, String? phone, String? lawyerId}) async {
+  Future<bool> addClient({
+    required String name,
+    String? phone,
+    String? lawyerId,
+  }) async {
+    if (_saving || isClosed) return false;
+    _saving = true;
     try {
       await repository.addClient(name: name, phone: phone, lawyerId: lawyerId);
-      await loadClients(); 
+      await loadClients();
+      return true;
     } catch (e) {
-      emit(ClientsError(e.toString()));
+      return false;
+    } finally {
+      _saving = false;
     }
   }
 
   Future<void> archiveClient(String id) async {
     try {
       await repository.archiveClient(id);
-      await loadClients(); 
+      await loadClients();
     } catch (e) {
-      emit(ClientsError(e.toString()));
+      if (!isClosed) emit(ClientsError('تعذر تحميل الموكلين. حاول مرة أخرى.'));
     }
   }
 }

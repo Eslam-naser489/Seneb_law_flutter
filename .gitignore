@@ -76,6 +76,7 @@ app.*.map.json
 *.pfx
 *.jks
 *.keystore
+*.hprof
 **/key.properties
 **/local.properties
 

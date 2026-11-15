@@ -9,6 +9,9 @@ import 'package:seneb_law/features/cases/presentation/screens/case_details_scree
 class _CaseRepository extends AppRepository {
   _CaseRepository(super.db);
 
+  @override
+  bool get canPostLegacyTransactions => true;
+
   final transactions = <TransactionEntity>[
     TransactionEntity(
       id: 'income',
@@ -76,6 +79,8 @@ void main() {
             home: CaseDetailsScreen(
               caseWithClient: CaseWithClient(
                 caseEntity: CaseEntity(
+                  revision: 1,
+                  statusCode: 'ACTIVE',
                   id: 'case',
                   clientId: 'client',
                   caseNumber: '123',
@@ -83,6 +88,8 @@ void main() {
                   createdAt: DateTime(2026),
                 ),
                 client: ClientEntity(
+                  revision: 1,
+                  whatsappConsentStatus: 'UNKNOWN',
                   id: 'client',
                   name: 'Client',
                   isArchived: false,
