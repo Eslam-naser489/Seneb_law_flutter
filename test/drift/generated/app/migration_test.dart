@@ -7,13 +7,13 @@ import 'generated/schema.dart';
 // Populated fixtures and recovery are tested in sprint_zero_migration_test.dart.
 void main() {
   setUpAll(() => driftRuntimeOptions.dontWarnAboutMultipleDatabases = true);
-  for (final version in [2, 3, 4]) {
-    test('v$version upgrade matches the captured v5 schema', () async {
+  for (final version in [2, 3, 4, 5]) {
+    test('v$version upgrade matches the captured v6 schema', () async {
       final verifier = SchemaVerifier(GeneratedHelper());
       final schema = await verifier.schemaAt(version);
       final db = AppDatabase.forTesting(schema.newConnection());
       try {
-        await verifier.migrateAndValidate(db, 5);
+        await verifier.migrateAndValidate(db, 6);
       } finally {
         await db.close();
       }

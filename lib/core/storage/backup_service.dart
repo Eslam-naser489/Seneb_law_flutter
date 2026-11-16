@@ -144,7 +144,7 @@ class BackupService {
     if (manifest['formatVersion'] != formatVersion ||
         manifest['schemaVersion'] is! int ||
         (manifest['schemaVersion'] as int) < 1 ||
-        (manifest['schemaVersion'] as int) > 5) {
+        (manifest['schemaVersion'] as int) > 6) {
       throw const FormatException('Unsupported backup version');
     }
     final missing = manifest['missingDocumentIds'] as List;

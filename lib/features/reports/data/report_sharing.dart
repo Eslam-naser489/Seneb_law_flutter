@@ -7,6 +7,7 @@ import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+import 'package:open_filex/open_filex.dart';
 import '../../../core/database/app_repository.dart';
 import '../domain/report_models.dart';
 
@@ -27,6 +28,54 @@ abstract class ShareGateway {
 }
 
 class NativeShareGateway implements ShareGateway {
+  Future<HandoffResult> handoffWord(
+    Uint8List bytes,
+    String channel,
+    Future<void> Function() authorize,
+  ) async {
+    const mime =
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    await authorize();
+    if (channel == 'SAVE') {
+      final path = await FilePicker.saveFile(
+        dialogTitle: 'حفظ مستند Word',
+        fileName: 'document.docx',
+        mimeType: mime,
+        bytes: bytes,
+      );
+      return HandoffResult(path == null ? 'CANCELLED' : 'SAVED');
+    }
+    final root = Directory(
+      p.join((await getTemporaryDirectory()).path, 'seneb-report-shares'),
+    );
+    await root.create(recursive: true);
+    await _cleanOldFiles(root);
+    final directory = Directory(p.join(root.path, const Uuid().v4()));
+    await directory.create();
+    final file = await File(
+      p.join(directory.path, 'document.docx'),
+    ).writeAsBytes(bytes, flush: true);
+    await authorize();
+    if (channel == 'OPEN') {
+      final result = await OpenFilex.open(file.path, type: mime);
+      return HandoffResult(
+        result.type == ResultType.done ? 'OPENED' : 'FAILED',
+      );
+    }
+    if (channel != 'NATIVE') throw ArgumentError('قناة غير مدعومة.');
+    final result = await SharePlus.instance.share(
+      ShareParams(
+        title: 'مشاركة مستند بعد المراجعة',
+        files: [XFile(file.path, mimeType: mime)],
+      ),
+    );
+    return HandoffResult(switch (result.status) {
+      ShareResultStatus.success => 'OPENED',
+      ShareResultStatus.dismissed => 'CANCELLED',
+      ShareResultStatus.unavailable => 'UNAVAILABLE',
+    });
+  }
+
   @override
   Future<HandoffResult> handoff(
     ReportBundle bundle,

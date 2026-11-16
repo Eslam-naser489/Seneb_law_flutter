@@ -22,6 +22,7 @@ import '../features/finance/presentation/finance_dashboard_screen.dart';
 import '../features/finance/presentation/legacy_review_screen.dart';
 import '../features/reports/presentation/report_composer_screen.dart';
 import '../features/reports/presentation/report_history_screen.dart';
+import '../features/templates/presentation/word_screens.dart';
 
 GoRouter createAppRouter({
   ScopedAppRepository? workspace,
@@ -81,6 +82,8 @@ GoRouter createAppRouter({
         },
       ),
     if (workspace != null) ...[
+      GoRoute(path:'/templates',builder:(_,s)=>WordLibraryScreen(clientId:s.uri.queryParameters['client'],caseId:s.uri.queryParameters['case'])),
+      GoRoute(path:'/client/:id/word-documents',builder:(_,s)=>WordHistoryScreen(clientId:s.pathParameters['id']!,caseId:s.uri.queryParameters['case'])),
       GoRoute(
         path: '/finance/legacy',
         builder: (_, _) => const LegacyReviewScreen(),

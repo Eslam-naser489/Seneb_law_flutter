@@ -65,7 +65,7 @@ void main() {
         );
         expect(
           (await BackupService().validate(current.directory))['schemaVersion'],
-          5,
+          6,
         );
         final restored = await BackupService().restoreIsolated(
           backup: current.directory,
@@ -75,7 +75,7 @@ void main() {
           p.join(restored.path, 'seneb_law_db.sqlite'),
         );
         try {
-          expect(native.userVersion, 5);
+          expect(native.userVersion, 6);
           expect(
             native
                 .select(

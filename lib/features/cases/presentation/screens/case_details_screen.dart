@@ -303,6 +303,8 @@ class _CaseDetailsScreenState extends State<CaseDetailsScreen> {
                   'قضية: ${widget.caseWithClient.caseEntity.caseNumber}',
                 ),
                 actions: [
+                  if(workspace != null && finance)
+                    IconButton(tooltip:'قوالب Word والمستندات',icon:const Icon(Icons.description_outlined),onPressed:()=>context.push('/templates?client=${Uri.encodeComponent(widget.caseWithClient.client.id)}&case=${Uri.encodeComponent(widget.caseWithClient.caseEntity.id)}')),
                   if (workspace != null && workspace.canEdit) ...[
                     IconButton(tooltip: 'إرسال تقرير للموكل', icon: const Icon(Icons.send_outlined),
                       onPressed: () => context.push('/case/${Uri.encodeComponent(widget.caseWithClient.caseEntity.id)}/report')),

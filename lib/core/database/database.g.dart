@@ -17622,6 +17622,2191 @@ class ShareAttemptsCompanion extends UpdateCompanion<ShareAttempt> {
   }
 }
 
+class $WordTemplatesTable extends WordTemplates
+    with TableInfo<$WordTemplatesTable, WordTemplate> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WordTemplatesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _revisionMeta = const VerificationMeta(
+    'revision',
+  );
+  @override
+  late final GeneratedColumn<int> revision = GeneratedColumn<int>(
+    'revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bytesMeta = const VerificationMeta('bytes');
+  @override
+  late final GeneratedColumn<Uint8List> bytes = GeneratedColumn<Uint8List>(
+    'bytes',
+    aliasedName,
+    false,
+    type: DriftSqlType.blob,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _checksumMeta = const VerificationMeta(
+    'checksum',
+  );
+  @override
+  late final GeneratedColumn<String> checksum = GeneratedColumn<String>(
+    'checksum',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fieldsJsonMeta = const VerificationMeta(
+    'fieldsJson',
+  );
+  @override
+  late final GeneratedColumn<String> fieldsJson = GeneratedColumn<String>(
+    'fields_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdByMeta = const VerificationMeta(
+    'createdBy',
+  );
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+    'created_by',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES office_lawyers (id)',
+    ),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    updatedAt,
+    deletedAt,
+    revision,
+    id,
+    name,
+    category,
+    version,
+    bytes,
+    checksum,
+    fieldsJson,
+    createdBy,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'word_templates';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WordTemplate> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('revision')) {
+      context.handle(
+        _revisionMeta,
+        revision.isAcceptableOrUnknown(data['revision']!, _revisionMeta),
+      );
+    }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
+    if (data.containsKey('bytes')) {
+      context.handle(
+        _bytesMeta,
+        bytes.isAcceptableOrUnknown(data['bytes']!, _bytesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bytesMeta);
+    }
+    if (data.containsKey('checksum')) {
+      context.handle(
+        _checksumMeta,
+        checksum.isAcceptableOrUnknown(data['checksum']!, _checksumMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_checksumMeta);
+    }
+    if (data.containsKey('fields_json')) {
+      context.handle(
+        _fieldsJsonMeta,
+        fieldsJson.isAcceptableOrUnknown(data['fields_json']!, _fieldsJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_fieldsJsonMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(
+        _createdByMeta,
+        createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdByMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {name, version},
+  ];
+  @override
+  WordTemplate map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WordTemplate(
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      revision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}revision'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      bytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}bytes'],
+      )!,
+      checksum: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}checksum'],
+      )!,
+      fieldsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}fields_json'],
+      )!,
+      createdBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_by'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $WordTemplatesTable createAlias(String alias) {
+    return $WordTemplatesTable(attachedDatabase, alias);
+  }
+}
+
+class WordTemplate extends DataClass implements Insertable<WordTemplate> {
+  final DateTime? updatedAt;
+  final DateTime? deletedAt;
+  final int revision;
+  final String id;
+  final String name;
+  final String category;
+  final int version;
+  final Uint8List bytes;
+  final String checksum;
+  final String fieldsJson;
+  final String createdBy;
+  final DateTime createdAt;
+  const WordTemplate({
+    this.updatedAt,
+    this.deletedAt,
+    required this.revision,
+    required this.id,
+    required this.name,
+    required this.category,
+    required this.version,
+    required this.bytes,
+    required this.checksum,
+    required this.fieldsJson,
+    required this.createdBy,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    map['revision'] = Variable<int>(revision);
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    map['category'] = Variable<String>(category);
+    map['version'] = Variable<int>(version);
+    map['bytes'] = Variable<Uint8List>(bytes);
+    map['checksum'] = Variable<String>(checksum);
+    map['fields_json'] = Variable<String>(fieldsJson);
+    map['created_by'] = Variable<String>(createdBy);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  WordTemplatesCompanion toCompanion(bool nullToAbsent) {
+    return WordTemplatesCompanion(
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      revision: Value(revision),
+      id: Value(id),
+      name: Value(name),
+      category: Value(category),
+      version: Value(version),
+      bytes: Value(bytes),
+      checksum: Value(checksum),
+      fieldsJson: Value(fieldsJson),
+      createdBy: Value(createdBy),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory WordTemplate.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WordTemplate(
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      revision: serializer.fromJson<int>(json['revision']),
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      category: serializer.fromJson<String>(json['category']),
+      version: serializer.fromJson<int>(json['version']),
+      bytes: serializer.fromJson<Uint8List>(json['bytes']),
+      checksum: serializer.fromJson<String>(json['checksum']),
+      fieldsJson: serializer.fromJson<String>(json['fieldsJson']),
+      createdBy: serializer.fromJson<String>(json['createdBy']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'revision': serializer.toJson<int>(revision),
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'category': serializer.toJson<String>(category),
+      'version': serializer.toJson<int>(version),
+      'bytes': serializer.toJson<Uint8List>(bytes),
+      'checksum': serializer.toJson<String>(checksum),
+      'fieldsJson': serializer.toJson<String>(fieldsJson),
+      'createdBy': serializer.toJson<String>(createdBy),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  WordTemplate copyWith({
+    Value<DateTime?> updatedAt = const Value.absent(),
+    Value<DateTime?> deletedAt = const Value.absent(),
+    int? revision,
+    String? id,
+    String? name,
+    String? category,
+    int? version,
+    Uint8List? bytes,
+    String? checksum,
+    String? fieldsJson,
+    String? createdBy,
+    DateTime? createdAt,
+  }) => WordTemplate(
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    revision: revision ?? this.revision,
+    id: id ?? this.id,
+    name: name ?? this.name,
+    category: category ?? this.category,
+    version: version ?? this.version,
+    bytes: bytes ?? this.bytes,
+    checksum: checksum ?? this.checksum,
+    fieldsJson: fieldsJson ?? this.fieldsJson,
+    createdBy: createdBy ?? this.createdBy,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  WordTemplate copyWithCompanion(WordTemplatesCompanion data) {
+    return WordTemplate(
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      revision: data.revision.present ? data.revision.value : this.revision,
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      category: data.category.present ? data.category.value : this.category,
+      version: data.version.present ? data.version.value : this.version,
+      bytes: data.bytes.present ? data.bytes.value : this.bytes,
+      checksum: data.checksum.present ? data.checksum.value : this.checksum,
+      fieldsJson: data.fieldsJson.present
+          ? data.fieldsJson.value
+          : this.fieldsJson,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WordTemplate(')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('revision: $revision, ')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('category: $category, ')
+          ..write('version: $version, ')
+          ..write('bytes: $bytes, ')
+          ..write('checksum: $checksum, ')
+          ..write('fieldsJson: $fieldsJson, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    updatedAt,
+    deletedAt,
+    revision,
+    id,
+    name,
+    category,
+    version,
+    $driftBlobEquality.hash(bytes),
+    checksum,
+    fieldsJson,
+    createdBy,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WordTemplate &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.revision == this.revision &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.category == this.category &&
+          other.version == this.version &&
+          $driftBlobEquality.equals(other.bytes, this.bytes) &&
+          other.checksum == this.checksum &&
+          other.fieldsJson == this.fieldsJson &&
+          other.createdBy == this.createdBy &&
+          other.createdAt == this.createdAt);
+}
+
+class WordTemplatesCompanion extends UpdateCompanion<WordTemplate> {
+  final Value<DateTime?> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<int> revision;
+  final Value<String> id;
+  final Value<String> name;
+  final Value<String> category;
+  final Value<int> version;
+  final Value<Uint8List> bytes;
+  final Value<String> checksum;
+  final Value<String> fieldsJson;
+  final Value<String> createdBy;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const WordTemplatesCompanion({
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.revision = const Value.absent(),
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.category = const Value.absent(),
+    this.version = const Value.absent(),
+    this.bytes = const Value.absent(),
+    this.checksum = const Value.absent(),
+    this.fieldsJson = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WordTemplatesCompanion.insert({
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.revision = const Value.absent(),
+    required String id,
+    required String name,
+    required String category,
+    required int version,
+    required Uint8List bytes,
+    required String checksum,
+    required String fieldsJson,
+    required String createdBy,
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name),
+       category = Value(category),
+       version = Value(version),
+       bytes = Value(bytes),
+       checksum = Value(checksum),
+       fieldsJson = Value(fieldsJson),
+       createdBy = Value(createdBy);
+  static Insertable<WordTemplate> custom({
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<int>? revision,
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? category,
+    Expression<int>? version,
+    Expression<Uint8List>? bytes,
+    Expression<String>? checksum,
+    Expression<String>? fieldsJson,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (revision != null) 'revision': revision,
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (category != null) 'category': category,
+      if (version != null) 'version': version,
+      if (bytes != null) 'bytes': bytes,
+      if (checksum != null) 'checksum': checksum,
+      if (fieldsJson != null) 'fields_json': fieldsJson,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WordTemplatesCompanion copyWith({
+    Value<DateTime?>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<int>? revision,
+    Value<String>? id,
+    Value<String>? name,
+    Value<String>? category,
+    Value<int>? version,
+    Value<Uint8List>? bytes,
+    Value<String>? checksum,
+    Value<String>? fieldsJson,
+    Value<String>? createdBy,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return WordTemplatesCompanion(
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      revision: revision ?? this.revision,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      category: category ?? this.category,
+      version: version ?? this.version,
+      bytes: bytes ?? this.bytes,
+      checksum: checksum ?? this.checksum,
+      fieldsJson: fieldsJson ?? this.fieldsJson,
+      createdBy: createdBy ?? this.createdBy,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (revision.present) {
+      map['revision'] = Variable<int>(revision.value);
+    }
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (bytes.present) {
+      map['bytes'] = Variable<Uint8List>(bytes.value);
+    }
+    if (checksum.present) {
+      map['checksum'] = Variable<String>(checksum.value);
+    }
+    if (fieldsJson.present) {
+      map['fields_json'] = Variable<String>(fieldsJson.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WordTemplatesCompanion(')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('revision: $revision, ')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('category: $category, ')
+          ..write('version: $version, ')
+          ..write('bytes: $bytes, ')
+          ..write('checksum: $checksum, ')
+          ..write('fieldsJson: $fieldsJson, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $WordDocumentsTable extends WordDocuments
+    with TableInfo<$WordDocumentsTable, WordDocument> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WordDocumentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _revisionMeta = const VerificationMeta(
+    'revision',
+  );
+  @override
+  late final GeneratedColumn<int> revision = GeneratedColumn<int>(
+    'revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _operationKeyMeta = const VerificationMeta(
+    'operationKey',
+  );
+  @override
+  late final GeneratedColumn<String> operationKey = GeneratedColumn<String>(
+    'operation_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _templateIdMeta = const VerificationMeta(
+    'templateId',
+  );
+  @override
+  late final GeneratedColumn<String> templateId = GeneratedColumn<String>(
+    'template_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES word_templates (id)',
+    ),
+  );
+  static const VerificationMeta _clientIdMeta = const VerificationMeta(
+    'clientId',
+  );
+  @override
+  late final GeneratedColumn<String> clientId = GeneratedColumn<String>(
+    'client_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES clients (id)',
+    ),
+  );
+  static const VerificationMeta _caseIdMeta = const VerificationMeta('caseId');
+  @override
+  late final GeneratedColumn<String> caseId = GeneratedColumn<String>(
+    'case_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES cases (id)',
+    ),
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _inputJsonMeta = const VerificationMeta(
+    'inputJson',
+  );
+  @override
+  late final GeneratedColumn<String> inputJson = GeneratedColumn<String>(
+    'input_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceHashMeta = const VerificationMeta(
+    'sourceHash',
+  );
+  @override
+  late final GeneratedColumn<String> sourceHash = GeneratedColumn<String>(
+    'source_hash',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bytesMeta = const VerificationMeta('bytes');
+  @override
+  late final GeneratedColumn<Uint8List> bytes = GeneratedColumn<Uint8List>(
+    'bytes',
+    aliasedName,
+    false,
+    type: DriftSqlType.blob,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _checksumMeta = const VerificationMeta(
+    'checksum',
+  );
+  @override
+  late final GeneratedColumn<String> checksum = GeneratedColumn<String>(
+    'checksum',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdByMeta = const VerificationMeta(
+    'createdBy',
+  );
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+    'created_by',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES office_lawyers (id)',
+    ),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    updatedAt,
+    deletedAt,
+    revision,
+    id,
+    operationKey,
+    templateId,
+    clientId,
+    caseId,
+    title,
+    inputJson,
+    sourceHash,
+    bytes,
+    checksum,
+    createdBy,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'word_documents';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WordDocument> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('revision')) {
+      context.handle(
+        _revisionMeta,
+        revision.isAcceptableOrUnknown(data['revision']!, _revisionMeta),
+      );
+    }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('operation_key')) {
+      context.handle(
+        _operationKeyMeta,
+        operationKey.isAcceptableOrUnknown(
+          data['operation_key']!,
+          _operationKeyMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_operationKeyMeta);
+    }
+    if (data.containsKey('template_id')) {
+      context.handle(
+        _templateIdMeta,
+        templateId.isAcceptableOrUnknown(data['template_id']!, _templateIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_templateIdMeta);
+    }
+    if (data.containsKey('client_id')) {
+      context.handle(
+        _clientIdMeta,
+        clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_clientIdMeta);
+    }
+    if (data.containsKey('case_id')) {
+      context.handle(
+        _caseIdMeta,
+        caseId.isAcceptableOrUnknown(data['case_id']!, _caseIdMeta),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('input_json')) {
+      context.handle(
+        _inputJsonMeta,
+        inputJson.isAcceptableOrUnknown(data['input_json']!, _inputJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_inputJsonMeta);
+    }
+    if (data.containsKey('source_hash')) {
+      context.handle(
+        _sourceHashMeta,
+        sourceHash.isAcceptableOrUnknown(data['source_hash']!, _sourceHashMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceHashMeta);
+    }
+    if (data.containsKey('bytes')) {
+      context.handle(
+        _bytesMeta,
+        bytes.isAcceptableOrUnknown(data['bytes']!, _bytesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bytesMeta);
+    }
+    if (data.containsKey('checksum')) {
+      context.handle(
+        _checksumMeta,
+        checksum.isAcceptableOrUnknown(data['checksum']!, _checksumMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_checksumMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(
+        _createdByMeta,
+        createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdByMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  WordDocument map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WordDocument(
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      revision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}revision'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      operationKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}operation_key'],
+      )!,
+      templateId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}template_id'],
+      )!,
+      clientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}client_id'],
+      )!,
+      caseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}case_id'],
+      ),
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      inputJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}input_json'],
+      )!,
+      sourceHash: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_hash'],
+      )!,
+      bytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}bytes'],
+      )!,
+      checksum: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}checksum'],
+      )!,
+      createdBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_by'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $WordDocumentsTable createAlias(String alias) {
+    return $WordDocumentsTable(attachedDatabase, alias);
+  }
+}
+
+class WordDocument extends DataClass implements Insertable<WordDocument> {
+  final DateTime? updatedAt;
+  final DateTime? deletedAt;
+  final int revision;
+  final String id;
+  final String operationKey;
+  final String templateId;
+  final String clientId;
+  final String? caseId;
+  final String title;
+  final String inputJson;
+  final String sourceHash;
+  final Uint8List bytes;
+  final String checksum;
+  final String createdBy;
+  final DateTime createdAt;
+  const WordDocument({
+    this.updatedAt,
+    this.deletedAt,
+    required this.revision,
+    required this.id,
+    required this.operationKey,
+    required this.templateId,
+    required this.clientId,
+    this.caseId,
+    required this.title,
+    required this.inputJson,
+    required this.sourceHash,
+    required this.bytes,
+    required this.checksum,
+    required this.createdBy,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    map['revision'] = Variable<int>(revision);
+    map['id'] = Variable<String>(id);
+    map['operation_key'] = Variable<String>(operationKey);
+    map['template_id'] = Variable<String>(templateId);
+    map['client_id'] = Variable<String>(clientId);
+    if (!nullToAbsent || caseId != null) {
+      map['case_id'] = Variable<String>(caseId);
+    }
+    map['title'] = Variable<String>(title);
+    map['input_json'] = Variable<String>(inputJson);
+    map['source_hash'] = Variable<String>(sourceHash);
+    map['bytes'] = Variable<Uint8List>(bytes);
+    map['checksum'] = Variable<String>(checksum);
+    map['created_by'] = Variable<String>(createdBy);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  WordDocumentsCompanion toCompanion(bool nullToAbsent) {
+    return WordDocumentsCompanion(
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      revision: Value(revision),
+      id: Value(id),
+      operationKey: Value(operationKey),
+      templateId: Value(templateId),
+      clientId: Value(clientId),
+      caseId: caseId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(caseId),
+      title: Value(title),
+      inputJson: Value(inputJson),
+      sourceHash: Value(sourceHash),
+      bytes: Value(bytes),
+      checksum: Value(checksum),
+      createdBy: Value(createdBy),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory WordDocument.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WordDocument(
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      revision: serializer.fromJson<int>(json['revision']),
+      id: serializer.fromJson<String>(json['id']),
+      operationKey: serializer.fromJson<String>(json['operationKey']),
+      templateId: serializer.fromJson<String>(json['templateId']),
+      clientId: serializer.fromJson<String>(json['clientId']),
+      caseId: serializer.fromJson<String?>(json['caseId']),
+      title: serializer.fromJson<String>(json['title']),
+      inputJson: serializer.fromJson<String>(json['inputJson']),
+      sourceHash: serializer.fromJson<String>(json['sourceHash']),
+      bytes: serializer.fromJson<Uint8List>(json['bytes']),
+      checksum: serializer.fromJson<String>(json['checksum']),
+      createdBy: serializer.fromJson<String>(json['createdBy']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'revision': serializer.toJson<int>(revision),
+      'id': serializer.toJson<String>(id),
+      'operationKey': serializer.toJson<String>(operationKey),
+      'templateId': serializer.toJson<String>(templateId),
+      'clientId': serializer.toJson<String>(clientId),
+      'caseId': serializer.toJson<String?>(caseId),
+      'title': serializer.toJson<String>(title),
+      'inputJson': serializer.toJson<String>(inputJson),
+      'sourceHash': serializer.toJson<String>(sourceHash),
+      'bytes': serializer.toJson<Uint8List>(bytes),
+      'checksum': serializer.toJson<String>(checksum),
+      'createdBy': serializer.toJson<String>(createdBy),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  WordDocument copyWith({
+    Value<DateTime?> updatedAt = const Value.absent(),
+    Value<DateTime?> deletedAt = const Value.absent(),
+    int? revision,
+    String? id,
+    String? operationKey,
+    String? templateId,
+    String? clientId,
+    Value<String?> caseId = const Value.absent(),
+    String? title,
+    String? inputJson,
+    String? sourceHash,
+    Uint8List? bytes,
+    String? checksum,
+    String? createdBy,
+    DateTime? createdAt,
+  }) => WordDocument(
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    revision: revision ?? this.revision,
+    id: id ?? this.id,
+    operationKey: operationKey ?? this.operationKey,
+    templateId: templateId ?? this.templateId,
+    clientId: clientId ?? this.clientId,
+    caseId: caseId.present ? caseId.value : this.caseId,
+    title: title ?? this.title,
+    inputJson: inputJson ?? this.inputJson,
+    sourceHash: sourceHash ?? this.sourceHash,
+    bytes: bytes ?? this.bytes,
+    checksum: checksum ?? this.checksum,
+    createdBy: createdBy ?? this.createdBy,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  WordDocument copyWithCompanion(WordDocumentsCompanion data) {
+    return WordDocument(
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      revision: data.revision.present ? data.revision.value : this.revision,
+      id: data.id.present ? data.id.value : this.id,
+      operationKey: data.operationKey.present
+          ? data.operationKey.value
+          : this.operationKey,
+      templateId: data.templateId.present
+          ? data.templateId.value
+          : this.templateId,
+      clientId: data.clientId.present ? data.clientId.value : this.clientId,
+      caseId: data.caseId.present ? data.caseId.value : this.caseId,
+      title: data.title.present ? data.title.value : this.title,
+      inputJson: data.inputJson.present ? data.inputJson.value : this.inputJson,
+      sourceHash: data.sourceHash.present
+          ? data.sourceHash.value
+          : this.sourceHash,
+      bytes: data.bytes.present ? data.bytes.value : this.bytes,
+      checksum: data.checksum.present ? data.checksum.value : this.checksum,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WordDocument(')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('revision: $revision, ')
+          ..write('id: $id, ')
+          ..write('operationKey: $operationKey, ')
+          ..write('templateId: $templateId, ')
+          ..write('clientId: $clientId, ')
+          ..write('caseId: $caseId, ')
+          ..write('title: $title, ')
+          ..write('inputJson: $inputJson, ')
+          ..write('sourceHash: $sourceHash, ')
+          ..write('bytes: $bytes, ')
+          ..write('checksum: $checksum, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    updatedAt,
+    deletedAt,
+    revision,
+    id,
+    operationKey,
+    templateId,
+    clientId,
+    caseId,
+    title,
+    inputJson,
+    sourceHash,
+    $driftBlobEquality.hash(bytes),
+    checksum,
+    createdBy,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WordDocument &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.revision == this.revision &&
+          other.id == this.id &&
+          other.operationKey == this.operationKey &&
+          other.templateId == this.templateId &&
+          other.clientId == this.clientId &&
+          other.caseId == this.caseId &&
+          other.title == this.title &&
+          other.inputJson == this.inputJson &&
+          other.sourceHash == this.sourceHash &&
+          $driftBlobEquality.equals(other.bytes, this.bytes) &&
+          other.checksum == this.checksum &&
+          other.createdBy == this.createdBy &&
+          other.createdAt == this.createdAt);
+}
+
+class WordDocumentsCompanion extends UpdateCompanion<WordDocument> {
+  final Value<DateTime?> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<int> revision;
+  final Value<String> id;
+  final Value<String> operationKey;
+  final Value<String> templateId;
+  final Value<String> clientId;
+  final Value<String?> caseId;
+  final Value<String> title;
+  final Value<String> inputJson;
+  final Value<String> sourceHash;
+  final Value<Uint8List> bytes;
+  final Value<String> checksum;
+  final Value<String> createdBy;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const WordDocumentsCompanion({
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.revision = const Value.absent(),
+    this.id = const Value.absent(),
+    this.operationKey = const Value.absent(),
+    this.templateId = const Value.absent(),
+    this.clientId = const Value.absent(),
+    this.caseId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.inputJson = const Value.absent(),
+    this.sourceHash = const Value.absent(),
+    this.bytes = const Value.absent(),
+    this.checksum = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WordDocumentsCompanion.insert({
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.revision = const Value.absent(),
+    required String id,
+    required String operationKey,
+    required String templateId,
+    required String clientId,
+    this.caseId = const Value.absent(),
+    required String title,
+    required String inputJson,
+    required String sourceHash,
+    required Uint8List bytes,
+    required String checksum,
+    required String createdBy,
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       operationKey = Value(operationKey),
+       templateId = Value(templateId),
+       clientId = Value(clientId),
+       title = Value(title),
+       inputJson = Value(inputJson),
+       sourceHash = Value(sourceHash),
+       bytes = Value(bytes),
+       checksum = Value(checksum),
+       createdBy = Value(createdBy);
+  static Insertable<WordDocument> custom({
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<int>? revision,
+    Expression<String>? id,
+    Expression<String>? operationKey,
+    Expression<String>? templateId,
+    Expression<String>? clientId,
+    Expression<String>? caseId,
+    Expression<String>? title,
+    Expression<String>? inputJson,
+    Expression<String>? sourceHash,
+    Expression<Uint8List>? bytes,
+    Expression<String>? checksum,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (revision != null) 'revision': revision,
+      if (id != null) 'id': id,
+      if (operationKey != null) 'operation_key': operationKey,
+      if (templateId != null) 'template_id': templateId,
+      if (clientId != null) 'client_id': clientId,
+      if (caseId != null) 'case_id': caseId,
+      if (title != null) 'title': title,
+      if (inputJson != null) 'input_json': inputJson,
+      if (sourceHash != null) 'source_hash': sourceHash,
+      if (bytes != null) 'bytes': bytes,
+      if (checksum != null) 'checksum': checksum,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WordDocumentsCompanion copyWith({
+    Value<DateTime?>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<int>? revision,
+    Value<String>? id,
+    Value<String>? operationKey,
+    Value<String>? templateId,
+    Value<String>? clientId,
+    Value<String?>? caseId,
+    Value<String>? title,
+    Value<String>? inputJson,
+    Value<String>? sourceHash,
+    Value<Uint8List>? bytes,
+    Value<String>? checksum,
+    Value<String>? createdBy,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return WordDocumentsCompanion(
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      revision: revision ?? this.revision,
+      id: id ?? this.id,
+      operationKey: operationKey ?? this.operationKey,
+      templateId: templateId ?? this.templateId,
+      clientId: clientId ?? this.clientId,
+      caseId: caseId ?? this.caseId,
+      title: title ?? this.title,
+      inputJson: inputJson ?? this.inputJson,
+      sourceHash: sourceHash ?? this.sourceHash,
+      bytes: bytes ?? this.bytes,
+      checksum: checksum ?? this.checksum,
+      createdBy: createdBy ?? this.createdBy,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (revision.present) {
+      map['revision'] = Variable<int>(revision.value);
+    }
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (operationKey.present) {
+      map['operation_key'] = Variable<String>(operationKey.value);
+    }
+    if (templateId.present) {
+      map['template_id'] = Variable<String>(templateId.value);
+    }
+    if (clientId.present) {
+      map['client_id'] = Variable<String>(clientId.value);
+    }
+    if (caseId.present) {
+      map['case_id'] = Variable<String>(caseId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (inputJson.present) {
+      map['input_json'] = Variable<String>(inputJson.value);
+    }
+    if (sourceHash.present) {
+      map['source_hash'] = Variable<String>(sourceHash.value);
+    }
+    if (bytes.present) {
+      map['bytes'] = Variable<Uint8List>(bytes.value);
+    }
+    if (checksum.present) {
+      map['checksum'] = Variable<String>(checksum.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WordDocumentsCompanion(')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('revision: $revision, ')
+          ..write('id: $id, ')
+          ..write('operationKey: $operationKey, ')
+          ..write('templateId: $templateId, ')
+          ..write('clientId: $clientId, ')
+          ..write('caseId: $caseId, ')
+          ..write('title: $title, ')
+          ..write('inputJson: $inputJson, ')
+          ..write('sourceHash: $sourceHash, ')
+          ..write('bytes: $bytes, ')
+          ..write('checksum: $checksum, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $WordShareAttemptsTable extends WordShareAttempts
+    with TableInfo<$WordShareAttemptsTable, WordShareAttempt> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WordShareAttemptsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _revisionMeta = const VerificationMeta(
+    'revision',
+  );
+  @override
+  late final GeneratedColumn<int> revision = GeneratedColumn<int>(
+    'revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _documentIdMeta = const VerificationMeta(
+    'documentId',
+  );
+  @override
+  late final GeneratedColumn<String> documentId = GeneratedColumn<String>(
+    'document_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES word_documents (id)',
+    ),
+  );
+  static const VerificationMeta _actorIdMeta = const VerificationMeta(
+    'actorId',
+  );
+  @override
+  late final GeneratedColumn<String> actorId = GeneratedColumn<String>(
+    'actor_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES office_lawyers (id)',
+    ),
+  );
+  static const VerificationMeta _channelMeta = const VerificationMeta(
+    'channel',
+  );
+  @override
+  late final GeneratedColumn<String> channel = GeneratedColumn<String>(
+    'channel',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _checksumMeta = const VerificationMeta(
+    'checksum',
+  );
+  @override
+  late final GeneratedColumn<String> checksum = GeneratedColumn<String>(
+    'checksum',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL CHECK(status IN (\'STARTED\',\'OPENED\',\'SAVED\',\'CANCELLED\',\'FAILED\',\'UNAVAILABLE\'))',
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    updatedAt,
+    deletedAt,
+    revision,
+    id,
+    documentId,
+    actorId,
+    channel,
+    checksum,
+    status,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'word_share_attempts';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WordShareAttempt> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('revision')) {
+      context.handle(
+        _revisionMeta,
+        revision.isAcceptableOrUnknown(data['revision']!, _revisionMeta),
+      );
+    }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('document_id')) {
+      context.handle(
+        _documentIdMeta,
+        documentId.isAcceptableOrUnknown(data['document_id']!, _documentIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_documentIdMeta);
+    }
+    if (data.containsKey('actor_id')) {
+      context.handle(
+        _actorIdMeta,
+        actorId.isAcceptableOrUnknown(data['actor_id']!, _actorIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_actorIdMeta);
+    }
+    if (data.containsKey('channel')) {
+      context.handle(
+        _channelMeta,
+        channel.isAcceptableOrUnknown(data['channel']!, _channelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_channelMeta);
+    }
+    if (data.containsKey('checksum')) {
+      context.handle(
+        _checksumMeta,
+        checksum.isAcceptableOrUnknown(data['checksum']!, _checksumMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_checksumMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  WordShareAttempt map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WordShareAttempt(
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      revision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}revision'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      documentId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}document_id'],
+      )!,
+      actorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}actor_id'],
+      )!,
+      channel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}channel'],
+      )!,
+      checksum: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}checksum'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $WordShareAttemptsTable createAlias(String alias) {
+    return $WordShareAttemptsTable(attachedDatabase, alias);
+  }
+}
+
+class WordShareAttempt extends DataClass
+    implements Insertable<WordShareAttempt> {
+  final DateTime? updatedAt;
+  final DateTime? deletedAt;
+  final int revision;
+  final String id;
+  final String documentId;
+  final String actorId;
+  final String channel;
+  final String checksum;
+  final String status;
+  final DateTime createdAt;
+  const WordShareAttempt({
+    this.updatedAt,
+    this.deletedAt,
+    required this.revision,
+    required this.id,
+    required this.documentId,
+    required this.actorId,
+    required this.channel,
+    required this.checksum,
+    required this.status,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    map['revision'] = Variable<int>(revision);
+    map['id'] = Variable<String>(id);
+    map['document_id'] = Variable<String>(documentId);
+    map['actor_id'] = Variable<String>(actorId);
+    map['channel'] = Variable<String>(channel);
+    map['checksum'] = Variable<String>(checksum);
+    map['status'] = Variable<String>(status);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  WordShareAttemptsCompanion toCompanion(bool nullToAbsent) {
+    return WordShareAttemptsCompanion(
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      revision: Value(revision),
+      id: Value(id),
+      documentId: Value(documentId),
+      actorId: Value(actorId),
+      channel: Value(channel),
+      checksum: Value(checksum),
+      status: Value(status),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory WordShareAttempt.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WordShareAttempt(
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      revision: serializer.fromJson<int>(json['revision']),
+      id: serializer.fromJson<String>(json['id']),
+      documentId: serializer.fromJson<String>(json['documentId']),
+      actorId: serializer.fromJson<String>(json['actorId']),
+      channel: serializer.fromJson<String>(json['channel']),
+      checksum: serializer.fromJson<String>(json['checksum']),
+      status: serializer.fromJson<String>(json['status']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'revision': serializer.toJson<int>(revision),
+      'id': serializer.toJson<String>(id),
+      'documentId': serializer.toJson<String>(documentId),
+      'actorId': serializer.toJson<String>(actorId),
+      'channel': serializer.toJson<String>(channel),
+      'checksum': serializer.toJson<String>(checksum),
+      'status': serializer.toJson<String>(status),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  WordShareAttempt copyWith({
+    Value<DateTime?> updatedAt = const Value.absent(),
+    Value<DateTime?> deletedAt = const Value.absent(),
+    int? revision,
+    String? id,
+    String? documentId,
+    String? actorId,
+    String? channel,
+    String? checksum,
+    String? status,
+    DateTime? createdAt,
+  }) => WordShareAttempt(
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    revision: revision ?? this.revision,
+    id: id ?? this.id,
+    documentId: documentId ?? this.documentId,
+    actorId: actorId ?? this.actorId,
+    channel: channel ?? this.channel,
+    checksum: checksum ?? this.checksum,
+    status: status ?? this.status,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  WordShareAttempt copyWithCompanion(WordShareAttemptsCompanion data) {
+    return WordShareAttempt(
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      revision: data.revision.present ? data.revision.value : this.revision,
+      id: data.id.present ? data.id.value : this.id,
+      documentId: data.documentId.present
+          ? data.documentId.value
+          : this.documentId,
+      actorId: data.actorId.present ? data.actorId.value : this.actorId,
+      channel: data.channel.present ? data.channel.value : this.channel,
+      checksum: data.checksum.present ? data.checksum.value : this.checksum,
+      status: data.status.present ? data.status.value : this.status,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WordShareAttempt(')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('revision: $revision, ')
+          ..write('id: $id, ')
+          ..write('documentId: $documentId, ')
+          ..write('actorId: $actorId, ')
+          ..write('channel: $channel, ')
+          ..write('checksum: $checksum, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    updatedAt,
+    deletedAt,
+    revision,
+    id,
+    documentId,
+    actorId,
+    channel,
+    checksum,
+    status,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WordShareAttempt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.revision == this.revision &&
+          other.id == this.id &&
+          other.documentId == this.documentId &&
+          other.actorId == this.actorId &&
+          other.channel == this.channel &&
+          other.checksum == this.checksum &&
+          other.status == this.status &&
+          other.createdAt == this.createdAt);
+}
+
+class WordShareAttemptsCompanion extends UpdateCompanion<WordShareAttempt> {
+  final Value<DateTime?> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<int> revision;
+  final Value<String> id;
+  final Value<String> documentId;
+  final Value<String> actorId;
+  final Value<String> channel;
+  final Value<String> checksum;
+  final Value<String> status;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const WordShareAttemptsCompanion({
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.revision = const Value.absent(),
+    this.id = const Value.absent(),
+    this.documentId = const Value.absent(),
+    this.actorId = const Value.absent(),
+    this.channel = const Value.absent(),
+    this.checksum = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WordShareAttemptsCompanion.insert({
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.revision = const Value.absent(),
+    required String id,
+    required String documentId,
+    required String actorId,
+    required String channel,
+    required String checksum,
+    required String status,
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       documentId = Value(documentId),
+       actorId = Value(actorId),
+       channel = Value(channel),
+       checksum = Value(checksum),
+       status = Value(status);
+  static Insertable<WordShareAttempt> custom({
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<int>? revision,
+    Expression<String>? id,
+    Expression<String>? documentId,
+    Expression<String>? actorId,
+    Expression<String>? channel,
+    Expression<String>? checksum,
+    Expression<String>? status,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (revision != null) 'revision': revision,
+      if (id != null) 'id': id,
+      if (documentId != null) 'document_id': documentId,
+      if (actorId != null) 'actor_id': actorId,
+      if (channel != null) 'channel': channel,
+      if (checksum != null) 'checksum': checksum,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WordShareAttemptsCompanion copyWith({
+    Value<DateTime?>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<int>? revision,
+    Value<String>? id,
+    Value<String>? documentId,
+    Value<String>? actorId,
+    Value<String>? channel,
+    Value<String>? checksum,
+    Value<String>? status,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return WordShareAttemptsCompanion(
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      revision: revision ?? this.revision,
+      id: id ?? this.id,
+      documentId: documentId ?? this.documentId,
+      actorId: actorId ?? this.actorId,
+      channel: channel ?? this.channel,
+      checksum: checksum ?? this.checksum,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (revision.present) {
+      map['revision'] = Variable<int>(revision.value);
+    }
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (documentId.present) {
+      map['document_id'] = Variable<String>(documentId.value);
+    }
+    if (actorId.present) {
+      map['actor_id'] = Variable<String>(actorId.value);
+    }
+    if (channel.present) {
+      map['channel'] = Variable<String>(channel.value);
+    }
+    if (checksum.present) {
+      map['checksum'] = Variable<String>(checksum.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WordShareAttemptsCompanion(')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('revision: $revision, ')
+          ..write('id: $id, ')
+          ..write('documentId: $documentId, ')
+          ..write('actorId: $actorId, ')
+          ..write('channel: $channel, ')
+          ..write('checksum: $checksum, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -17659,6 +19844,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $GeneratedDocumentsTable generatedDocuments =
       $GeneratedDocumentsTable(this);
   late final $ShareAttemptsTable shareAttempts = $ShareAttemptsTable(this);
+  late final $WordTemplatesTable wordTemplates = $WordTemplatesTable(this);
+  late final $WordDocumentsTable wordDocuments = $WordDocumentsTable(this);
+  late final $WordShareAttemptsTable wordShareAttempts =
+      $WordShareAttemptsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -17688,6 +19877,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     caseReports,
     generatedDocuments,
     shareAttempts,
+    wordTemplates,
+    wordDocuments,
+    wordShareAttempts,
   ];
 }
 
@@ -18080,6 +20272,63 @@ final class $$OfficeLawyersTableReferences
     ).filter((f) => f.actorId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_shareAttemptsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$WordTemplatesTable, List<WordTemplate>>
+  _wordTemplatesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.wordTemplates,
+    aliasName: 'office_lawyers__id__word_templates__created_by',
+  );
+
+  $$WordTemplatesTableProcessedTableManager get wordTemplatesRefs {
+    final manager = $$WordTemplatesTableTableManager(
+      $_db,
+      $_db.wordTemplates,
+    ).filter((f) => f.createdBy.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_wordTemplatesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$WordDocumentsTable, List<WordDocument>>
+  _wordDocumentsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.wordDocuments,
+    aliasName: 'office_lawyers__id__word_documents__created_by',
+  );
+
+  $$WordDocumentsTableProcessedTableManager get wordDocumentsRefs {
+    final manager = $$WordDocumentsTableTableManager(
+      $_db,
+      $_db.wordDocuments,
+    ).filter((f) => f.createdBy.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_wordDocumentsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$WordShareAttemptsTable, List<WordShareAttempt>>
+  _wordShareAttemptsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.wordShareAttempts,
+        aliasName: 'office_lawyers__id__word_share_attempts__actor_id',
+      );
+
+  $$WordShareAttemptsTableProcessedTableManager get wordShareAttemptsRefs {
+    final manager = $$WordShareAttemptsTableTableManager(
+      $_db,
+      $_db.wordShareAttempts,
+    ).filter((f) => f.actorId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _wordShareAttemptsRefsTable($_db),
+    );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -18599,6 +20848,81 @@ class $$OfficeLawyersTableFilterComposer
           }) => $$ShareAttemptsTableFilterComposer(
             $db: $db,
             $table: $db.shareAttempts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> wordTemplatesRefs(
+    Expression<bool> Function($$WordTemplatesTableFilterComposer f) f,
+  ) {
+    final $$WordTemplatesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordTemplates,
+      getReferencedColumn: (t) => t.createdBy,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordTemplatesTableFilterComposer(
+            $db: $db,
+            $table: $db.wordTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> wordDocumentsRefs(
+    Expression<bool> Function($$WordDocumentsTableFilterComposer f) f,
+  ) {
+    final $$WordDocumentsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.createdBy,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableFilterComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> wordShareAttemptsRefs(
+    Expression<bool> Function($$WordShareAttemptsTableFilterComposer f) f,
+  ) {
+    final $$WordShareAttemptsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordShareAttempts,
+      getReferencedColumn: (t) => t.actorId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordShareAttemptsTableFilterComposer(
+            $db: $db,
+            $table: $db.wordShareAttempts,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -19184,6 +21508,82 @@ class $$OfficeLawyersTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> wordTemplatesRefs<T extends Object>(
+    Expression<T> Function($$WordTemplatesTableAnnotationComposer a) f,
+  ) {
+    final $$WordTemplatesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordTemplates,
+      getReferencedColumn: (t) => t.createdBy,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordTemplatesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.wordTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> wordDocumentsRefs<T extends Object>(
+    Expression<T> Function($$WordDocumentsTableAnnotationComposer a) f,
+  ) {
+    final $$WordDocumentsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.createdBy,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> wordShareAttemptsRefs<T extends Object>(
+    Expression<T> Function($$WordShareAttemptsTableAnnotationComposer a) f,
+  ) {
+    final $$WordShareAttemptsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.wordShareAttempts,
+          getReferencedColumn: (t) => t.actorId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$WordShareAttemptsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.wordShareAttempts,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$OfficeLawyersTableTableManager
@@ -19218,6 +21618,9 @@ class $$OfficeLawyersTableTableManager
             bool legacyClassificationsRefs,
             bool caseReportsRefs,
             bool shareAttemptsRefs,
+            bool wordTemplatesRefs,
+            bool wordDocumentsRefs,
+            bool wordShareAttemptsRefs,
           })
         > {
   $$OfficeLawyersTableTableManager(_$AppDatabase db, $OfficeLawyersTable table)
@@ -19319,6 +21722,9 @@ class $$OfficeLawyersTableTableManager
                 legacyClassificationsRefs = false,
                 caseReportsRefs = false,
                 shareAttemptsRefs = false,
+                wordTemplatesRefs = false,
+                wordDocumentsRefs = false,
+                wordShareAttemptsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -19342,6 +21748,9 @@ class $$OfficeLawyersTableTableManager
                     if (legacyClassificationsRefs) db.legacyClassifications,
                     if (caseReportsRefs) db.caseReports,
                     if (shareAttemptsRefs) db.shareAttempts,
+                    if (wordTemplatesRefs) db.wordTemplates,
+                    if (wordDocumentsRefs) db.wordDocuments,
+                    if (wordShareAttemptsRefs) db.wordShareAttempts,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -19706,6 +22115,66 @@ class $$OfficeLawyersTableTableManager
                           referencedColumn: 'actor_id',
                           typedResults: items,
                         ),
+                      if (wordTemplatesRefs)
+                        await $_getPrefetchedDataByColumns<
+                          OfficeLawyerEntity,
+                          $OfficeLawyersTable,
+                          WordTemplate,
+                          $WordTemplatesTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$OfficeLawyersTableReferences
+                              ._wordTemplatesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$OfficeLawyersTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).wordTemplatesRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'created_by',
+                          typedResults: items,
+                        ),
+                      if (wordDocumentsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          OfficeLawyerEntity,
+                          $OfficeLawyersTable,
+                          WordDocument,
+                          $WordDocumentsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$OfficeLawyersTableReferences
+                              ._wordDocumentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$OfficeLawyersTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).wordDocumentsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'created_by',
+                          typedResults: items,
+                        ),
+                      if (wordShareAttemptsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          OfficeLawyerEntity,
+                          $OfficeLawyersTable,
+                          WordShareAttempt,
+                          $WordShareAttemptsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$OfficeLawyersTableReferences
+                              ._wordShareAttemptsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$OfficeLawyersTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).wordShareAttemptsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'actor_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -19745,6 +22214,9 @@ typedef $$OfficeLawyersTableProcessedTableManager =
         bool legacyClassificationsRefs,
         bool caseReportsRefs,
         bool shareAttemptsRefs,
+        bool wordTemplatesRefs,
+        bool wordDocumentsRefs,
+        bool wordShareAttemptsRefs,
       })
     >;
 typedef $$ClientsTableCreateCompanionBuilder =
@@ -19927,6 +22399,24 @@ final class $$ClientsTableReferences
     ).filter((f) => f.clientId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_caseReportsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$WordDocumentsTable, List<WordDocument>>
+  _wordDocumentsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.wordDocuments,
+    aliasName: 'clients__id__word_documents__client_id',
+  );
+
+  $$WordDocumentsTableProcessedTableManager get wordDocumentsRefs {
+    final manager = $$WordDocumentsTableTableManager(
+      $_db,
+      $_db.wordDocuments,
+    ).filter((f) => f.clientId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_wordDocumentsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -20199,6 +22689,31 @@ class $$ClientsTableFilterComposer
           }) => $$CaseReportsTableFilterComposer(
             $db: $db,
             $table: $db.caseReports,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> wordDocumentsRefs(
+    Expression<bool> Function($$WordDocumentsTableFilterComposer f) f,
+  ) {
+    final $$WordDocumentsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.clientId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableFilterComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -20615,6 +23130,31 @@ class $$ClientsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> wordDocumentsRefs<T extends Object>(
+    Expression<T> Function($$WordDocumentsTableAnnotationComposer a) f,
+  ) {
+    final $$WordDocumentsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.clientId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$ClientsTableTableManager
@@ -20638,6 +23178,7 @@ class $$ClientsTableTableManager
             bool clientLawyersRefs,
             bool clientLedgerEntriesRefs,
             bool caseReportsRefs,
+            bool wordDocumentsRefs,
           })
         > {
   $$ClientsTableTableManager(_$AppDatabase db, $ClientsTable table)
@@ -20764,6 +23305,7 @@ class $$ClientsTableTableManager
                 clientLawyersRefs = false,
                 clientLedgerEntriesRefs = false,
                 caseReportsRefs = false,
+                wordDocumentsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -20773,6 +23315,7 @@ class $$ClientsTableTableManager
                     if (clientLawyersRefs) db.clientLawyers,
                     if (clientLedgerEntriesRefs) db.clientLedgerEntries,
                     if (caseReportsRefs) db.caseReports,
+                    if (wordDocumentsRefs) db.wordDocuments,
                   ],
                   addJoins:
                       <
@@ -20917,6 +23460,26 @@ class $$ClientsTableTableManager
                           referencedColumn: 'client_id',
                           typedResults: items,
                         ),
+                      if (wordDocumentsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ClientEntity,
+                          $ClientsTable,
+                          WordDocument,
+                          $WordDocumentsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ClientsTableReferences
+                              ._wordDocumentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ClientsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).wordDocumentsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'client_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -20945,6 +23508,7 @@ typedef $$ClientsTableProcessedTableManager =
         bool clientLawyersRefs,
         bool clientLedgerEntriesRefs,
         bool caseReportsRefs,
+        bool wordDocumentsRefs,
       })
     >;
 typedef $$CasesTableCreateCompanionBuilder =
@@ -21139,6 +23703,24 @@ final class $$CasesTableReferences
     ).filter((f) => f.caseId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_caseReportsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$WordDocumentsTable, List<WordDocument>>
+  _wordDocumentsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.wordDocuments,
+    aliasName: 'cases__id__word_documents__case_id',
+  );
+
+  $$WordDocumentsTableProcessedTableManager get wordDocumentsRefs {
+    final manager = $$WordDocumentsTableTableManager(
+      $_db,
+      $_db.wordDocuments,
+    ).filter((f) => f.caseId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_wordDocumentsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -21412,6 +23994,31 @@ class $$CasesTableFilterComposer extends Composer<_$AppDatabase, $CasesTable> {
           }) => $$CaseReportsTableFilterComposer(
             $db: $db,
             $table: $db.caseReports,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> wordDocumentsRefs(
+    Expression<bool> Function($$WordDocumentsTableFilterComposer f) f,
+  ) {
+    final $$WordDocumentsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.caseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableFilterComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -21765,6 +24372,31 @@ class $$CasesTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> wordDocumentsRefs<T extends Object>(
+    Expression<T> Function($$WordDocumentsTableAnnotationComposer a) f,
+  ) {
+    final $$WordDocumentsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.caseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$CasesTableTableManager
@@ -21790,6 +24422,7 @@ class $$CasesTableTableManager
             bool feeAgreementsRefs,
             bool clientLedgerEntriesRefs,
             bool caseReportsRefs,
+            bool wordDocumentsRefs,
           })
         > {
   $$CasesTableTableManager(_$AppDatabase db, $CasesTable table)
@@ -21874,6 +24507,7 @@ class $$CasesTableTableManager
                 feeAgreementsRefs = false,
                 clientLedgerEntriesRefs = false,
                 caseReportsRefs = false,
+                wordDocumentsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -21886,6 +24520,7 @@ class $$CasesTableTableManager
                     if (feeAgreementsRefs) db.feeAgreements,
                     if (clientLedgerEntriesRefs) db.clientLedgerEntries,
                     if (caseReportsRefs) db.caseReports,
+                    if (wordDocumentsRefs) db.wordDocuments,
                   ],
                   addJoins:
                       <
@@ -22081,6 +24716,26 @@ class $$CasesTableTableManager
                           referencedColumn: 'case_id',
                           typedResults: items,
                         ),
+                      if (wordDocumentsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          CaseEntity,
+                          $CasesTable,
+                          WordDocument,
+                          $WordDocumentsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CasesTableReferences
+                              ._wordDocumentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CasesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).wordDocumentsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'case_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -22111,6 +24766,7 @@ typedef $$CasesTableProcessedTableManager =
         bool feeAgreementsRefs,
         bool clientLedgerEntriesRefs,
         bool caseReportsRefs,
+        bool wordDocumentsRefs,
       })
     >;
 typedef $$SessionsTableCreateCompanionBuilder =
@@ -34964,6 +37620,1971 @@ typedef $$ShareAttemptsTableProcessedTableManager =
       ShareAttempt,
       PrefetchHooks Function({bool reportId, bool actorId})
     >;
+typedef $$WordTemplatesTableCreateCompanionBuilder =
+    WordTemplatesCompanion Function({
+      Value<DateTime?> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> revision,
+      required String id,
+      required String name,
+      required String category,
+      required int version,
+      required Uint8List bytes,
+      required String checksum,
+      required String fieldsJson,
+      required String createdBy,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $$WordTemplatesTableUpdateCompanionBuilder =
+    WordTemplatesCompanion Function({
+      Value<DateTime?> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> revision,
+      Value<String> id,
+      Value<String> name,
+      Value<String> category,
+      Value<int> version,
+      Value<Uint8List> bytes,
+      Value<String> checksum,
+      Value<String> fieldsJson,
+      Value<String> createdBy,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$WordTemplatesTableReferences
+    extends BaseReferences<_$AppDatabase, $WordTemplatesTable, WordTemplate> {
+  $$WordTemplatesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $OfficeLawyersTable _createdByTable(_$AppDatabase db) => db
+      .officeLawyers
+      .createAlias('word_templates__created_by__office_lawyers__id');
+
+  $$OfficeLawyersTableProcessedTableManager get createdBy {
+    final $_column = $_itemColumn<String>('created_by')!;
+
+    final manager = $$OfficeLawyersTableTableManager(
+      $_db,
+      $_db.officeLawyers,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_createdByTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$WordDocumentsTable, List<WordDocument>>
+  _wordDocumentsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.wordDocuments,
+    aliasName: 'word_templates__id__word_documents__template_id',
+  );
+
+  $$WordDocumentsTableProcessedTableManager get wordDocumentsRefs {
+    final manager = $$WordDocumentsTableTableManager(
+      $_db,
+      $_db.wordDocuments,
+    ).filter((f) => f.templateId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_wordDocumentsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$WordTemplatesTableFilterComposer
+    extends Composer<_$AppDatabase, $WordTemplatesTable> {
+  $$WordTemplatesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<Uint8List> get bytes => $composableBuilder(
+    column: $table.bytes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get checksum => $composableBuilder(
+    column: $table.checksum,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fieldsJson => $composableBuilder(
+    column: $table.fieldsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$OfficeLawyersTableFilterComposer get createdBy {
+    final $$OfficeLawyersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdBy,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableFilterComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> wordDocumentsRefs(
+    Expression<bool> Function($$WordDocumentsTableFilterComposer f) f,
+  ) {
+    final $$WordDocumentsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.templateId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableFilterComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$WordTemplatesTableOrderingComposer
+    extends Composer<_$AppDatabase, $WordTemplatesTable> {
+  $$WordTemplatesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<Uint8List> get bytes => $composableBuilder(
+    column: $table.bytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get checksum => $composableBuilder(
+    column: $table.checksum,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fieldsJson => $composableBuilder(
+    column: $table.fieldsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$OfficeLawyersTableOrderingComposer get createdBy {
+    final $$OfficeLawyersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdBy,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableOrderingComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$WordTemplatesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WordTemplatesTable> {
+  $$WordTemplatesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get revision =>
+      $composableBuilder(column: $table.revision, builder: (column) => column);
+
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<Uint8List> get bytes =>
+      $composableBuilder(column: $table.bytes, builder: (column) => column);
+
+  GeneratedColumn<String> get checksum =>
+      $composableBuilder(column: $table.checksum, builder: (column) => column);
+
+  GeneratedColumn<String> get fieldsJson => $composableBuilder(
+    column: $table.fieldsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$OfficeLawyersTableAnnotationComposer get createdBy {
+    final $$OfficeLawyersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdBy,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> wordDocumentsRefs<T extends Object>(
+    Expression<T> Function($$WordDocumentsTableAnnotationComposer a) f,
+  ) {
+    final $$WordDocumentsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.templateId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$WordTemplatesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WordTemplatesTable,
+          WordTemplate,
+          $$WordTemplatesTableFilterComposer,
+          $$WordTemplatesTableOrderingComposer,
+          $$WordTemplatesTableAnnotationComposer,
+          $$WordTemplatesTableCreateCompanionBuilder,
+          $$WordTemplatesTableUpdateCompanionBuilder,
+          (WordTemplate, $$WordTemplatesTableReferences),
+          WordTemplate,
+          PrefetchHooks Function({bool createdBy, bool wordDocumentsRefs})
+        > {
+  $$WordTemplatesTableTableManager(_$AppDatabase db, $WordTemplatesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WordTemplatesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WordTemplatesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WordTemplatesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<DateTime?> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> category = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<Uint8List> bytes = const Value.absent(),
+                Value<String> checksum = const Value.absent(),
+                Value<String> fieldsJson = const Value.absent(),
+                Value<String> createdBy = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WordTemplatesCompanion(
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                revision: revision,
+                id: id,
+                name: name,
+                category: category,
+                version: version,
+                bytes: bytes,
+                checksum: checksum,
+                fieldsJson: fieldsJson,
+                createdBy: createdBy,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<DateTime?> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                required String id,
+                required String name,
+                required String category,
+                required int version,
+                required Uint8List bytes,
+                required String checksum,
+                required String fieldsJson,
+                required String createdBy,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WordTemplatesCompanion.insert(
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                revision: revision,
+                id: id,
+                name: name,
+                category: category,
+                version: version,
+                bytes: bytes,
+                checksum: checksum,
+                fieldsJson: fieldsJson,
+                createdBy: createdBy,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$WordTemplatesTable, WordTemplate>(table),
+                  $$WordTemplatesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({createdBy = false, wordDocumentsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (wordDocumentsRefs) db.wordDocuments,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (createdBy) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.createdBy,
+                                    referencedTable:
+                                        $$WordTemplatesTableReferences
+                                            ._createdByTable(db),
+                                    referencedColumn:
+                                        $$WordTemplatesTableReferences
+                                            ._createdByTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (wordDocumentsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          WordTemplate,
+                          $WordTemplatesTable,
+                          WordDocument,
+                          $WordDocumentsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$WordTemplatesTableReferences
+                              ._wordDocumentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$WordTemplatesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).wordDocumentsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'template_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$WordTemplatesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WordTemplatesTable,
+      WordTemplate,
+      $$WordTemplatesTableFilterComposer,
+      $$WordTemplatesTableOrderingComposer,
+      $$WordTemplatesTableAnnotationComposer,
+      $$WordTemplatesTableCreateCompanionBuilder,
+      $$WordTemplatesTableUpdateCompanionBuilder,
+      (WordTemplate, $$WordTemplatesTableReferences),
+      WordTemplate,
+      PrefetchHooks Function({bool createdBy, bool wordDocumentsRefs})
+    >;
+typedef $$WordDocumentsTableCreateCompanionBuilder =
+    WordDocumentsCompanion Function({
+      Value<DateTime?> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> revision,
+      required String id,
+      required String operationKey,
+      required String templateId,
+      required String clientId,
+      Value<String?> caseId,
+      required String title,
+      required String inputJson,
+      required String sourceHash,
+      required Uint8List bytes,
+      required String checksum,
+      required String createdBy,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $$WordDocumentsTableUpdateCompanionBuilder =
+    WordDocumentsCompanion Function({
+      Value<DateTime?> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> revision,
+      Value<String> id,
+      Value<String> operationKey,
+      Value<String> templateId,
+      Value<String> clientId,
+      Value<String?> caseId,
+      Value<String> title,
+      Value<String> inputJson,
+      Value<String> sourceHash,
+      Value<Uint8List> bytes,
+      Value<String> checksum,
+      Value<String> createdBy,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$WordDocumentsTableReferences
+    extends BaseReferences<_$AppDatabase, $WordDocumentsTable, WordDocument> {
+  $$WordDocumentsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $WordTemplatesTable _templateIdTable(_$AppDatabase db) => db
+      .wordTemplates
+      .createAlias('word_documents__template_id__word_templates__id');
+
+  $$WordTemplatesTableProcessedTableManager get templateId {
+    final $_column = $_itemColumn<String>('template_id')!;
+
+    final manager = $$WordTemplatesTableTableManager(
+      $_db,
+      $_db.wordTemplates,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_templateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $ClientsTable _clientIdTable(_$AppDatabase db) =>
+      db.clients.createAlias('word_documents__client_id__clients__id');
+
+  $$ClientsTableProcessedTableManager get clientId {
+    final $_column = $_itemColumn<String>('client_id')!;
+
+    final manager = $$ClientsTableTableManager(
+      $_db,
+      $_db.clients,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_clientIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $CasesTable _caseIdTable(_$AppDatabase db) =>
+      db.cases.createAlias('word_documents__case_id__cases__id');
+
+  $$CasesTableProcessedTableManager? get caseId {
+    final $_column = $_itemColumn<String>('case_id');
+    if ($_column == null) return null;
+    final manager = $$CasesTableTableManager(
+      $_db,
+      $_db.cases,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_caseIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $OfficeLawyersTable _createdByTable(_$AppDatabase db) => db
+      .officeLawyers
+      .createAlias('word_documents__created_by__office_lawyers__id');
+
+  $$OfficeLawyersTableProcessedTableManager get createdBy {
+    final $_column = $_itemColumn<String>('created_by')!;
+
+    final manager = $$OfficeLawyersTableTableManager(
+      $_db,
+      $_db.officeLawyers,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_createdByTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$WordShareAttemptsTable, List<WordShareAttempt>>
+  _wordShareAttemptsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.wordShareAttempts,
+        aliasName: 'word_documents__id__word_share_attempts__document_id',
+      );
+
+  $$WordShareAttemptsTableProcessedTableManager get wordShareAttemptsRefs {
+    final manager = $$WordShareAttemptsTableTableManager(
+      $_db,
+      $_db.wordShareAttempts,
+    ).filter((f) => f.documentId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _wordShareAttemptsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$WordDocumentsTableFilterComposer
+    extends Composer<_$AppDatabase, $WordDocumentsTable> {
+  $$WordDocumentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get operationKey => $composableBuilder(
+    column: $table.operationKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get inputJson => $composableBuilder(
+    column: $table.inputJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceHash => $composableBuilder(
+    column: $table.sourceHash,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<Uint8List> get bytes => $composableBuilder(
+    column: $table.bytes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get checksum => $composableBuilder(
+    column: $table.checksum,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$WordTemplatesTableFilterComposer get templateId {
+    final $$WordTemplatesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.templateId,
+      referencedTable: $db.wordTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordTemplatesTableFilterComposer(
+            $db: $db,
+            $table: $db.wordTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ClientsTableFilterComposer get clientId {
+    final $$ClientsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.clientId,
+      referencedTable: $db.clients,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ClientsTableFilterComposer(
+            $db: $db,
+            $table: $db.clients,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$CasesTableFilterComposer get caseId {
+    final $$CasesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableFilterComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$OfficeLawyersTableFilterComposer get createdBy {
+    final $$OfficeLawyersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdBy,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableFilterComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> wordShareAttemptsRefs(
+    Expression<bool> Function($$WordShareAttemptsTableFilterComposer f) f,
+  ) {
+    final $$WordShareAttemptsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.wordShareAttempts,
+      getReferencedColumn: (t) => t.documentId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordShareAttemptsTableFilterComposer(
+            $db: $db,
+            $table: $db.wordShareAttempts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$WordDocumentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $WordDocumentsTable> {
+  $$WordDocumentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get operationKey => $composableBuilder(
+    column: $table.operationKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get inputJson => $composableBuilder(
+    column: $table.inputJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceHash => $composableBuilder(
+    column: $table.sourceHash,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<Uint8List> get bytes => $composableBuilder(
+    column: $table.bytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get checksum => $composableBuilder(
+    column: $table.checksum,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$WordTemplatesTableOrderingComposer get templateId {
+    final $$WordTemplatesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.templateId,
+      referencedTable: $db.wordTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordTemplatesTableOrderingComposer(
+            $db: $db,
+            $table: $db.wordTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ClientsTableOrderingComposer get clientId {
+    final $$ClientsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.clientId,
+      referencedTable: $db.clients,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ClientsTableOrderingComposer(
+            $db: $db,
+            $table: $db.clients,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$CasesTableOrderingComposer get caseId {
+    final $$CasesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableOrderingComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$OfficeLawyersTableOrderingComposer get createdBy {
+    final $$OfficeLawyersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdBy,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableOrderingComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$WordDocumentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WordDocumentsTable> {
+  $$WordDocumentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get revision =>
+      $composableBuilder(column: $table.revision, builder: (column) => column);
+
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get operationKey => $composableBuilder(
+    column: $table.operationKey,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get inputJson =>
+      $composableBuilder(column: $table.inputJson, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceHash => $composableBuilder(
+    column: $table.sourceHash,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<Uint8List> get bytes =>
+      $composableBuilder(column: $table.bytes, builder: (column) => column);
+
+  GeneratedColumn<String> get checksum =>
+      $composableBuilder(column: $table.checksum, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$WordTemplatesTableAnnotationComposer get templateId {
+    final $$WordTemplatesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.templateId,
+      referencedTable: $db.wordTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordTemplatesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.wordTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ClientsTableAnnotationComposer get clientId {
+    final $$ClientsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.clientId,
+      referencedTable: $db.clients,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ClientsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.clients,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$CasesTableAnnotationComposer get caseId {
+    final $$CasesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.caseId,
+      referencedTable: $db.cases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CasesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.cases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$OfficeLawyersTableAnnotationComposer get createdBy {
+    final $$OfficeLawyersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdBy,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> wordShareAttemptsRefs<T extends Object>(
+    Expression<T> Function($$WordShareAttemptsTableAnnotationComposer a) f,
+  ) {
+    final $$WordShareAttemptsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.wordShareAttempts,
+          getReferencedColumn: (t) => t.documentId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$WordShareAttemptsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.wordShareAttempts,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$WordDocumentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WordDocumentsTable,
+          WordDocument,
+          $$WordDocumentsTableFilterComposer,
+          $$WordDocumentsTableOrderingComposer,
+          $$WordDocumentsTableAnnotationComposer,
+          $$WordDocumentsTableCreateCompanionBuilder,
+          $$WordDocumentsTableUpdateCompanionBuilder,
+          (WordDocument, $$WordDocumentsTableReferences),
+          WordDocument,
+          PrefetchHooks Function({
+            bool templateId,
+            bool clientId,
+            bool caseId,
+            bool createdBy,
+            bool wordShareAttemptsRefs,
+          })
+        > {
+  $$WordDocumentsTableTableManager(_$AppDatabase db, $WordDocumentsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WordDocumentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WordDocumentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WordDocumentsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<DateTime?> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                Value<String> id = const Value.absent(),
+                Value<String> operationKey = const Value.absent(),
+                Value<String> templateId = const Value.absent(),
+                Value<String> clientId = const Value.absent(),
+                Value<String?> caseId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> inputJson = const Value.absent(),
+                Value<String> sourceHash = const Value.absent(),
+                Value<Uint8List> bytes = const Value.absent(),
+                Value<String> checksum = const Value.absent(),
+                Value<String> createdBy = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WordDocumentsCompanion(
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                revision: revision,
+                id: id,
+                operationKey: operationKey,
+                templateId: templateId,
+                clientId: clientId,
+                caseId: caseId,
+                title: title,
+                inputJson: inputJson,
+                sourceHash: sourceHash,
+                bytes: bytes,
+                checksum: checksum,
+                createdBy: createdBy,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<DateTime?> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                required String id,
+                required String operationKey,
+                required String templateId,
+                required String clientId,
+                Value<String?> caseId = const Value.absent(),
+                required String title,
+                required String inputJson,
+                required String sourceHash,
+                required Uint8List bytes,
+                required String checksum,
+                required String createdBy,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WordDocumentsCompanion.insert(
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                revision: revision,
+                id: id,
+                operationKey: operationKey,
+                templateId: templateId,
+                clientId: clientId,
+                caseId: caseId,
+                title: title,
+                inputJson: inputJson,
+                sourceHash: sourceHash,
+                bytes: bytes,
+                checksum: checksum,
+                createdBy: createdBy,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$WordDocumentsTable, WordDocument>(table),
+                  $$WordDocumentsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                templateId = false,
+                clientId = false,
+                caseId = false,
+                createdBy = false,
+                wordShareAttemptsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (wordShareAttemptsRefs) db.wordShareAttempts,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (templateId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.templateId,
+                                    referencedTable:
+                                        $$WordDocumentsTableReferences
+                                            ._templateIdTable(db),
+                                    referencedColumn:
+                                        $$WordDocumentsTableReferences
+                                            ._templateIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (clientId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.clientId,
+                                    referencedTable:
+                                        $$WordDocumentsTableReferences
+                                            ._clientIdTable(db),
+                                    referencedColumn:
+                                        $$WordDocumentsTableReferences
+                                            ._clientIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (caseId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.caseId,
+                                    referencedTable:
+                                        $$WordDocumentsTableReferences
+                                            ._caseIdTable(db),
+                                    referencedColumn:
+                                        $$WordDocumentsTableReferences
+                                            ._caseIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (createdBy) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.createdBy,
+                                    referencedTable:
+                                        $$WordDocumentsTableReferences
+                                            ._createdByTable(db),
+                                    referencedColumn:
+                                        $$WordDocumentsTableReferences
+                                            ._createdByTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (wordShareAttemptsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          WordDocument,
+                          $WordDocumentsTable,
+                          WordShareAttempt,
+                          $WordShareAttemptsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$WordDocumentsTableReferences
+                              ._wordShareAttemptsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$WordDocumentsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).wordShareAttemptsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'document_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$WordDocumentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WordDocumentsTable,
+      WordDocument,
+      $$WordDocumentsTableFilterComposer,
+      $$WordDocumentsTableOrderingComposer,
+      $$WordDocumentsTableAnnotationComposer,
+      $$WordDocumentsTableCreateCompanionBuilder,
+      $$WordDocumentsTableUpdateCompanionBuilder,
+      (WordDocument, $$WordDocumentsTableReferences),
+      WordDocument,
+      PrefetchHooks Function({
+        bool templateId,
+        bool clientId,
+        bool caseId,
+        bool createdBy,
+        bool wordShareAttemptsRefs,
+      })
+    >;
+typedef $$WordShareAttemptsTableCreateCompanionBuilder =
+    WordShareAttemptsCompanion Function({
+      Value<DateTime?> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> revision,
+      required String id,
+      required String documentId,
+      required String actorId,
+      required String channel,
+      required String checksum,
+      required String status,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $$WordShareAttemptsTableUpdateCompanionBuilder =
+    WordShareAttemptsCompanion Function({
+      Value<DateTime?> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> revision,
+      Value<String> id,
+      Value<String> documentId,
+      Value<String> actorId,
+      Value<String> channel,
+      Value<String> checksum,
+      Value<String> status,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$WordShareAttemptsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $WordShareAttemptsTable,
+          WordShareAttempt
+        > {
+  $$WordShareAttemptsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $WordDocumentsTable _documentIdTable(_$AppDatabase db) => db
+      .wordDocuments
+      .createAlias('word_share_attempts__document_id__word_documents__id');
+
+  $$WordDocumentsTableProcessedTableManager get documentId {
+    final $_column = $_itemColumn<String>('document_id')!;
+
+    final manager = $$WordDocumentsTableTableManager(
+      $_db,
+      $_db.wordDocuments,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_documentIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $OfficeLawyersTable _actorIdTable(_$AppDatabase db) => db.officeLawyers
+      .createAlias('word_share_attempts__actor_id__office_lawyers__id');
+
+  $$OfficeLawyersTableProcessedTableManager get actorId {
+    final $_column = $_itemColumn<String>('actor_id')!;
+
+    final manager = $$OfficeLawyersTableTableManager(
+      $_db,
+      $_db.officeLawyers,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_actorIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$WordShareAttemptsTableFilterComposer
+    extends Composer<_$AppDatabase, $WordShareAttemptsTable> {
+  $$WordShareAttemptsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get channel => $composableBuilder(
+    column: $table.channel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get checksum => $composableBuilder(
+    column: $table.checksum,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$WordDocumentsTableFilterComposer get documentId {
+    final $$WordDocumentsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.documentId,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableFilterComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$OfficeLawyersTableFilterComposer get actorId {
+    final $$OfficeLawyersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.actorId,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableFilterComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$WordShareAttemptsTableOrderingComposer
+    extends Composer<_$AppDatabase, $WordShareAttemptsTable> {
+  $$WordShareAttemptsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get channel => $composableBuilder(
+    column: $table.channel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get checksum => $composableBuilder(
+    column: $table.checksum,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$WordDocumentsTableOrderingComposer get documentId {
+    final $$WordDocumentsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.documentId,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableOrderingComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$OfficeLawyersTableOrderingComposer get actorId {
+    final $$OfficeLawyersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.actorId,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableOrderingComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$WordShareAttemptsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WordShareAttemptsTable> {
+  $$WordShareAttemptsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get revision =>
+      $composableBuilder(column: $table.revision, builder: (column) => column);
+
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get channel =>
+      $composableBuilder(column: $table.channel, builder: (column) => column);
+
+  GeneratedColumn<String> get checksum =>
+      $composableBuilder(column: $table.checksum, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$WordDocumentsTableAnnotationComposer get documentId {
+    final $$WordDocumentsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.documentId,
+      referencedTable: $db.wordDocuments,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordDocumentsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.wordDocuments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$OfficeLawyersTableAnnotationComposer get actorId {
+    final $$OfficeLawyersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.actorId,
+      referencedTable: $db.officeLawyers,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$OfficeLawyersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.officeLawyers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$WordShareAttemptsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WordShareAttemptsTable,
+          WordShareAttempt,
+          $$WordShareAttemptsTableFilterComposer,
+          $$WordShareAttemptsTableOrderingComposer,
+          $$WordShareAttemptsTableAnnotationComposer,
+          $$WordShareAttemptsTableCreateCompanionBuilder,
+          $$WordShareAttemptsTableUpdateCompanionBuilder,
+          (WordShareAttempt, $$WordShareAttemptsTableReferences),
+          WordShareAttempt,
+          PrefetchHooks Function({bool documentId, bool actorId})
+        > {
+  $$WordShareAttemptsTableTableManager(
+    _$AppDatabase db,
+    $WordShareAttemptsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WordShareAttemptsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WordShareAttemptsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WordShareAttemptsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<DateTime?> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                Value<String> id = const Value.absent(),
+                Value<String> documentId = const Value.absent(),
+                Value<String> actorId = const Value.absent(),
+                Value<String> channel = const Value.absent(),
+                Value<String> checksum = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WordShareAttemptsCompanion(
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                revision: revision,
+                id: id,
+                documentId: documentId,
+                actorId: actorId,
+                channel: channel,
+                checksum: checksum,
+                status: status,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<DateTime?> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                required String id,
+                required String documentId,
+                required String actorId,
+                required String channel,
+                required String checksum,
+                required String status,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WordShareAttemptsCompanion.insert(
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                revision: revision,
+                id: id,
+                documentId: documentId,
+                actorId: actorId,
+                channel: channel,
+                checksum: checksum,
+                status: status,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$WordShareAttemptsTable, WordShareAttempt>(table),
+                  $$WordShareAttemptsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({documentId = false, actorId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (documentId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.documentId,
+                                referencedTable:
+                                    $$WordShareAttemptsTableReferences
+                                        ._documentIdTable(db),
+                                referencedColumn:
+                                    $$WordShareAttemptsTableReferences
+                                        ._documentIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+                    if (actorId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.actorId,
+                                referencedTable:
+                                    $$WordShareAttemptsTableReferences
+                                        ._actorIdTable(db),
+                                referencedColumn:
+                                    $$WordShareAttemptsTableReferences
+                                        ._actorIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$WordShareAttemptsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WordShareAttemptsTable,
+      WordShareAttempt,
+      $$WordShareAttemptsTableFilterComposer,
+      $$WordShareAttemptsTableOrderingComposer,
+      $$WordShareAttemptsTableAnnotationComposer,
+      $$WordShareAttemptsTableCreateCompanionBuilder,
+      $$WordShareAttemptsTableUpdateCompanionBuilder,
+      (WordShareAttempt, $$WordShareAttemptsTableReferences),
+      WordShareAttempt,
+      PrefetchHooks Function({bool documentId, bool actorId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -35019,4 +39640,10 @@ class $AppDatabaseManager {
       $$GeneratedDocumentsTableTableManager(_db, _db.generatedDocuments);
   $$ShareAttemptsTableTableManager get shareAttempts =>
       $$ShareAttemptsTableTableManager(_db, _db.shareAttempts);
+  $$WordTemplatesTableTableManager get wordTemplates =>
+      $$WordTemplatesTableTableManager(_db, _db.wordTemplates);
+  $$WordDocumentsTableTableManager get wordDocuments =>
+      $$WordDocumentsTableTableManager(_db, _db.wordDocuments);
+  $$WordShareAttemptsTableTableManager get wordShareAttempts =>
+      $$WordShareAttemptsTableTableManager(_db, _db.wordShareAttempts);
 }

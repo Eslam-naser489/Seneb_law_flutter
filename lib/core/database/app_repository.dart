@@ -36,6 +36,8 @@ import 'models.dart';
 import '../money/money.dart';
 import '../../features/finance/domain/finance_models.dart';
 import '../../features/reports/domain/report_models.dart';
+import '../../features/templates/domain/docx_engine.dart';
+import '../../features/templates/domain/word_draft.dart';
 
 export 'models.dart';
 part 'office_access.dart';
@@ -44,6 +46,7 @@ part 'workspace_queries.dart';
 part 'search_queries.dart';
 part 'finance_queries.dart';
 part 'report_queries.dart';
+part 'word_queries.dart';
 
 /// واجهة انتقالية تحافظ على الشاشات الحالية أثناء فصل المستودعات.
 class AppRepository {

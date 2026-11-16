@@ -331,6 +331,10 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
       (
         'المستندات',
         _list([
+          if(data.fullAccess && _repo.canEdit) ...[
+            ListTile(title:const Text('إنشاء مستند من قالب Word'),leading:const Icon(Icons.note_add_outlined),onTap:()=>_navigate('/templates?client=${Uri.encodeComponent(id)}')),
+            ListTile(title:const Text('المستندات المولدة'),leading:const Icon(Icons.folder_open),onTap:()=>_navigate('/client/${Uri.encodeComponent(id)}/word-documents')),
+          ],
           for (final d in data.documents)
             ListTile(
               leading: const Icon(Icons.description_outlined),

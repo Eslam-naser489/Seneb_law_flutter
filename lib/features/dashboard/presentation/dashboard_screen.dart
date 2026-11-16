@@ -82,6 +82,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
+                  if (widget.workspace?.canEdit ?? false)
+                    OutlinedButton.icon(onPressed:()=>context.push('/templates'),icon:const Icon(Icons.description_outlined),label:const Text('قوالب Word')),
                   if (widget.workspace?.isOwner ?? true)
                     OutlinedButton.icon(
                       onPressed: () => context.push('/backup'),

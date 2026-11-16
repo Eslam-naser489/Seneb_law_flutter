@@ -17,6 +17,8 @@ part 'finance_schema.dart';
 part 'finance_migration.dart';
 part 'report_schema.dart';
 part 'report_migration.dart';
+part 'word_schema.dart';
+part 'word_migration.dart';
 
 @DataClassName('OfficeLawyerEntity')
 class OfficeLawyers extends Table with LifecycleColumns {
@@ -164,6 +166,9 @@ class CaseDocuments extends Table with LifecycleColumns {
     CaseReports,
     GeneratedDocuments,
     ShareAttempts,
+    WordTemplates,
+    WordDocuments,
+    WordShareAttempts,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -176,7 +181,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.connection);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration {
@@ -186,6 +191,7 @@ class AppDatabase extends _$AppDatabase {
         await installSprintZeroGuards(this);
         await installFinanceGuards(this);
         await installReportGuards(this);
+        await installWordGuards(this);
       },
       onUpgrade: (m, from, to) => transaction(() async {
         if (from < 2) {
@@ -194,6 +200,7 @@ class AppDatabase extends _$AppDatabase {
         if (from < 3) await upgradeToThree(this, m);
         if (from < 4) await upgradeToFour(this, m);
         if (from < 5) await upgradeToFive(this, m);
+        if (from < 6) await upgradeToSix(this, m);
       }),
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
@@ -267,7 +274,7 @@ Future<QueryExecutor> _preparedConnection(Directory root) async {
     } finally {
       source.close();
     }
-    if (version > 0 && version < 5) {
+    if (version > 0 && version < 6) {
       final backup = await BackupService().create(
         databaseFile: file,
         storageRoot: root,

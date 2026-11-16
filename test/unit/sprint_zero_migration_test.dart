@@ -81,7 +81,7 @@ void main() {
       expect(transaction, originalTransaction);
       expect(
         (await db.customSelect('PRAGMA user_version').get()).single.data.values,
-        [5],
+        [6],
       );
       expect(await db.customSelect('PRAGMA foreign_key_check').get(), isEmpty);
       expect(
@@ -163,7 +163,7 @@ void main() {
       expect(await reopened.select(reopened.clientLawyers).get(), hasLength(1));
       expect(
         (await reopened.select(reopened.auditLog).get()).map((e) => e.action),
-        ['UPGRADE_V2_V3', 'UPGRADE_V3_V4', 'UPGRADE_V4_V5'],
+        ['UPGRADE_V2_V3', 'UPGRADE_V3_V4', 'UPGRADE_V4_V5', 'UPGRADE_V5_V6'],
       );
       expect(await backups(office), hasLength(1));
     },
@@ -427,7 +427,7 @@ void main() {
       expect(unchangedSession.decision, 'قرار تجريبي');
       expect(unchangedSession.revision, 1);
       expect(unchangedSession.updatedAt, isNull);
-      expect(await db.select(db.auditLog).get(), hasLength(3));
+      expect(await db.select(db.auditLog).get(), hasLength(4));
     },
   );
 }
