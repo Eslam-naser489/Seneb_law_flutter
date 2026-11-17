@@ -85,3 +85,7 @@ app.*.map.json
 **/.gradle/
 **/.cxx/
 **/ephemeral/
+
+# Internal handoff / planning docs
+CODEX_HANDOFF.md
+ARCHITECTURE_REFACTOR_PLAN.md
