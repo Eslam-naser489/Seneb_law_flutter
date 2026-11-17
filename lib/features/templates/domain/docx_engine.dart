@@ -138,8 +138,9 @@ class DocxEngine {
 
   static XmlDocument _xml(ArchiveFile file) {
     final text = utf8.decode(file.content);
-    if (text.contains('<!DOCTYPE') || text.contains('<!ENTITY'))
+    if (text.contains('<!DOCTYPE') || text.contains('<!ENTITY')) {
       _fail('تعريفات XML الخارجية غير مدعومة.');
+    }
     return XmlDocument.parse(text);
   }
 
@@ -159,10 +160,11 @@ class DocxEngine {
           final text = _texts(p).map((e) => e.innerText).join();
           final matches = token.allMatches(text);
           final rest = text.replaceAll(token, '');
-          if (rest.contains('{{') || rest.contains('}}'))
+          if (rest.contains('{{') || rest.contains('}}')) {
             _fail(
               'حقل غير صالح أو ممتد بين فقرات؛ استخدم {{field_name}} داخل فقرة واحدة.',
             );
+          }
           if (matches.isNotEmpty &&
               p.descendants.whereType<XmlElement>().any(
                 (e) => [
@@ -180,8 +182,9 @@ class DocxEngine {
           fields.addAll(matches.map((m) => m[1]!));
         }
       }
-      if (fields.isEmpty)
+      if (fields.isEmpty) {
         _fail('لم توجد حقول؛ أضف {{client_name}} أو حقلًا مخصصًا.');
+      }
       if (fields.length > 80) _fail('الحد الأقصى 80 حقلًا.');
       return fields;
     } on TemplateFailure {

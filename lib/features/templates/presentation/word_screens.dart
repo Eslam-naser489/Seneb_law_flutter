@@ -34,8 +34,9 @@ class _WordLibraryState extends State<WordLibraryScreen> {
       if (files.isEmpty) return;
       final length = await files.single.length();
       if (length == null || length > DocxEngine.maxBytes ||
-          !files.single.name.toLowerCase().endsWith('.docx'))
+          !files.single.name.toLowerCase().endsWith('.docx')) {
         throw const TemplateFailure('اختر DOCX لا يتجاوز 10 ميجابايت.');
+      }
       final bytes = await files.single.readAsBytes();
       final fields = DocxEngine.inspect(bytes).toList()..sort();
       if (!mounted) return;
@@ -45,10 +46,11 @@ class _WordLibraryState extends State<WordLibraryScreen> {
       );
       if (mounted) refresh();
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('$e')));
+      }
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -102,27 +104,30 @@ class _WordLibraryState extends State<WordLibraryScreen> {
           child: FutureBuilder<List<WordTemplate>>(
             future: data,
             builder: (context, s) {
-              if (s.hasError)
+              if (s.hasError) {
                 return Center(
                   child: TextButton(
                     onPressed: refresh,
                     child: Text('${s.error}\nإعادة المحاولة'),
                   ),
                 );
-              if (!s.hasData)
+              }
+              if (!s.hasData) {
                 return const Center(child: CircularProgressIndicator());
+              }
               final rows = s.data!
                   .where(
                     (t) =>
                         t.name.contains(filter) || t.category.contains(filter),
                   )
                   .toList();
-              if (rows.isEmpty)
+              if (rows.isEmpty) {
                 return const Center(
                   child: Text(
                     'لا توجد قوالب مطابقة. يمكن للمالك رفع قالب Word.',
                   ),
                 );
+              }
               return ListView.builder(
                 itemCount: rows.length,
                 itemBuilder: (_, i) {
@@ -418,12 +423,13 @@ class _HistoryState extends State<WordHistoryScreen> {
       builder: (context, s) {
         if (s.hasError) return Center(child: Text('${s.error}'));
         if (!s.hasData) return const Center(child: CircularProgressIndicator());
-        if (s.data!.isEmpty)
+        if (s.data!.isEmpty) {
           return const Center(
             child: Text(
               'لم تُنشأ مستندات بعد. اختر قالب Word من ملف الموكل أو القضية.',
             ),
           );
+        }
         return ListView(
           children: [
             for (final d in s.data!)
@@ -510,11 +516,12 @@ class _DocumentState extends State<WordDocumentScreen> {
       }
       if (mounted) setState(() => message = 'تعذر الإجراء: $e');
     } finally {
-      if (mounted)
+      if (mounted) {
         setState(() {
           busy = false;
           attempts = repo.wordShareHistory(widget.id);
         });
+      }
     }
   }
 

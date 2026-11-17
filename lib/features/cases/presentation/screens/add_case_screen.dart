@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seneb_law/app/theme/app_widgets.dart';
 import 'package:seneb_law/core/database/app_repository.dart';
 import 'package:seneb_law/core/database/database.dart';
 import '../cubit/cases_cubit.dart';
@@ -122,66 +123,69 @@ class _AddCaseScreenState extends State<AddCaseScreen> {
       canPop: !_saving,
       child: Scaffold(
         appBar: AppBar(title: const Text('إضافة قضية جديدة')),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                DropdownButtonFormField<String>(
-                  initialValue: _selectedClientId,
-                  decoration: const InputDecoration(
-                    labelText: 'اختر الموكل',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person),
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: AppCard(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const AppSectionHeader(title: 'بيانات القضية الجديدة'),
+                      DropdownButtonFormField<String>(
+                        initialValue: _selectedClientId,
+                        decoration: const InputDecoration(
+                          labelText: 'اختر الموكل',
+                          prefixIcon: Icon(Icons.person_outline),
+                        ),
+                        items: _clients.map((client) {
+                          return DropdownMenuItem(
+                            value: client.id,
+                            child: Text(client.name),
+                          );
+                        }).toList(),
+                        onChanged: (value) =>
+                            setState(() => _selectedClientId = value),
+                        validator: (value) =>
+                            value == null ? 'برجاء اختيار الموكل' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _caseNumberController,
+                        decoration: const InputDecoration(
+                          labelText: 'رقم القضية وسنتها (مثال: 123 لسنة 2026)',
+                          prefixIcon: Icon(Icons.numbers_outlined),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'برجاء إدخال رقم القضية';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _opponentNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'اسم الخصم (اختياري)',
+                          prefixIcon: Icon(Icons.gavel_outlined),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      AppButton(
+                        onPressed: _saving ? null : _saveCase,
+                        isLoading: _saving,
+                        label: 'حفظ القضية',
+                        icon: Icons.check,
+                      ),
+                    ],
                   ),
-                  items: _clients.map((client) {
-                    return DropdownMenuItem(
-                      value: client.id,
-                      child: Text(client.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) =>
-                      setState(() => _selectedClientId = value),
-                  validator: (value) =>
-                      value == null ? 'برجاء اختيار الموكل' : null,
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _caseNumberController,
-                  decoration: const InputDecoration(
-                    labelText: 'رقم القضية وسنتها (مثال: 123 لسنة 2026)',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.numbers),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'برجاء إدخال رقم القضية';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _opponentNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'اسم الخصم (اختياري)',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.gavel_outlined),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  onPressed: _saving ? null : _saveCase,
-                  child: Text(
-                    _saving ? 'جارٍ الحفظ…' : 'حفظ القضية',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

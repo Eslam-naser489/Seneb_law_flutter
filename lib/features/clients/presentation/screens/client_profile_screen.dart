@@ -8,6 +8,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/database/app_repository.dart';
 import '../../../../core/database/database.dart';
+import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_widgets.dart';
 import '../../../search/data/arabic_search.dart';
 import '../../../shared/presentation/async_save_dialog.dart';
 import '../../../shared/presentation/workspace_load.dart';
@@ -218,8 +220,16 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
   }
 
   Widget _list(List<Widget> children, String empty) => children.isEmpty
-      ? Center(child: Text(empty))
-      : ListView(padding: const EdgeInsets.all(12), children: children);
+      ? Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: AppEmptyState(
+              icon: Icons.folder_open_outlined,
+              title: empty,
+            ),
+          ),
+        )
+      : ListView(padding: const EdgeInsets.all(16), children: children);
 
   Future<void> _navigate(String location) async {
     await context.push(location);
@@ -252,13 +262,29 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
         'القضايا',
         _list([
           for (final c in data.cases)
-            ListTile(
-              leading: const Icon(Icons.gavel),
-              title: Text(c.caseNumber),
-              subtitle: Text(
-                '${c.status} · ${c.opponentName ?? 'الخصم غير مسجل'}',
+            Card(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: AppColors.primaryNavy.withValues(alpha: 0.08),
+                  child: const Icon(Icons.gavel, color: AppColors.primaryNavy),
+                ),
+                title: Text(c.caseNumber, style: const TextStyle(fontWeight: FontWeight.w600)),
+                subtitle: Text(
+                  c.opponentName != null
+                      ? 'الخصم: ${c.opponentName}'
+                      : 'الخصم غير مسجل',
+                ),
+                trailing: AppStatusBadge(
+                  label: c.status,
+                  color: c.status == 'جارية' || c.status == 'ACTIVE'
+                      ? AppColors.success
+                      : c.status == 'موقوفة' || c.status == 'ON_HOLD'
+                          ? AppColors.warning
+                          : AppColors.secondaryText,
+                ),
+                onTap: () => _navigate('/case/${Uri.encodeComponent(c.id)}'),
               ),
-              onTap: () => _navigate('/case/${Uri.encodeComponent(c.id)}'),
             ),
         ], 'لا توجد قضايا متاحة لهذا الموكل.'),
       ),
@@ -408,9 +434,63 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                 ),
               ),
           ],
-          bottom: TabBar(
-            isScrollable: true,
-            tabs: [for (final tab in tabs) Tab(text: tab.$1)],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(52),
+            child: Container(
+              color: AppColors.primaryNavy,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              alignment: AlignmentDirectional.centerStart,
+              child: TabBar(
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                padding: EdgeInsets.zero,
+                splashBorderRadius: BorderRadius.circular(8),
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white, width: 2),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x1A000000),
+                      blurRadius: 4,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                labelColor: AppColors.accentBlue,
+                unselectedLabelColor: Colors.white,
+                labelStyle: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+                unselectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+                dividerColor: Colors.transparent,
+                overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Colors.white.withValues(alpha: 0.15);
+                  }
+                  if (states.contains(WidgetState.focused)) {
+                    return Colors.white.withValues(alpha: 0.25);
+                  }
+                  return null;
+                }),
+                tabs: [
+                  for (final tab in tabs)
+                    Tab(
+                      height: 38,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(tab.$1),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
         body: Column(
@@ -425,11 +505,24 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                 ),
               ),
             if (data.fullAccess)
-              Padding(
-                padding: const EdgeInsets.all(8),
+              Container(
+                margin: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x08000000),
+                      blurRadius: 4,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
                 child: Wrap(
-                  spacing: 8,
-                  runSpacing: 4,
+                  spacing: 10,
+                  runSpacing: 8,
                   children: [
                     if (_repo.canEdit && data.cases.isNotEmpty)
                       OutlinedButton.icon(

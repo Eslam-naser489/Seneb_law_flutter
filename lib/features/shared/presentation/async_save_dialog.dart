@@ -78,7 +78,16 @@ class _AsyncSaveDialogState extends State<AsyncSaveDialog> {
   Widget build(BuildContext context) => PopScope(
     canPop: !_saving,
     child: AlertDialog(
-      title: Text(widget.title),
+      title: Text(
+        widget.title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: Color(0xFF0A1F44),
+        ),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -101,9 +110,18 @@ class _AsyncSaveDialogState extends State<AsyncSaveDialog> {
           onPressed: _saving ? null : () => Navigator.of(context).pop(false),
           child: const Text('إلغاء'),
         ),
-        ElevatedButton(
+        FilledButton(
           onPressed: _saving ? null : _save,
-          child: Text(_saving ? 'جارٍ الحفظ…' : widget.saveLabel),
+          child: _saving
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                  ),
+                )
+              : Text(widget.saveLabel),
         ),
       ],
     ),

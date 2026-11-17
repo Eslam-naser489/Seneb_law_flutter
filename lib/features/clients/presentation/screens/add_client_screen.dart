@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seneb_law/app/theme/app_widgets.dart';
 import 'package:seneb_law/core/database/app_repository.dart';
 import 'package:seneb_law/core/database/database.dart';
 import '../cubit/clients_cubit.dart';
@@ -106,68 +107,71 @@ class _AddClientScreenState extends State<AddClientScreen> {
                   ],
                 ),
               )
-            : Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: [
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: const InputDecoration(
-                          labelText: 'اسم الموكل',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.person),
+            : Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24.0),
+                    child: AppCard(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const AppSectionHeader(title: 'بيانات الموكل الأساسية'),
+                            TextFormField(
+                              controller: _nameController,
+                              decoration: const InputDecoration(
+                                labelText: 'اسم الموكل',
+                                prefixIcon: Icon(Icons.person_outline),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'برجاء إدخال اسم الموكل';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _phoneController,
+                              keyboardType: TextInputType.phone,
+                              decoration: const InputDecoration(
+                                labelText: 'رقم الهاتف (اختياري)',
+                                prefixIcon: Icon(Icons.phone_outlined),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            DropdownButtonFormField<String>(
+                              initialValue: _selectedLawyerId,
+                              decoration: const InputDecoration(
+                                labelText: 'المحامي المسؤول',
+                                prefixIcon: Icon(Icons.gavel_outlined),
+                              ),
+                              items: _lawyers.map((lawyer) {
+                                return DropdownMenuItem(
+                                  value: lawyer.id,
+                                  child: Text(lawyer.name),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedLawyerId = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 28),
+                            AppButton(
+                              onPressed: _saving ? null : _saveClient,
+                              isLoading: _saving,
+                              label: 'حفظ بيانات الموكل',
+                              icon: Icons.check,
+                            ),
+                          ],
                         ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'برجاء إدخال اسم الموكل';
-                          }
-                          return null;
-                        },
                       ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                          labelText: 'رقم الهاتف (اختياري)',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.phone),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      DropdownButtonFormField<String>(
-                        initialValue: _selectedLawyerId,
-                        decoration: const InputDecoration(
-                          labelText: 'المحامي المسؤول',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.gavel),
-                        ),
-                        items: _lawyers.map((lawyer) {
-                          return DropdownMenuItem(
-                            value: lawyer.id,
-                            child: Text(lawyer.name),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedLawyerId = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        onPressed: _saving ? null : _saveClient,
-                        child: Text(
-                          _saving ? 'جارٍ الحفظ…' : 'حفظ بيانات الموكل',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),

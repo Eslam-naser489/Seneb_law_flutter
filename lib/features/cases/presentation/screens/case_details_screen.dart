@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:seneb_law/app/theme/app_colors.dart';
+import 'package:seneb_law/app/theme/app_widgets.dart';
 import 'package:seneb_law/core/database/app_repository.dart';
 import 'package:seneb_law/core/database/database.dart';
 import 'package:seneb_law/features/shared/presentation/async_save_dialog.dart';
@@ -342,38 +344,61 @@ class _CaseDetailsScreenState extends State<CaseDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Card(
-                      color: Theme.of(context).colorScheme.primaryContainer,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'الموكل: ${widget.caseWithClient.client.name}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                    AppCard(
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 26,
+                            backgroundColor: AppColors.primaryNavy.withValues(alpha: 0.08),
+                            child: const Icon(Icons.gavel, color: AppColors.primaryNavy, size: 28),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'الموكل: ${widget.caseWithClient.client.name}',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.primaryText,
+                                        ),
+                                      ),
+                                    ),
+                                    AppStatusBadge(
+                                      label: _statusLabel,
+                                      color: _statusLabel == 'جارية' || _statusLabel == 'ACTIVE'
+                                          ? AppColors.success
+                                          : _statusLabel == 'موقوفة' || _statusLabel == 'ON_HOLD'
+                                              ? AppColors.warning
+                                              : AppColors.secondaryText,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  'الخصم: ${widget.caseWithClient.caseEntity.opponentName ?? "غير مسجل"}',
+                                  style: const TextStyle(fontSize: 14, color: AppColors.secondaryText),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (editable) ...[
+                            const SizedBox(width: 12),
+                            OutlinedButton.icon(
+                              onPressed: () => _showStatusDialog(context),
+                              icon: const Icon(Icons.edit_outlined, size: 16),
+                              label: const Text('تحديث الحالة'),
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'الخصم: ${widget.caseWithClient.caseEntity.opponentName ?? "غير مسجل"}',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'الحالة: $_statusLabel',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            if (editable)
-                              TextButton.icon(
-                                onPressed: () => _showStatusDialog(context),
-                                icon: const Icon(Icons.edit_outlined),
-                                label: const Text('تحديث الحالة'),
-                              ),
                           ],
-                        ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -395,27 +420,81 @@ class _CaseDetailsScreenState extends State<CaseDetailsScreen> {
 
                             return Column(
                               children: [
-                                TabBar(
-                                  isScrollable: true,
-                                  tabs: [
-                                    const Tab(
-                                      icon: Icon(Icons.note),
-                                      text: 'الملاحظات',
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFE2E8F0).withValues(alpha: 0.6),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: TabBar(
+                                    isScrollable: true,
+                                    tabAlignment: TabAlignment.start,
+                                    padding: EdgeInsets.zero,
+                                    indicatorSize: TabBarIndicatorSize.tab,
+                                    indicator: BoxDecoration(
+                                      color: AppColors.primaryNavy,
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color(0x14000000),
+                                          blurRadius: 4,
+                                          offset: Offset(0, 1),
+                                        ),
+                                      ],
                                     ),
-                                    const Tab(
-                                      icon: Icon(Icons.calendar_month),
-                                      text: 'الجلسات',
-                                    ),
-                                    if (finance)
+                                    labelColor: Colors.white,
+                                    unselectedLabelColor: AppColors.primaryText,
+                                    labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                                    unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+                                    dividerColor: Colors.transparent,
+                                    tabs: [
                                       const Tab(
-                                        icon: Icon(Icons.attach_money),
-                                        text: 'الماليات',
+                                        height: 36,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.note_outlined, size: 16),
+                                            SizedBox(width: 6),
+                                            Text('الملاحظات'),
+                                          ],
+                                        ),
                                       ),
-                                    const Tab(
-                                      icon: Icon(Icons.folder_special),
-                                      text: 'الأرشيف',
-                                    ), // التبويب الجديد
-                                  ],
+                                      const Tab(
+                                        height: 36,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.calendar_month_outlined, size: 16),
+                                            SizedBox(width: 6),
+                                            Text('الجلسات'),
+                                          ],
+                                        ),
+                                      ),
+                                      if (finance)
+                                        const Tab(
+                                          height: 36,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(Icons.attach_money, size: 16),
+                                              SizedBox(width: 6),
+                                              Text('الماليات'),
+                                            ],
+                                          ),
+                                        ),
+                                      const Tab(
+                                        height: 36,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.folder_outlined, size: 16),
+                                            SizedBox(width: 6),
+                                            Text('الأرشيف'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 Expanded(
                                   child: TabBarView(

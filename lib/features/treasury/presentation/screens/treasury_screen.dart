@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:seneb_law/app/theme/app_colors.dart';
+import 'package:seneb_law/app/theme/app_widgets.dart';
 import '../cubit/treasury_cubit.dart';
 import '../cubit/treasury_state.dart';
 import 'package:seneb_law/features/shared/presentation/async_save_dialog.dart';
@@ -99,37 +101,49 @@ class _TreasuryScreenState extends State<TreasuryScreen> {
     IconData icon,
   ) {
     return Expanded(
-      child: Card(
-        color: color.withValues(alpha: 0.1),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: color, width: 1),
-          borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.all(14.0),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE2E8F0)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x06000000),
+              blurRadius: 4,
+              offset: Offset(0, 1),
+            ),
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Icon(icon, color: color, size: 28),
-              const SizedBox(height: 8),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
               ),
-              const SizedBox(height: 4),
-              Text(
-                '$amount ج.م',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
+              child: Icon(icon, color: color, size: 22),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.secondaryText,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '$amount ج.م',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -199,32 +213,46 @@ class _TreasuryScreenState extends State<TreasuryScreen> {
                 // قائمة الحركات
                 Expanded(
                   child: state.transactions.isEmpty
-                      ? const Center(child: Text('لا توجد حركات مالية مسجلة.'))
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(32),
+                            child: AppEmptyState(
+                              icon: Icons.account_balance_wallet_outlined,
+                              title: 'لا توجد حركات مالية مسجلة',
+                              subtitle: 'سجّل أول حركة إيراد أو مصروف في الخزينة.',
+                            ),
+                          ),
+                        )
                       : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           itemCount: state.transactions.length,
                           itemBuilder: (context, index) {
                             final t = state.transactions[index];
                             final isIncome = t.type == 'INCOME';
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: isIncome
-                                    ? Colors.green.shade100
-                                    : Colors.red.shade100,
-                                child: Icon(
-                                  isIncome ? Icons.add : Icons.remove,
-                                  color: isIncome ? Colors.green : Colors.red,
+                            final color = isIncome ? AppColors.success : AppColors.error;
+                            return Card(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: color.withValues(alpha: 0.1),
+                                  child: Icon(
+                                    isIncome ? Icons.arrow_downward : Icons.arrow_upward,
+                                    color: color,
+                                    size: 20,
+                                  ),
                                 ),
-                              ),
-                              title: Text(t.title),
-                              subtitle: Text(
-                                '${t.transactionDate.year}-${t.transactionDate.month}-${t.transactionDate.day}',
-                              ),
-                              trailing: Text(
-                                '${isIncome ? '+' : '-'}${t.amount} ج.م',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: isIncome ? Colors.green : Colors.red,
+                                title: Text(t.title, style: const TextStyle(fontWeight: FontWeight.w600)),
+                                subtitle: Text(
+                                  '${t.transactionDate.year}-${t.transactionDate.month}-${t.transactionDate.day}',
+                                  style: const TextStyle(color: AppColors.secondaryText, fontSize: 13),
+                                ),
+                                trailing: Text(
+                                  '${isIncome ? '+' : '-'}${t.amount} ج.م',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: color,
+                                  ),
                                 ),
                               ),
                             );

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seneb_law/app/theme/app_colors.dart';
+import 'package:seneb_law/app/theme/app_widgets.dart';
 
 import '../../../core/database/app_repository.dart';
 import '../../../core/database/database.dart';
@@ -205,37 +207,70 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
   );
 
   Widget _results() {
-    if (_loading) return const Center(child: CircularProgressIndicator());
+    if (_loading) {
+      return const AppLoadingIndicator(message: 'جارٍ البحث...');
+    }
     if (_failed) {
       return Center(
-        child: TextButton(
-          onPressed: () => _search(now: true),
-          child: const Text('تعذر البحث. إعادة المحاولة'),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+              const SizedBox(height: 12),
+              const Text('تعذر إتمام البحث.'),
+              const SizedBox(height: 16),
+              OutlinedButton(
+                onPressed: () => _search(now: true),
+                child: const Text('إعادة المحاولة'),
+              ),
+            ],
+          ),
         ),
       );
     }
     if (_text.text.trim().isEmpty) {
-      return const Center(child: Text('اكتب اسمًا أو رقمًا للبحث.'));
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32),
+          child: AppEmptyState(
+            icon: Icons.search,
+            title: 'اكتب اسمًا أو رقمًا للبحث',
+            subtitle: 'يمكنك البحث باسم الموكل، رقم الهاتف، الرقم القومي، أو رقم القضية.',
+          ),
+        ),
+      );
     }
     if (_hits.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('لا توجد نتائج مطابقة.'),
-            if (_lawyer != null ||
-                _status != null ||
-                _archive != ArchiveFilter.active)
-              TextButton(
-                onPressed: () {
-                  _lawyer = null;
-                  _status = null;
-                  _archive = ArchiveFilter.active;
-                  _search(now: true);
-                },
-                child: const Text('مسح الفلاتر'),
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const AppEmptyState(
+                icon: Icons.search_off_outlined,
+                title: 'لا توجد نتائج مطابقة للبحث',
+                subtitle: 'جرّب البحث بكلمات أخرى أو تحقق من الفلاتر المحددة.',
               ),
-          ],
+              if (_lawyer != null ||
+                  _status != null ||
+                  _archive != ArchiveFilter.active) ...[
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.filter_alt_off_outlined, size: 18),
+                  onPressed: () {
+                    _lawyer = null;
+                    _status = null;
+                    _archive = ArchiveFilter.active;
+                    _search(now: true);
+                  },
+                  label: const Text('مسح الفلاتر'),
+                ),
+              ],
+            ],
+          ),
         ),
       );
     }

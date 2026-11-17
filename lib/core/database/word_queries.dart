@@ -15,8 +15,9 @@ extension WordWorkspace on ScopedAppRepository {
     final t = await (_db.select(
       _db.wordTemplates,
     )..where((t) => t.id.equals(id))).getSingle();
-    if (reportHash(t.bytes) != t.checksum)
+    if (reportHash(t.bytes) != t.checksum) {
       throw const TemplateFailure('تلف القالب المحفوظ؛ استعد نسخة سليمة.');
+    }
     return t;
   }
 
@@ -30,8 +31,9 @@ extension WordWorkspace on ScopedAppRepository {
     if (name.isEmpty ||
         category.isEmpty ||
         name.length > 120 ||
-        category.length > 80)
+        category.length > 80) {
       throw const TemplateFailure('أدخل اسم القالب وتصنيفه ضمن حدود الطول.');
+    }
     final fields = DocxEngine.inspect(bytes).toList()..sort();
     final checksum = reportHash(bytes);
     return _db.transaction(() async {
@@ -42,8 +44,9 @@ extension WordWorkspace on ScopedAppRepository {
               .get();
       if (old.isNotEmpty &&
           old.first.checksum == checksum &&
-          old.first.category == category)
+          old.first.category == category) {
         return old.first.id;
+      }
       final id = const Uuid().v4();
       await _db
           .into(_db.wordTemplates)
@@ -78,8 +81,9 @@ extension WordWorkspace on ScopedAppRepository {
     final template = await _wordTemplate(templateId);
     final client = await _fullClient(clientId);
     if (client == null) _deny();
-    if (client.isArchived)
+    if (client.isArchived) {
       throw const TemplateFailure('استعد الموكل المؤرشف قبل إنشاء مستند.');
+    }
     final c = caseId == null ? null : await _case(caseId);
     if (c != null && c.clientId != clientId) _deny();
     final defaults = <String, String>{
@@ -106,12 +110,14 @@ extension WordWorkspace on ScopedAppRepository {
     required bool sensitiveReviewed,
   }) => _read(() async {
     final ctx = await wordContext(templateId, clientId, caseId: caseId);
-    if (ctx.values.containsKey('client_national_id') && !sensitiveReviewed)
+    if (ctx.values.containsKey('client_national_id') && !sensitiveReviewed) {
       throw const TemplateFailure(
         'راجع الرقم القومي ووافق على إدراجه في المستند.',
       );
-    if (values.keys.toSet().difference(ctx.values.keys.toSet()).isNotEmpty)
+    }
+    if (values.keys.toSet().difference(ctx.values.keys.toSet()).isNotEmpty) {
       throw const TemplateFailure('حقول إضافية غير معروفة.');
+    }
     final input = {for (final key in ctx.values.keys) key: values[key] ?? ''};
     DocxEngine.generate(ctx.template.bytes, input);
     final client = (await _fullClient(clientId))!;
@@ -141,8 +147,9 @@ extension WordWorkspace on ScopedAppRepository {
     required String operationKey,
     required bool reviewed,
   }) => _write(() async {
-    if (!reviewed || operationKey.trim().isEmpty)
+    if (!reviewed || operationKey.trim().isEmpty) {
       throw const TemplateFailure('راجع البيانات قبل الحفظ.');
+    }
     await _needClient(draft.clientId);
     final prior = await (_db.select(
       _db.wordDocuments,
@@ -153,8 +160,9 @@ extension WordWorkspace on ScopedAppRepository {
           prior.templateId != draft.templateId ||
           prior.clientId != draft.clientId ||
           prior.caseId != draft.caseId ||
-          prior.sourceHash != draft.sourceHash)
+          prior.sourceHash != draft.sourceHash) {
         throw const TemplateFailure('مفتاح العملية مستخدم لمستند آخر.');
+      }
       return _wordDocument(prior.id);
     }
     final fresh = await prepareWord(
@@ -164,8 +172,9 @@ extension WordWorkspace on ScopedAppRepository {
       values: draft.values,
       sensitiveReviewed: reviewed,
     );
-    if (fresh.sourceHash != draft.sourceHash)
+    if (fresh.sourceHash != draft.sourceHash) {
       throw const TemplateFailure('تغيرت بيانات المصدر؛ أعد مراجعة البيانات.');
+    }
     final template = await _wordTemplate(draft.templateId);
     final bytes = DocxEngine.generate(template.bytes, draft.values);
     return _db.transaction(() async {
@@ -205,8 +214,9 @@ extension WordWorkspace on ScopedAppRepository {
     )..where((t) => t.id.equals(id))).getSingle();
     await _needClient(doc.clientId);
     if (doc.caseId != null) await _case(doc.caseId!);
-    if (reportHash(doc.bytes) != doc.checksum)
+    if (reportHash(doc.bytes) != doc.checksum) {
       throw const TemplateFailure('تلف الملف؛ استعد نسخة سليمة.');
+    }
     return doc;
   }
 
@@ -216,8 +226,9 @@ extension WordWorkspace on ScopedAppRepository {
       _read(() async {
         if (!canEdit) _deny();
         await _needClient(clientId);
-        if (caseId != null && (await _case(caseId)).clientId != clientId)
+        if (caseId != null && (await _case(caseId)).clientId != clientId) {
           _deny();
+        }
         return (_db.select(_db.wordDocuments)
               ..where(
                 (t) =>
@@ -245,8 +256,9 @@ extension WordWorkspace on ScopedAppRepository {
     final doc = await _wordDocument(id);
     if (!['OPEN', 'SAVE', 'NATIVE'].contains(channel) ||
         (channel == 'NATIVE' && !reviewed) ||
-        checksum != doc.checksum)
+        checksum != doc.checksum) {
       throw const TemplateFailure('راجع المستند قبل المشاركة.');
+    }
     final attempt = const Uuid().v4();
     await _db.transaction(() async {
       await _db
@@ -287,8 +299,9 @@ extension WordWorkspace on ScopedAppRepository {
       'CANCELLED',
       'FAILED',
       'UNAVAILABLE',
-    ].contains(status))
+    ].contains(status)) {
       _deny();
+    }
     await _db.transaction(() async {
       await (_db.update(
         _db.wordShareAttempts,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seneb_law/app/theme/app_colors.dart';
+import 'package:seneb_law/app/theme/app_widgets.dart';
 import 'package:seneb_law/core/database/app_repository.dart';
 import '../cubit/sessions_cubit.dart';
 
@@ -137,83 +139,109 @@ class _AddSessionScreenState extends State<AddSessionScreen> {
       canPop: !_saving,
       child: Scaffold(
         appBar: AppBar(title: const Text('إضافة جلسة جديدة')),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                DropdownButtonFormField<String>(
-                  initialValue: _selectedCaseId,
-                  decoration: const InputDecoration(
-                    labelText: 'اختر القضية',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: _cases.map((c) {
-                    return DropdownMenuItem(
-                      value: c.caseEntity.id,
-                      child: Text(
-                        '${c.caseEntity.caseNumber} - ${c.client.name}',
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: AppCard(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const AppSectionHeader(title: 'بيانات الجلسة والمحكمة'),
+                      DropdownButtonFormField<String>(
+                        initialValue: _selectedCaseId,
+                        decoration: const InputDecoration(
+                          labelText: 'اختر القضية',
+                          prefixIcon: Icon(Icons.gavel_outlined),
+                        ),
+                        items: _cases.map((c) {
+                          return DropdownMenuItem(
+                            value: c.caseEntity.id,
+                            child: Text(
+                              '${c.caseEntity.caseNumber} - ${c.client.name}',
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (val) => setState(() => _selectedCaseId = val),
+                        validator: (val) =>
+                            val == null ? 'برجاء اختيار القضية' : null,
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (val) => setState(() => _selectedCaseId = val),
-                  validator: (val) =>
-                      val == null ? 'برجاء اختيار القضية' : null,
+                      const SizedBox(height: 16),
+                      InkWell(
+                        onTap: _pickDate,
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF8FAFC),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color(0xFFE2E8F0)),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.calendar_today_outlined, size: 20, color: AppColors.secondaryText),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('تاريخ الجلسة', style: TextStyle(fontSize: 12, color: AppColors.secondaryText)),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}',
+                                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.primaryText),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(Icons.edit_calendar_outlined, size: 20, color: AppColors.accentBlue),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _courtController,
+                        decoration: const InputDecoration(
+                          labelText: 'اسم المحكمة',
+                          prefixIcon: Icon(Icons.account_balance_outlined),
+                        ),
+                        validator: (val) => val == null || val.trim().isEmpty
+                            ? 'برجاء إدخال اسم المحكمة'
+                            : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _circleController,
+                        decoration: const InputDecoration(
+                          labelText: 'رقم الدائرة (اختياري)',
+                          prefixIcon: Icon(Icons.numbers_outlined),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _decisionController,
+                        maxLines: 3,
+                        decoration: const InputDecoration(
+                          labelText: 'القرار أو التوجيهات (اختياري)',
+                          prefixIcon: Icon(Icons.description_outlined),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      AppButton(
+                        onPressed: _saving ? null : _saveSession,
+                        isLoading: _saving,
+                        label: 'حفظ الجلسة',
+                        icon: Icons.check,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 16),
-                ListTile(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  title: const Text('تاريخ الجلسة'),
-                  subtitle: Text(
-                    '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}',
-                  ),
-                  trailing: const Icon(Icons.calendar_today),
-                  onTap: _pickDate,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _courtController,
-                  decoration: const InputDecoration(
-                    labelText: 'المحكمة',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (val) => val == null || val.trim().isEmpty
-                      ? 'برجاء إدخال اسم المحكمة'
-                      : null,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _circleController,
-                  decoration: const InputDecoration(
-                    labelText: 'الدائرة (اختياري)',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _decisionController,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                    labelText: 'القرار (اختياري)',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  onPressed: _saving ? null : _saveSession,
-                  child: Text(
-                    _saving ? 'جارٍ الحفظ…' : 'حفظ الجلسة',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seneb_law/app/theme/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,8 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // The background color matches the dark blue hex #2e49a0 found in your JSON file[cite: 3]
-      backgroundColor: const Color(0xFF2E49A0), 
+      backgroundColor: AppColors.primaryNavy,
       body: Center(
         child: Lottie.asset(
           'assets/lottie/splash.json',

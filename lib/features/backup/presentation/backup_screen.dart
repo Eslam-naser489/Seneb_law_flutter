@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 
+import 'package:seneb_law/app/theme/app_colors.dart';
+import 'package:seneb_law/app/theme/app_widgets.dart';
 import 'package:seneb_law/core/database/app_repository.dart';
 import 'package:seneb_law/core/storage/backup_service.dart';
 
@@ -82,42 +84,81 @@ class _BackupScreenState extends State<BackupScreen> {
     return PopScope(
       canPop: !_busy,
       child: Scaffold(
+        backgroundColor: AppColors.background,
         appBar: AppBar(title: const Text('النسخ الاحتياطي والتحقق')),
-        body: ListView(
-          padding: const EdgeInsetsDirectional.all(16),
-          children: [
-            const Text(
-              'إصدار تجريبي: النسخ هنا غير مشفرة. احفظها في مكان خاص، '
-              'وانسخ مجلد النسخة كاملًا إلى وسيط آخر.',
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 680),
+            child: ListView(
+              padding: const EdgeInsets.all(24),
+              children: [
+                AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const AppSectionHeader(title: 'النسخ الاحتياطي والأرشيف'),
+                      const Text(
+                        'إصدار تجريبي: النسخ هنا غير مشفرة. احفظها في مكان خاص، وانسخ مجلد النسخة كاملًا إلى وسيط تخزين آمن.',
+                        style: TextStyle(color: AppColors.secondaryText, fontSize: 13, height: 1.5),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AppButton(
+                              onPressed: _busy ? null : () => _run(() => _export(repository)),
+                              isLoading: _busy,
+                              icon: Icons.backup_outlined,
+                              label: 'إنشاء نسخة احتياطية',
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: _busy ? null : () => _run(() => _restore(repository)),
+                              icon: const Icon(Icons.fact_check_outlined),
+                              label: const Text('استعادة تجريبية إلى مجلد جديد'),
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      const Text(
+                        'الاستعادة التجريبية تفحص الملفات وتنسخ البيانات فقط؛ ولا تستبدل القاعدة المفتوحة أو تفعّل الحسابات الجديدة.',
+                        style: TextStyle(color: AppColors.secondaryText, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                if (_busy) ...[
+                  const SizedBox(height: 16),
+                  const LinearProgressIndicator(),
+                ],
+                if (_message != null) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: SelectableText(
+                      _message!,
+                      style: const TextStyle(fontSize: 14, height: 1.5, color: AppColors.primaryText),
+                    ),
+                  ),
+                ],
+              ],
             ),
-            const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: _busy ? null : () => _run(() => _export(repository)),
-              icon: const Icon(Icons.backup),
-              label: const Text('إنشاء نسخة احتياطية'),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              onPressed: _busy ? null : () => _run(() => _restore(repository)),
-              icon: const Icon(Icons.fact_check),
-              label: const Text('استعادة تجريبية إلى مجلد جديد'),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'الاستعادة التجريبية تفحص الملفات وتنسخ البيانات فقط؛ '
-              'ولا تستبدل القاعدة المفتوحة أو تفعّل الحسابات الجديدة.',
-            ),
-            if (_busy)
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: LinearProgressIndicator(),
-              ),
-            if (_message != null)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(top: 16),
-                child: SelectableText(_message!),
-              ),
-          ],
+          ),
         ),
       ),
     );
