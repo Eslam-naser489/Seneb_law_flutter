@@ -191,9 +191,12 @@ void main() {
     await tester.tap(find.text('حفظ'));
     await tester.pump();
     expect(calls, 1);
-    expect(find.text('جارٍ الحفظ…'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(
-      tester.widget<ElevatedButton>(find.byType(ElevatedButton)).onPressed,
+      tester.widget<FilledButton>(find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.byType(FilledButton),
+      )).onPressed,
       isNull,
     );
     expect(
@@ -238,7 +241,7 @@ void main() {
     await tester.tap(find.text('حفظ بيانات الموكل'));
     await tester.pump();
     expect(repository.calls, 1);
-    expect(find.text('جارٍ الحفظ…'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
     repository.pending.completeError(StateError('Injected write failure'));
     await tester.pumpAndSettle();
     expect(find.byType(AddClientScreen), findsOneWidget);

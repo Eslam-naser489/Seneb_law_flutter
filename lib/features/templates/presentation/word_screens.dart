@@ -33,7 +33,8 @@ class _WordLibraryState extends State<WordLibraryScreen> {
       );
       if (files.isEmpty) return;
       final length = await files.single.length();
-      if (length == null || length > DocxEngine.maxBytes ||
+      if (length == null ||
+          length > DocxEngine.maxBytes ||
           !files.single.name.toLowerCase().endsWith('.docx')) {
         throw const TemplateFailure('اختر DOCX لا يتجاوز 10 ميجابايت.');
       }
@@ -284,6 +285,7 @@ class _GenerateState extends State<WordGenerateScreen> {
       widget.clientId,
       caseId: widget.caseId,
     );
+    if (!mounted) return result;
     for (final e in result.values.entries) {
       fields[e.key] = TextEditingController(text: e.value);
     }

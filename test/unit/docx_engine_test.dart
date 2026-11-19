@@ -86,6 +86,7 @@ void main() {
               '<Relationships><Relationship TargetMode="External" Target="https://example.invalid/"/></Relationships>',
         },
         {'customXml/item1.xml': '<x/>'},
+        {'word/settings.xml': '<settings value="{{unsupported}}"/>'},
       ]) {
         expect(
           () => DocxEngine.inspect(wordFixture(extra: extra)),
@@ -99,6 +100,10 @@ void main() {
                 '<w:p><w:ins><w:r><w:t>{{client_name}}</w:t></w:r></w:ins></w:p>',
           ),
         ),
+        throwsA(isA<TemplateFailure>()),
+      );
+      expect(
+        () => DocxEngine.inspect(wordFixture(body: '<w:p><w:fldSimple w:instr="INCLUDETEXT remote"><w:r><w:t>نص</w:t></w:r></w:fldSimple></w:p>')),
         throwsA(isA<TemplateFailure>()),
       );
     },

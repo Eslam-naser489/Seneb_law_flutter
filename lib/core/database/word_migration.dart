@@ -1,10 +1,10 @@
 part of 'database.dart';
 
 Future<void> upgradeToSix(AppDatabase db, Migrator m) async {
-  // هذه الجداول جديدة في v6، وتُجمّد في المخطط التاريخي بعد التوليد.
-  await m.createTable(db.wordTemplates);
-  await m.createTable(db.wordDocuments);
-  await m.createTable(db.wordShareAttempts);
+  final schema = historical.Schema6(database: db);
+  await m.createTable(schema.wordTemplates);
+  await m.createTable(schema.wordDocuments);
+  await m.createTable(schema.wordShareAttempts);
   await installWordGuards(db);
   await db.customStatement(
     'INSERT INTO audit_log (id,actor_kind,entity_type,entity_id,action,reason,operation_id) VALUES (?,?,?,?,?,?,?)',

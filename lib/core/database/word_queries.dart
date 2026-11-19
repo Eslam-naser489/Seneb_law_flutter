@@ -188,7 +188,7 @@ extension WordWorkspace on ScopedAppRepository {
               templateId: template.id,
               clientId: draft.clientId,
               caseId: Value(draft.caseId),
-              title: template.name,
+              title: '${template.name} — إصدار ${template.version}',
               inputJson: draft.inputJson,
               sourceHash: draft.sourceHash,
               bytes: bytes,

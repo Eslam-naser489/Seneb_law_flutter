@@ -357,17 +357,17 @@ class _CaseDetailsScreenState extends State<CaseDetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 6,
                                   children: [
-                                    Expanded(
-                                      child: Text(
+                                    Text(
                                         'الموكل: ${widget.caseWithClient.client.name}',
                                         style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                           color: AppColors.primaryText,
                                         ),
-                                      ),
                                     ),
                                     AppStatusBadge(
                                       label: _statusLabel,
@@ -389,6 +389,13 @@ class _CaseDetailsScreenState extends State<CaseDetailsScreen> {
                           ),
                           if (editable) ...[
                             const SizedBox(width: 12),
+                            if (MediaQuery.sizeOf(context).width < 600)
+                              IconButton(
+                                tooltip: 'تحديث الحالة',
+                                onPressed: () => _showStatusDialog(context),
+                                icon: const Icon(Icons.edit_outlined),
+                              )
+                            else
                             OutlinedButton.icon(
                               onPressed: () => _showStatusDialog(context),
                               icon: const Icon(Icons.edit_outlined, size: 16),

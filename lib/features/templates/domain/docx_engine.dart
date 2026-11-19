@@ -88,6 +88,18 @@ class DocxEngine {
       if (name.endsWith('.xml') || name.endsWith('.rels')) {
         final xml = _xml(file);
         for (final e in xml.descendants.whereType<XmlElement>()) {
+          if (e.attributes.any(
+            (a) => a.value.contains('{{') || a.value.contains('}}'),
+          )) {
+            _fail('يوجد حقل داخل خاصية XML؛ انقله إلى نص فقرة عادية.');
+          }
+          if (e.name.namespaceUri == wordNs &&
+              e.name.local == 'fldSimple' &&
+              !RegExp(
+                r'^\s*(PAGE|NUMPAGES)\s*$',
+              ).hasMatch(e.getAttribute('instr', namespaceUri: wordNs) ?? '')) {
+            _fail('حوّل حقول Word الديناميكية إلى نص، عدا ترقيم الصفحات.');
+          }
           if (e.name.local == 'Relationship' &&
               e.getAttribute('TargetMode') == 'External') {
             _fail(
@@ -238,6 +250,9 @@ class DocxEngine {
         }
       }
       final data = utf8.encode(xml.toXmlString());
+      if (xml.innerText.contains('{{') || xml.innerText.contains('}}')) {
+        _fail('بقي حقل غير مستبدل؛ راجع بنية القالب.');
+      }
       output.add(ArchiveFile(file.name, data.length, data));
     }
     return Uint8List.fromList(ZipEncoder().encode(output));
