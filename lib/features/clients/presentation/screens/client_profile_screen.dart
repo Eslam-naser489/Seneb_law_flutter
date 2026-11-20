@@ -266,10 +266,15 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: AppColors.primaryNavy.withValues(alpha: 0.08),
+                  backgroundColor: AppColors.primaryNavy.withValues(
+                    alpha: 0.08,
+                  ),
                   child: const Icon(Icons.gavel, color: AppColors.primaryNavy),
                 ),
-                title: Text(c.caseNumber, style: const TextStyle(fontWeight: FontWeight.w600)),
+                title: Text(
+                  c.caseNumber,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
                 subtitle: Text(
                   c.opponentName != null
                       ? 'الخصم: ${c.opponentName}'
@@ -280,8 +285,8 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                   color: c.status == 'جارية' || c.status == 'ACTIVE'
                       ? AppColors.success
                       : c.status == 'موقوفة' || c.status == 'ON_HOLD'
-                          ? AppColors.warning
-                          : AppColors.secondaryText,
+                      ? AppColors.warning
+                      : AppColors.secondaryText,
                 ),
                 onTap: () => _navigate('/case/${Uri.encodeComponent(c.id)}'),
               ),
@@ -357,9 +362,20 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
       (
         'المستندات',
         _list([
-          if(data.fullAccess && _repo.canEdit) ...[
-            ListTile(title:const Text('إنشاء مستند من قالب Word'),leading:const Icon(Icons.note_add_outlined),onTap:()=>_navigate('/templates?client=${Uri.encodeComponent(id)}')),
-            ListTile(title:const Text('المستندات المولدة'),leading:const Icon(Icons.folder_open),onTap:()=>_navigate('/client/${Uri.encodeComponent(id)}/word-documents')),
+          if (data.fullAccess && _repo.canEdit) ...[
+            ListTile(
+              title: const Text('إنشاء مستند من قالب Word'),
+              leading: const Icon(Icons.note_add_outlined),
+              onTap: () =>
+                  _navigate('/templates?client=${Uri.encodeComponent(id)}'),
+            ),
+            ListTile(
+              title: const Text('المستندات المولدة'),
+              leading: const Icon(Icons.folder_open),
+              onTap: () => _navigate(
+                '/client/${Uri.encodeComponent(id)}/word-documents',
+              ),
+            ),
           ],
           for (final d in data.documents)
             ListTile(
@@ -437,7 +453,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(52),
             child: Container(
-              color: AppColors.primaryNavy,
+              color: const Color(0xFFF4F6FA),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               alignment: AlignmentDirectional.centerStart,
               child: TabBar(
@@ -447,9 +463,9 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                 splashBorderRadius: BorderRadius.circular(8),
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.primaryNavy,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: AppColors.primaryNavy, width: 2),
                   boxShadow: const [
                     BoxShadow(
                       color: Color(0x1A000000),
@@ -458,8 +474,8 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                     ),
                   ],
                 ),
-                labelColor: AppColors.accentBlue,
-                unselectedLabelColor: Colors.white,
+                labelColor: Colors.white,
+                unselectedLabelColor: AppColors.primaryNavy,
                 labelStyle: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
@@ -467,15 +483,15 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                 unselectedLabelStyle: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
-                  color: Colors.white,
+                  color: AppColors.primaryNavy,
                 ),
                 dividerColor: Colors.transparent,
                 overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
                   if (states.contains(WidgetState.hovered)) {
-                    return Colors.white.withValues(alpha: 0.15);
+                    return AppColors.primaryNavy.withValues(alpha: 0.12);
                   }
                   if (states.contains(WidgetState.focused)) {
-                    return Colors.white.withValues(alpha: 0.25);
+                    return AppColors.primaryNavy.withValues(alpha: 0.18);
                   }
                   return null;
                 }),
@@ -507,7 +523,10 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
             if (data.fullAccess)
               Container(
                 margin: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(12),

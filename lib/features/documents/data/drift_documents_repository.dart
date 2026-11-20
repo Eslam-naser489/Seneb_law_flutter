@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:crypto/crypto.dart';
 
 import 'package:drift/drift.dart';
 import 'package:path/path.dart' as p;
@@ -66,6 +67,20 @@ class DriftDocumentsRepository implements DocumentsRepository {
 
   @override
   Future<void> resumeImports() async {
+    if (db.officeCipher != null) {
+      final pending = await db
+          .customSelect(
+            'SELECT id FROM case_documents WHERE id NOT IN (SELECT id FROM seneb_backup_files)',
+          )
+          .get();
+      for (final item in pending) {
+        final row = await (db.select(
+          db.caseDocuments,
+        )..where((r) => r.id.equals(item.read<String>('id')))).getSingle();
+        await _complete(row);
+      }
+      return;
+    }
     final rows =
         await (db.select(db.caseDocuments)..where(
               (t) =>
@@ -92,6 +107,43 @@ class DriftDocumentsRepository implements DocumentsRepository {
         ? 'documents/${row.id}${_extension(row.filePath)}'
         : row.filePath;
     final destination = File(BackupService.safePath(root, relative));
+    if (db.officeCipher != null) {
+      final stored = await db
+          .customSelect(
+            'SELECT id FROM seneb_backup_files WHERE id=?',
+            variables: [Variable.withString(row.id)],
+          )
+          .getSingleOrNull();
+      if (stored != null) return;
+      final origin = row.sourceFilePath ?? row.filePath;
+      final managed = await destination.exists();
+      final source = managed
+          ? destination
+          : File(
+              p.isAbsolute(origin)
+                  ? origin
+                  : BackupService.safePath(root, origin),
+            );
+      final bytes = await source.readAsBytes();
+      final hash = sha256.convert(bytes).toString();
+      if (row.checksum != null && row.checksum != hash) {
+        throw const FileSystemException('تغير الملف الأصلي.');
+      }
+      await db.transaction(() async {
+        await db.customStatement(
+          'INSERT INTO seneb_backup_files VALUES(?,?,?,?)',
+          [row.id, _extension(relative), hash, bytes],
+        );
+        await _markAvailable(row, relative, source, hash);
+      });
+      if (managed &&
+          relative == 'documents/${row.id}${_extension(relative)}' &&
+          p.normalize(source.absolute.path) !=
+              p.normalize(File(origin).absolute.path)) {
+        await destination.delete();
+      }
+      return;
+    }
     if (await destination.exists()) {
       final checksum = await BackupService.hashFile(destination);
       if (row.checksum != null && row.checksum == checksum) {
@@ -189,6 +241,25 @@ class DriftDocumentsRepository implements DocumentsRepository {
   @override
   Future<String> resolveDocumentPath(String storedPath) async {
     final root = await storageRoot();
+    if (db.officeCipher != null) {
+      final result = await db
+          .customSelect(
+            'SELECT b.bytes,b.digest FROM seneb_backup_files b JOIN case_documents d ON d.id=b.id WHERE d.file_path=? AND d.deleted_at IS NULL',
+            variables: [Variable.withString(storedPath)],
+          )
+          .getSingle();
+      final bytes = result.read<Uint8List>('bytes');
+      if (sha256.convert(bytes).toString() != result.read<String>('digest')) {
+        throw const FormatException('مرفق تالف.');
+      }
+      final previews = Directory(p.join(root.path, 'preview-cache'));
+      await previews.create(recursive: true);
+      final preview = File(
+        p.join(previews.path, '${const Uuid().v4()}${_extension(storedPath)}'),
+      );
+      await preview.writeAsBytes(bytes, flush: true);
+      return preview.path;
+    }
     final file = File(
       p.isAbsolute(storedPath)
           ? storedPath

@@ -33,6 +33,9 @@ class OfficeAccess extends ChangeNotifier {
     _generation++;
     final wasUnlocked = _session != null;
     _session = null;
+    if (wasUnlocked && _db.officeCipher != null) {
+      unawaited(_base._clearPreviews().onError<FileSystemException>((_, _) {}));
+    }
     if (wasUnlocked && !_disposed) notifyListeners();
   }
 

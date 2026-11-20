@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,7 +66,8 @@ class _OfficeGateState extends State<OfficeGate> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached ||
+    if ((!Platform.isAndroid && state == AppLifecycleState.hidden) ||
+        state == AppLifecycleState.detached ||
         (state == AppLifecycleState.resumed &&
             DateTime.now().difference(_lastActivity) >= widget.idleTimeout)) {
       widget.access.lock();

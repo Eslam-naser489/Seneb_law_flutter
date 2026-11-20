@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:seneb_law/app/theme/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({super.key, this.startup = false});
+  final bool startup;
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -14,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToNext();
+    if (!widget.startup) _navigateToNext();
   }
 
   Future<void> _navigateToNext() async {

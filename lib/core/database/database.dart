@@ -1,4 +1,5 @@
 import 'dart:io';
+import '../storage/office_cipher.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
@@ -172,13 +173,20 @@ class CaseDocuments extends Table with LifecycleColumns {
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
+  AppDatabase([QueryExecutor? executor])
+    : officeCipher = null,
+      super(executor ?? _openConnection());
+  final OfficeCipher? officeCipher;
+  AppDatabase.secured(Directory root, OfficeCipher cipher)
+    : officeCipher = cipher,
+      super(_safeLazy(() => _preparedConnection(root, cipher)));
   AppDatabase.openAt(Directory root, {this.migrationProbe})
-    : super(_openAt(root));
+    : officeCipher = null,
+      super(_openAt(root));
   Future<void> Function()? migrationProbe;
 
   // Constructor مخصص للـ Testing
-  AppDatabase.forTesting(super.connection);
+  AppDatabase.forTesting(super.connection) : officeCipher = null;
 
   @override
   int get schemaVersion => 6;
@@ -204,6 +212,9 @@ class AppDatabase extends _$AppDatabase {
       }),
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
+        if (officeCipher != null) {
+          await customStatement(OfficeCipher.payloadSchema);
+        }
         await customStatement(
           'CREATE INDEX IF NOT EXISTS search_notes_by_case '
           'ON case_notes(case_id) WHERE deleted_at IS NULL',
@@ -260,21 +271,42 @@ class _RecoverableLazyDatabase extends LazyDatabase {
   }
 }
 
-Future<QueryExecutor> _preparedConnection(Directory root) async {
+Future<QueryExecutor> _preparedConnection(
+  Directory root, [
+  OfficeCipher? cipher,
+]) async {
   await root.create(recursive: true);
   final file = File(p.join(root.path, 'seneb_law_db.sqlite'));
   if (await file.exists()) {
-    final source = native.sqlite3.open(
-      file.path,
-      mode: native.OpenMode.readOnly,
-    );
+    if (cipher != null && await OfficeCipher.isPlain(file)) {
+      await cipher.export(
+        file,
+        root,
+        Directory(p.join(root.path, 'backups')),
+        plain: true,
+      );
+      final legacy = native.sqlite3.open(file.path);
+      try {
+        legacy.execute('PRAGMA wal_checkpoint(TRUNCATE)');
+        legacy.execute('PRAGMA journal_mode=DELETE');
+        cipher.configure(legacy, convert: true);
+      } finally {
+        legacy.close();
+      }
+    }
+    final source =
+        cipher?.open(file, readOnly: true) ??
+        native.sqlite3.open(file.path, mode: native.OpenMode.readOnly);
     late int version;
     try {
       version = source.userVersion;
     } finally {
       source.close();
     }
-    if (version > 0 && version < 6) {
+    if (version > 0 && version < 6 && cipher != null) {
+      await cipher.export(file, root, Directory(p.join(root.path, "backups")));
+    }
+    if (version > 0 && version < 6 && cipher == null) {
       final backup = await BackupService().create(
         databaseFile: file,
         storageRoot: root,
@@ -290,6 +322,9 @@ Future<QueryExecutor> _preparedConnection(Directory root) async {
   }
   return NativeDatabase.createInBackground(
     file,
-    setup: registerSearchFunctions,
+    setup: (db) {
+      cipher?.configure(db);
+      registerSearchFunctions(db);
+    },
   );
 }

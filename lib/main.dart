@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'features/backup/presentation/vault_unlock.dart';
+import 'features/splash/presentation/splash_screen.dart';
+import 'core/storage/office_cipher.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,11 +29,17 @@ RandomAccessFile? _instanceLease;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final db = AppDatabase();
-  final repository = AppRepository(db);
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(startup: true),
+    ),
+  );
+  await WidgetsBinding.instance.endOfFrame;
+  final splashTime = Future<void>.delayed(const Duration(seconds: 3));
 
   try {
-    final root = Directory(
+    var root = Directory(
       p.join((await getApplicationDocumentsDirectory()).path, 'seneb_law'),
     );
     await root.create(recursive: true);
@@ -46,18 +55,49 @@ Future<void> main() async {
         rethrow;
       }
     }
-    await repository.initialize();
-    final access = OfficeAccess(repository);
-    InstallmentReminders(db).start();
+    final recovered = Directory(p.join(root.path, 'recovered-office'));
+    if (await recovered.exists()) root = recovered;
+    final file = File(p.join(root.path, 'seneb_law_db.sqlite'));
+    final setup = !await file.exists() || await OfficeCipher.isPlain(file);
+    await splashTime;
     runApp(
-      OfficeGate(
-        access: access,
-        workspace: (scoped) =>
-            SenebLawApp(repository: scoped, onLock: access.lock),
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        locale: const Locale('ar'),
+        supportedLocales: const [Locale('ar')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        home: VaultUnlock(
+          setup: setup,
+          restore: !await file.exists()
+              ? (cipher, archive) async {
+                  await cipher.restore(archive, recovered);
+                  root = recovered;
+                }
+              : null,
+          unlock: (cipher) async {
+            final db = AppDatabase.secured(root, cipher);
+            final repository = AppRepository(db, storageRoot: root);
+            try {
+              await repository.initialize();
+            } catch (_) {
+              await db.close();
+              rethrow;
+            }
+            final access = OfficeAccess(repository);
+            InstallmentReminders(db).start();
+            runApp(
+              OfficeGate(
+                access: access,
+                workspace: (scoped) =>
+                    SenebLawApp(repository: scoped, onLock: access.lock),
+              ),
+            );
+          },
+        ),
       ),
     );
   } catch (_) {
-    await db.close();
     await _instanceLease?.close();
     _instanceLease = null;
     runApp(

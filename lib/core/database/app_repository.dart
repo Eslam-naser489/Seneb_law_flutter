@@ -79,11 +79,32 @@ class AppRepository {
 
   Future<void> initialize() => _writes.run(() async {
     await _db.customSelect('SELECT 1').get();
+    await _clearPreviews();
     await documentsRepository.resumeImports();
   });
 
+  Future<void> _clearPreviews() async {
+    if (_db.officeCipher == null) return;
+    final previews = Directory(
+      p.join((await _resolveStorageRoot()).path, 'preview-cache'),
+    );
+    if (!await previews.exists()) return;
+    await for (final entity in previews.list(followLinks: false)) {
+      if (entity is File) {
+        try {
+          await entity.delete();
+        } on FileSystemException {
+          // A Windows viewer can retain a handle. Retry at the next lock/start.
+        }
+      }
+    }
+  }
+
   Future<BackupResult> createBackup(Directory destinationRoot) =>
       _writes.run(() async {
+        if (_db.officeCipher != null) {
+          throw StateError('استخدم تصدير النسخة المشفرة.');
+        }
         await _db.customSelect('SELECT 1').get();
         await documentsRepository.resumeImports();
         final root = await _resolveStorageRoot();

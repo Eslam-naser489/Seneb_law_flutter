@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'archive_picker.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +45,28 @@ class _BackupScreenState extends State<BackupScreen> {
   }
 
   Future<String?> _export(AppRepository repository) async {
+    if (repository is ScopedAppRepository && Platform.isAndroid) {
+      final tmp = await Directory.systemTemp.createTemp('seneb-export-');
+      try {
+        final archive = await repository.exportVault(tmp);
+        if (!mounted) return null;
+        final saved = await FilePicker.saveFile(
+          fileName: p.basename(archive.path),
+          bytes: await archive.readAsBytes(),
+        );
+        return saved == null ? null : 'تم حفظ النسخة المشفرة.';
+      } finally {
+        await tmp.delete(recursive: true);
+      }
+    }
     final path = await FilePicker.getDirectoryPath(
       dialogTitle: 'اختر مجلد حفظ النسخة',
     );
     if (path == null) return null;
+    if (repository is ScopedAppRepository) {
+      final file = await repository.exportVault(Directory(path));
+      return 'تم فحص النسخة المشفرة وحفظها في:\n${file.path}';
+    }
     final result = await repository.createBackup(Directory(path));
     return result.isComplete
         ? 'تم إنشاء نسخة وفحص سلامتها في:\n${result.directory.path}'
@@ -56,6 +75,22 @@ class _BackupScreenState extends State<BackupScreen> {
   }
 
   Future<String?> _restore(AppRepository repository) async {
+    if (repository is ScopedAppRepository) {
+      return withPickedArchive<String?>((archive) async {
+        if (!mounted) return null;
+        final dest = Platform.isAndroid
+            ? repository.storageRoot?.path
+            : await FilePicker.getDirectoryPath(
+                dialogTitle: 'اختر مكان الاستعادة المستقلة',
+              );
+        if (dest == null || !mounted) return null;
+        final restored = await repository.verifyVault(
+          archive,
+          Directory(p.join(dest, 'restored-${const Uuid().v4()}')),
+        );
+        return 'تم فحص النسخة واستعادتها في ${restored.path}';
+      });
+    }
     final source = await FilePicker.getDirectoryPath(
       dialogTitle: 'اختر مجلد النسخة المحتوي على manifest.json',
     );
@@ -68,12 +103,10 @@ class _BackupScreenState extends State<BackupScreen> {
     final output = Directory(
       p.join(destination, 'restored-${const Uuid().v4()}'),
     );
-    final restored = repository is ScopedAppRepository
-        ? await repository.restoreBackupIsolated(backup, output)
-        : await BackupService().restoreIsolated(
-            backup: backup,
-            destination: output,
-          );
+    final restored = await BackupService().restoreIsolated(
+      backup: backup,
+      destination: output,
+    );
     return 'نجح فحص النسخة واستعادتها إلى مجلد مستقل. '
         'لم تتغير قاعدة التطبيق الحالية.\n${restored.path}';
   }
@@ -98,15 +131,21 @@ class _BackupScreenState extends State<BackupScreen> {
                     children: [
                       const AppSectionHeader(title: 'النسخ الاحتياطي والأرشيف'),
                       const Text(
-                        'إصدار تجريبي: النسخ هنا غير مشفرة. احفظها في مكان خاص، وانسخ مجلد النسخة كاملًا إلى وسيط تخزين آمن.',
-                        style: TextStyle(color: AppColors.secondaryText, fontSize: 13, height: 1.5),
+                        'احتفظ بملف النسخة المشفرة وعبارة الاستعادة في مكانين منفصلين. تشمل النسخة قاعدة المكتب والمرفقات.',
+                        style: TextStyle(
+                          color: AppColors.secondaryText,
+                          fontSize: 13,
+                          height: 1.5,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Row(
                         children: [
                           Expanded(
                             child: AppButton(
-                              onPressed: _busy ? null : () => _run(() => _export(repository)),
+                              onPressed: _busy
+                                  ? null
+                                  : () => _run(() => _export(repository)),
                               isLoading: _busy,
                               icon: Icons.backup_outlined,
                               label: 'إنشاء نسخة احتياطية',
@@ -119,11 +158,17 @@ class _BackupScreenState extends State<BackupScreen> {
                         children: [
                           Expanded(
                             child: OutlinedButton.icon(
-                              onPressed: _busy ? null : () => _run(() => _restore(repository)),
+                              onPressed: _busy
+                                  ? null
+                                  : () => _run(() => _restore(repository)),
                               icon: const Icon(Icons.fact_check_outlined),
-                              label: const Text('استعادة تجريبية إلى مجلد جديد'),
+                              label: const Text(
+                                'استعادة تجريبية إلى مجلد جديد',
+                              ),
                               style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                               ),
                             ),
                           ),
@@ -132,7 +177,10 @@ class _BackupScreenState extends State<BackupScreen> {
                       const SizedBox(height: 14),
                       const Text(
                         'الاستعادة التجريبية تفحص الملفات وتنسخ البيانات فقط؛ ولا تستبدل القاعدة المفتوحة أو تفعّل الحسابات الجديدة.',
-                        style: TextStyle(color: AppColors.secondaryText, fontSize: 12),
+                        style: TextStyle(
+                          color: AppColors.secondaryText,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
@@ -152,7 +200,11 @@ class _BackupScreenState extends State<BackupScreen> {
                     ),
                     child: SelectableText(
                       _message!,
-                      style: const TextStyle(fontSize: 14, height: 1.5, color: AppColors.primaryText),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        height: 1.5,
+                        color: AppColors.primaryText,
+                      ),
                     ),
                   ),
                 ],

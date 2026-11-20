@@ -102,6 +102,25 @@ class ScopedAppRepository extends AppRepository {
   Future<BackupResult> createBackup(Directory destinationRoot) =>
       _write(() => super.createBackup(destinationRoot), owner: true);
 
+  Future<File> exportVault(Directory destination) => _write(() async {
+    final root = await _resolveStorageRoot();
+    final cipher = _db.officeCipher;
+    if (cipher == null) throw StateError('قاعدة غير مشفرة');
+    await documentsRepository.resumeImports();
+    return cipher.export(
+      File(p.join(root.path, 'seneb_law_db.sqlite')),
+      root,
+      destination,
+    );
+  }, owner: true);
+
+  Future<Directory> verifyVault(File file, Directory output) =>
+      _write(() async {
+        final cipher = _db.officeCipher;
+        if (cipher == null) throw StateError('قاعدة غير مشفرة');
+        return cipher.restore(file, output);
+      }, owner: true);
+
   Future<Directory> restoreBackupIsolated(
     Directory backup,
     Directory destination,

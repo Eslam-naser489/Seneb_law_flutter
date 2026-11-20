@@ -89,3 +89,6 @@ app.*.map.json
 # Internal handoff / planning docs
 CODEX_HANDOFF.md
 ARCHITECTURE_REFACTOR_PLAN.md
+# Encrypted portable office archives and interrupted exports
+*.seneb
+*.seneb.partial
